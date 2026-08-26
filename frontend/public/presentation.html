@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HyperCampus AI — Hackathon Master Presentation Deck</title>
+  <title>HyperCampus AI — Hackathon Winning Pitch Deck</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #08070a;
-      --bg-card: rgba(18, 18, 24, 0.78);
-      --border-card: rgba(216, 178, 150, 0.22);
+      --bg-dark: #07060a;
+      --bg-card: rgba(16, 14, 24, 0.75);
+      --border-card: rgba(167, 139, 250, 0.22);
       --border-subtle: rgba(255, 255, 255, 0.08);
-      --accent-skin: #D8B296;
-      --accent-light: #F3E5D8;
-      --accent-warm: #C99E80;
-      --accent-glow: rgba(216, 178, 150, 0.2);
+      --purple-main: #8b5cf6;
+      --purple-light: #c4b5fd;
+      --purple-dim: rgba(139, 92, 246, 0.15);
+      --champagne-skin: #D8B296;
+      --champagne-light: #F3E5D8;
       --text-main: #fafafa;
       --text-muted: #a1a1aa;
       --text-dim: #71717a;
@@ -49,109 +50,113 @@
     .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(120px);
+      filter: blur(130px);
       pointer-events: none;
       z-index: 0;
     }
     .orb-1 {
       width: 700px;
       height: 700px;
-      top: -200px;
-      left: -150px;
-      background: radial-gradient(circle, rgba(216, 178, 150, 0.16) 0%, transparent 70%);
+      top: -180px;
+      left: -120px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
     }
     .orb-2 {
-      width: 800px;
-      height: 800px;
-      bottom: -250px;
-      right: -150px;
-      background: radial-gradient(circle, rgba(140, 95, 65, 0.14) 0%, transparent 70%);
+      width: 750px;
+      height: 750px;
+      bottom: -220px;
+      right: -120px;
+      background: radial-gradient(circle, rgba(216, 178, 150, 0.14) 0%, transparent 70%);
     }
 
-    /* Slide Deck Container */
+    /* Deck Master Container */
     .deck-container {
       position: relative;
       z-index: 10;
-      width: 92vw;
-      max-width: 1400px;
-      height: 86vh;
-      max-height: 880px;
-      background: rgba(14, 14, 20, 0.7);
-      backdrop-filter: blur(32px);
-      -webkit-backdrop-filter: blur(32px);
+      width: 93vw;
+      max-width: 1420px;
+      height: 88vh;
+      max-height: 900px;
+      background: rgba(13, 11, 20, 0.82);
+      backdrop-filter: blur(36px);
+      -webkit-backdrop-filter: blur(36px);
       border: 1px solid var(--border-card);
-      border-radius: 28px;
-      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.9), 0 0 40px rgba(216, 178, 150, 0.05);
+      border-radius: 26px;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.95), 0 0 50px rgba(139, 92, 246, 0.06);
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    /* Presentation Header & Footer */
+    /* Header Bar */
     .deck-header {
-      padding: 1.25rem 2.5rem;
+      padding: 1.1rem 2.5rem;
       display: flex;
-      justifyContent: space-between;
+      justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.015);
     }
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-weight: 800;
       font-size: 1.15rem;
       letter-spacing: -0.5px;
       color: #ffffff;
     }
-    .brand span.badge {
-      font-size: 10px;
-      padding: 3px 8px;
-      background: rgba(216, 178, 150, 0.12);
-      border: 1px solid var(--border-card);
-      color: var(--accent-skin);
+    .brand span.badge-os {
+      font-size: 10.5px;
+      padding: 3px 9px;
+      background: var(--purple-dim);
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      color: var(--purple-light);
       border-radius: 6px;
       font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .slide-counter {
       font-size: 13px;
       color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
     }
 
+    /* Slide Content Area */
     .slide-content {
       flex: 1;
-      padding: 2.5rem 3.5rem;
+      padding: 2.25rem 3.5rem;
       display: none;
       flex-direction: column;
       justifyContent: center;
-      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: slideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
       overflow-y: auto;
     }
     .slide-content.active {
       display: flex;
     }
 
-    /* Deck Footer Navigation */
+    /* Footer Navigation */
     .deck-footer {
-      padding: 1.1rem 2.5rem;
+      padding: 1rem 2.5rem;
       display: flex;
-      justifyContent: space-between;
+      justify-content: space-between;
       align-items: center;
       border-top: 1px solid var(--border-subtle);
-      background: rgba(10, 10, 15, 0.6);
+      background: rgba(8, 7, 13, 0.7);
     }
     .nav-controls {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .nav-btn {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-card);
       color: #ffffff;
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: 10px;
       font-weight: 700;
       font-size: 12.5px;
@@ -162,8 +167,9 @@
       gap: 6px;
     }
     .nav-btn:hover {
-      background: var(--accent-skin);
-      color: #1a120c;
+      background: var(--purple-main);
+      border-color: var(--purple-main);
+      color: #ffffff;
     }
     .dots-container {
       display: flex;
@@ -178,149 +184,232 @@
       transition: all 0.25s ease;
     }
     .dot.active {
-      background: var(--accent-skin);
-      width: 28px;
+      background: var(--purple-main);
+      width: 30px;
       border-radius: 10px;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
     }
 
-    /* Slide Typography & Layouts */
+    /* Typography */
     .slide-tag {
       font-size: 11.5px;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--accent-skin);
-      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--champagne-skin);
+      font-weight: 800;
       margin-bottom: 6px;
       display: block;
     }
     .slide-title {
-      font-size: 2.6rem;
+      font-size: 2.5rem;
       font-weight: 900;
       letter-spacing: -1px;
       line-height: 1.15;
       color: #ffffff;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.9rem;
     }
-    .slide-title span {
-      background: linear-gradient(135deg, #F3E5D8 0%, #D8B296 60%, #C99E80 100%);
+    .slide-title span.grad {
+      background: linear-gradient(135deg, #ffffff 0%, var(--purple-light) 50%, var(--champagne-skin) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .slide-subtitle {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       color: var(--text-muted);
-      line-height: 1.6;
-      max-width: 900px;
-      margin-bottom: 2rem;
+      line-height: 1.55;
+      max-width: 960px;
+      margin-bottom: 1.75rem;
     }
 
-    /* Grid Cards */
+    /* Cards Grid */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
       width: 100%;
     }
     .card {
       background: rgba(255, 255, 255, 0.025);
       border: 1px solid var(--border-subtle);
-      border-radius: 18px;
-      padding: 1.75rem;
+      border-radius: 16px;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      transition: all 0.25s ease;
+      gap: 0.65rem;
+      transition: all 0.2s ease;
       position: relative;
     }
     .card:hover {
       border-color: var(--border-card);
       background: rgba(255, 255, 255, 0.04);
-      transform: translateY(-3px);
+      transform: translateY(-2px);
     }
     .card-icon {
-      font-size: 28px;
-      width: 50px;
-      height: 50px;
-      border-radius: 12px;
-      background: rgba(216, 178, 150, 0.08);
-      border: 1px solid var(--border-card);
+      font-size: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--purple-dim);
+      border: 1px solid rgba(139, 92, 246, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .card h4 {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: #ffffff;
     }
     .card p {
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.48;
+    }
+    .card ul {
+      padding-left: 1.2rem;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Status & Type Badges */
+    .pill {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      display: inline-block;
+    }
+    .pill-real {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: #34d399;
+    }
+    .pill-demo {
+      background: rgba(251, 146, 60, 0.15);
+      border: 1px solid rgba(251, 146, 60, 0.4);
+      color: #fb923c;
+    }
+    .pill-ext {
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: var(--purple-light);
     }
 
     /* Flow Diagrams */
-    .flow-box {
+    .flow-strip {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      background: rgba(0, 0, 0, 0.4);
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--border-subtle);
-      border-radius: 18px;
-      padding: 1.5rem;
-      margin-top: 1.5rem;
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.25rem;
       flex-wrap: wrap;
     }
-    .flow-step {
+    .flow-node {
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 6px;
+      gap: 5px;
       flex: 1;
-      min-width: 130px;
+      min-width: 120px;
     }
-    .flow-badge {
-      width: 38px;
-      height: 38px;
+    .flow-num {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: rgba(216, 178, 150, 0.12);
-      border: 1px solid var(--border-card);
-      color: var(--accent-light);
+      background: var(--purple-dim);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: var(--purple-light);
       font-weight: 800;
-      font-size: 13px;
+      font-size: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .flow-step strong {
-      font-size: 13px;
+    .flow-node strong {
+      font-size: 12.5px;
       color: #ffffff;
     }
-    .flow-step span {
-      font-size: 11px;
+    .flow-node span {
+      font-size: 10.5px;
       color: var(--text-muted);
     }
     .flow-arrow {
-      color: var(--accent-skin);
-      font-size: 18px;
+      color: var(--purple-light);
+      font-size: 16px;
       font-weight: 800;
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
-    /* Metric Counters */
-    .metric-hero {
-      font-size: 3.2rem;
-      font-weight: 900;
-      color: var(--accent-skin);
-      letter-spacing: -1px;
-      line-height: 1;
+    /* Differentiator Bottom Banner */
+    .bottom-tagline {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      padding: 0.9rem 1.5rem;
+      background: linear-gradient(90deg, rgba(139, 92, 246, 0.08), rgba(216, 178, 150, 0.08));
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      margin-top: 1.25rem;
+      font-size: 13.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--champagne-light);
+    }
+    .bottom-tagline span.sep {
+      color: var(--purple-main);
+    }
+
+    /* Speaker Notes Modal Overlay */
+    .notes-drawer {
+      position: absolute;
+      bottom: 60px;
+      left: 2.5rem;
+      right: 2.5rem;
+      background: rgba(10, 9, 16, 0.96);
+      border: 1px solid var(--purple-main);
+      border-radius: 14px;
+      padding: 1.25rem 1.75rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+      display: none;
+      z-index: 50;
+      animation: fadeIn 0.2s ease;
+    }
+    .notes-drawer.open {
+      display: block;
+    }
+    .notes-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--purple-light);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .notes-body {
+      font-size: 13px;
+      color: #e4e4e7;
+      line-height: 1.5;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @media print {
@@ -329,7 +418,7 @@
         overflow: visible;
         height: auto;
       }
-      .orb, .deck-footer, .deck-header {
+      .orb, .deck-footer, .deck-header, .notes-drawer {
         display: none !important;
       }
       .deck-container {
@@ -348,360 +437,417 @@
 </head>
 <body>
 
-  <!-- Ambient Glow -->
+  <!-- Ambient Glow Background -->
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
 
-  <!-- Master Presentation Container -->
+  <!-- Master Presentation Deck Box -->
   <div class="deck-container">
     
-    <!-- Top Header -->
+    <!-- Top Deck Header -->
     <div class="deck-header">
       <div class="brand">
         <span>🏛️</span>
         <span>HyperCampus AI</span>
-        <span class="badge">Intelligent Campus OS</span>
+        <span class="badge-os">Intelligent Campus OS</span>
       </div>
-      <div class="slide-counter" id="slideNum">Slide 1 / 8</div>
+      <div class="slide-counter" id="slideNum">Slide 1 / 7</div>
     </div>
 
-    <!-- ==================== SLIDE 1 ==================== -->
+    <!-- ==================== SLIDE 1: THE HOOK ==================== -->
     <div class="slide-content active" id="slide-1">
-      <span class="slide-tag">Hackathon Pitch Deck • Higher EdTech Track</span>
+      <span class="slide-tag">Hackathon Master Pitch • Higher EdTech & Smart Governance</span>
       <h1 class="slide-title">
-        Next-Generation <span>Intelligent Campus</span><br />Operating System
+        Next-Generation <span class="grad">Intelligent Campus</span><br />Operating System
       </h1>
       <p class="slide-subtitle">
-        Transforming passive college ERP databases into <strong>Explainable Student Digital Twins (Student 360°)</strong>, <strong>Autonomous Closed-Loop Interventions (HyperIntervene)</strong>, and <strong>Cryptographic Razorpay Financial Reconciliations</strong>.
+        From fragmented college data to <strong>Explainable Student Digital Twins</strong>, <strong>Autonomous Closed-Loop Interventions</strong>, and <strong>Cryptographic Razorpay Financial Reconciliations</strong>.
       </p>
 
       <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr);">
         <div class="card">
           <div class="card-icon">🎯</div>
           <h4>Student 360°</h4>
-          <p>Real-time Digital Twin across 10 tables with 6 transparent deterministic health scores.</p>
+          <p>Real-time Digital Twin across 10 database tables with 6 transparent, deterministic health benchmarks.</p>
         </div>
         <div class="card">
           <div class="card-icon">⚡</div>
           <h4>HyperIntervene AI</h4>
-          <p>Closed-loop action engine: Risk ➔ Diagnosis ➔ Assignment ➔ Strict Deadline ➔ Recalibration.</p>
+          <p>Closed-loop action engine: Risk ➔ Diagnosis ➔ Assigned Actions ➔ Strict Deadlines ➔ Recalibration.</p>
         </div>
         <div class="card">
           <div class="card-icon">💳</div>
-          <h4>Smart Fee Gateway</h4>
-          <p>Razorpay Standard Checkout in paise with HMAC-SHA256 verification & printable receipts.</p>
+          <h4>Smart Fee Ledger</h4>
+          <p>Razorpay Standard Checkout in paise with HMAC-SHA256 verification & instant printable receipts.</p>
         </div>
         <div class="card">
           <div class="card-icon">📚</div>
           <h4>Learning Hub</h4>
-          <p>Verified publisher textbooks with EveryCircuit & VisuAlgo simulator integration.</p>
+          <p>Curated university literature with EveryCircuit & VisuAlgo interactive visual simulator integrations.</p>
         </div>
+      </div>
+
+      <div class="bottom-tagline">
+        DETECT <span class="sep">➔</span> EXPLAIN <span class="sep">➔</span> INTERVENE <span class="sep">➔</span> TRACK <span class="sep">➔</span> IMPROVE
       </div>
     </div>
 
-    <!-- ==================== SLIDE 2 ==================== -->
+    <!-- ==================== SLIDE 2: THE REAL PROBLEM ==================== -->
     <div class="slide-content" id="slide-2">
-      <span class="slide-tag">The University Dilemma</span>
-      <h2 class="slide-title">Why Traditional College <span>ERPs Fail</span></h2>
+      <span class="slide-tag">The Higher Education Bottleneck</span>
+      <h2 class="slide-title">A College Has Data. <span class="grad">Does It Have Intelligence?</span></h2>
       <p class="slide-subtitle">
-        Universities rely on passive digital filing cabinets that store records in silos without cross-correlating early warning signals.
+        Traditional college ERPs are passive digital filing cabinets. They record attendance, marks, and fees in silos without correlating early warning indicators.
       </p>
 
-      <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="card" style="border-left: 4px solid var(--red);">
-          <div class="card-icon" style="color: var(--red);">🚨</div>
-          <h4>1. Retroactive Detection</h4>
-          <p>Faculty discover failing students only during end-semester exams or after they drop below the 75% attendance threshold.</p>
+      <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="card" style="border-left: 3px solid var(--red);">
+          <span style="font-size: 11px; color: var(--red); font-weight: 700;">STUDENT FRICTION</span>
+          <h4>Academic Blindspots</h4>
+          <p>Students fall behind before anyone notices, cram aimlessly for exams, and lack clarity on career roadmaps.</p>
         </div>
-        <div class="card" style="border-left: 4px solid var(--orange);">
-          <div class="card-icon" style="color: var(--orange);">❓</div>
-          <h4>2. Black-Box Opacity</h4>
-          <p>Opaque predictive risk scores generate skepticism because teachers and students don't know <em>why</em> a score is high.</p>
+        <div class="card" style="border-left: 3px solid var(--orange);">
+          <span style="font-size: 11px; color: var(--orange); font-weight: 700;">FACULTY OVERLOAD</span>
+          <h4>Manual Tracking Void</h4>
+          <p>1 mentor manages 80+ students. Signal data is scattered, and intervention happens only after semester failure.</p>
         </div>
-        <div class="card" style="border-left: 4px solid var(--accent-skin);">
-          <div class="card-icon" style="color: var(--accent-skin);">🔕</div>
-          <h4>3. The Action Void</h4>
-          <p>Traditional alerts send notification spam, but nobody is assigned responsibility, deadlines, or recovery tracking.</p>
+        <div class="card" style="border-left: 3px solid var(--champagne-skin);">
+          <span style="font-size: 11px; color: var(--champagne-skin); font-weight: 700;">PARENT DISCONNECT</span>
+          <h4>Zero Transparency</h4>
+          <p>Parents only discover attendance shortages or fee dues at exam detention, causing panic and dispute.</p>
+        </div>
+        <div class="card" style="border-left: 3px solid var(--purple-main);">
+          <span style="font-size: 11px; color: var(--purple-light); font-weight: 700;">ADMIN INEFFICIENCY</span>
+          <h4>Fragmented Ledgers</h4>
+          <p>Fee reconciliation relies on manual bank receipts and WhatsApp slips; zero departmental collection analytics.</p>
         </div>
       </div>
 
-      <div class="flow-box">
-        <div class="flow-step">
-          <div class="flow-badge">1</div>
+      <div class="flow-strip" style="border-color: rgba(239, 68, 68, 0.35);">
+        <div class="flow-node">
+          <div class="flow-num" style="border-color: var(--red); color: var(--red);">1</div>
           <strong>Attendance Drops</strong>
           <span>Logged in Silo A</span>
         </div>
         <div class="flow-arrow">+</div>
-        <div class="flow-step">
-          <div class="flow-badge">2</div>
-          <strong>Mid-Term Score Falls</strong>
+        <div class="flow-node">
+          <div class="flow-num" style="border-color: var(--orange); color: var(--orange);">2</div>
+          <strong>Mid-Term Marks Fall</strong>
           <span>Logged in Silo B</span>
         </div>
         <div class="flow-arrow">+</div>
-        <div class="flow-step">
-          <div class="flow-badge">3</div>
+        <div class="flow-node">
+          <div class="flow-num" style="border-color: var(--champagne-skin); color: var(--champagne-skin);">3</div>
           <strong>Fee Remains Pending</strong>
           <span>Logged in Silo C</span>
         </div>
         <div class="flow-arrow">➔</div>
-        <div class="flow-step" style="color: var(--red);">
-          <div class="flow-badge" style="background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: var(--red);">✕</div>
-          <strong>Student Detained / Drops Out</strong>
+        <div class="flow-node" style="color: var(--red);">
+          <div class="flow-num" style="background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: var(--red);">✕</div>
+          <strong style="color: var(--red);">Student Detained / Drops Out</strong>
           <span>Discovered Too Late</span>
         </div>
       </div>
     </div>
 
-    <!-- ==================== SLIDE 3 ==================== -->
+    <!-- ==================== SLIDE 3: THE SOLUTION ==================== -->
     <div class="slide-content" id="slide-3">
-      <span class="slide-tag">The Architectural Breakthrough</span>
-      <h2 class="slide-title">From Passive Tables to <span>Closed-Loop Action</span></h2>
+      <span class="slide-tag">The Architecture Transformation</span>
+      <h2 class="slide-title">One Connected <span class="grad">Intelligent Campus Brain</span></h2>
       <p class="slide-subtitle">
-        HyperCampus AI correlates multi-table ERP signals into explainable diagnoses and autonomous recovery workflows.
+        HyperCampus AI turns fragmented database rows into a continuous, explainable closed-loop intervention ecosystem.
       </p>
 
-      <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="card" style="background: rgba(216, 178, 150, 0.04); border-color: var(--border-card);">
-          <span style="font-size: 11px; color: var(--accent-skin); font-weight: 700; text-transform: uppercase;">Step 1 • Holistic Signal</span>
-          <h4>Student 360° Twin</h4>
-          <p>Consolidates Academic marks, Attendance logs, Study habits, Career gaps, and Fees into single operational profile.</p>
+      <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="card" style="background: rgba(139, 92, 246, 0.04); border-color: var(--border-card);">
+          <div class="card-icon">🧠</div>
+          <h4>AI Intelligence</h4>
+          <ul>
+            <li>Predictive Risk Engine</li>
+            <li>Student 360° Digital Twin</li>
+            <li>Explainable Risk Factors</li>
+            <li>AI Counselor (Dual LLM)</li>
+          </ul>
         </div>
-        <div class="card" style="background: rgba(216, 178, 150, 0.04); border-color: var(--border-card);">
-          <span style="font-size: 11px; color: var(--accent-skin); font-weight: 700; text-transform: uppercase;">Step 2 • Explainable Diagnosis</span>
-          <h4>"Why Am I At Risk?"</h4>
-          <p>Mathematical factor contribution breakdown: Attendance (-35 pts), CIA Exam (-28 pts), Tasks (-12 pts).</p>
+        <div class="card" style="background: rgba(216, 178, 150, 0.04); border-color: rgba(216, 178, 150, 0.3);">
+          <div class="card-icon">🎯</div>
+          <h4>Student Success</h4>
+          <ul>
+            <li>AI Adaptive Study Planner</li>
+            <li>AI Career Guidance Roadmaps</li>
+            <li>Learning Hub & Concepts</li>
+            <li>Gamification & XP Streaks</li>
+          </ul>
         </div>
         <div class="card" style="background: rgba(52, 211, 153, 0.04); border-color: rgba(52, 211, 153, 0.3);">
-          <span style="font-size: 11px; color: var(--green); font-weight: 700; text-transform: uppercase;">Step 3 • Closed-Loop Resolution</span>
-          <h4>HyperIntervene AI</h4>
-          <p>Prescribes targeted remedial modules, assigns faculty mentors, sets 5-day deadlines, and re-evaluates risk on verified completion.</p>
-        </div>
-      </div>
-
-      <div class="flow-box" style="border-color: var(--border-card);">
-        <div class="flow-step">
-          <div class="flow-badge">1</div>
-          <strong>Risk Detection</strong>
-          <span>Real-time Triage</span>
-        </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-step">
-          <div class="flow-badge">2</div>
-          <strong>Root Diagnosis</strong>
-          <span>Factor Breakdown</span>
-        </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-step">
-          <div class="flow-badge">3</div>
-          <strong>Prescribe Action</strong>
-          <span>Remedial Plan</span>
-        </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-step">
-          <div class="flow-badge">4</div>
-          <strong>Assign & Deadline</strong>
-          <span>Mentor / Student</span>
-        </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-step" style="color: var(--green);">
-          <div class="flow-badge" style="background: rgba(52, 211, 153, 0.2); border-color: var(--green); color: var(--green);">✓</div>
-          <strong>Re-Evaluate Risk</strong>
-          <span>Recalibrated Twin</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== SLIDE 4 ==================== -->
-    <div class="slide-content" id="slide-4">
-      <span class="slide-tag">Core Intelligence Layer</span>
-      <h2 class="slide-title">The 3 Big <span>AI Differentiators</span></h2>
-      <p class="slide-subtitle">
-        Engineered with strict separation between deterministic mathematical algorithms and ultra-fast LLM synthesis.
-      </p>
-
-      <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="card">
-          <div class="card-icon">🎯</div>
-          <h4>1. Student 360° Digital Twin</h4>
-          <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem;">
-            <li>6 deterministic transparent scores (0–100)</li>
-            <li>Zero black-box hallucinations</li>
-            <li>Identifies key strengths & attention areas</li>
-            <li>1-Click action triggers to planner & roadmap</li>
-          </ul>
-        </div>
-        <div class="card">
           <div class="card-icon">⚡</div>
-          <h4>2. Dual AI Engine (Groq + Gemini)</h4>
-          <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem;">
-            <li>Sub-200ms ultra-fast Groq LLM inference</li>
-            <li>Live ERP database context injection</li>
-            <li>AI Study Planner & 4-phase Career Roadmaps</li>
-            <li>On-demand 2-sentence Concept Explainer</li>
+          <h4>Campus Operations</h4>
+          <ul>
+            <li>Razorpay Standard Checkout</li>
+            <li>Department Fee Analytics</li>
+            <li>Face Attendance Scanner</li>
+            <li>AI Exam Proctoring</li>
           </ul>
         </div>
-        <div class="card">
-          <div class="card-icon">🛡️</div>
-          <h4>3. AI Proctoring & Attendance</h4>
-          <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem;">
-            <li>In-browser Face Recognition attendance</li>
-            <li>Real-time head-pose & gaze tracking</li>
-            <li>Multiple person violation detection</li>
-            <li>Client-side privacy-first processing</li>
+        <div class="card" style="background: rgba(255, 255, 255, 0.02); border-color: var(--border-subtle);">
+          <div class="card-icon">👥</div>
+          <h4>Unified Roles</h4>
+          <ul>
+            <li>Student Dashboard & Twin</li>
+            <li>Faculty Intervention Center</li>
+            <li>Parent SMS / WhatsApp Hub</li>
+            <li>Admin Financial Console</li>
           </ul>
+        </div>
+      </div>
+
+      <div class="flow-strip">
+        <div class="flow-node">
+          <div class="flow-num">1</div>
+          <strong>Raw ERP Data</strong>
+          <span>10 Table Signals</span>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-node">
+          <div class="flow-num">2</div>
+          <strong>Student 360°</strong>
+          <span>Digital Twin Scores</span>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-node">
+          <div class="flow-num">3</div>
+          <strong>Explainable Risk</strong>
+          <span>Points Contribution</span>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-node">
+          <div class="flow-num">4</div>
+          <strong>HyperIntervene AI</strong>
+          <span>Action + Assignee</span>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-node" style="color: var(--green);">
+          <div class="flow-num" style="background: rgba(52, 211, 153, 0.2); border-color: var(--green); color: var(--green);">✓</div>
+          <strong>Re-Evaluation</strong>
+          <span>Verified Recovery</span>
         </div>
       </div>
     </div>
 
-    <!-- ==================== SLIDE 5 ==================== -->
+    <!-- ==================== SLIDE 4: THE KILLER FEATURE ==================== -->
+    <div class="slide-content" id="slide-4">
+      <span class="slide-tag">The Innovation Centerpiece</span>
+      <h2 class="slide-title">From “At Risk” to <span class="grad">“What Should We Do Next?”</span></h2>
+      <p class="slide-subtitle">
+        Moving beyond passive alerts into deterministic, assignable closed-loop recovery workflows with verifiable deadlines.
+      </p>
+
+      <div class="cards-grid" style="grid-template-columns: 1.1fr 1fr 1.3fr;">
+        <!-- Demo Case Profile -->
+        <div class="card" style="border-left: 3px solid var(--red);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong style="font-size: 14px; color: #ffffff;">Ritu Patel (PRN000)</strong>
+            <span class="pill pill-demo">Demo Profile</span>
+          </div>
+          <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">2nd Year CSE • Semester 5</p>
+          
+          <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 4px;">
+            <div style="display: flex; justify-content: space-between;"><span>Attendance:</span> <strong style="color: #f87171;">65% (Low)</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>DAA Mid-Term:</span> <strong style="color: #f87171;">22/50 (Falling)</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>Semester Exam:</span> <strong style="color: #fb923c;">14 Days Left</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>Tuition Fee:</span> <strong style="color: #fb923c;">₹50,000 Pending</strong></div>
+          </div>
+        </div>
+
+        <!-- Explainable Factors -->
+        <div class="card" style="border-left: 3px solid var(--orange);">
+          <strong style="font-size: 14px; color: #ffffff;">2. Why? (Explainable Factors)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 0;">Calculated Risk: <strong style="color: #f87171;">82% (CRITICAL)</strong></p>
+          
+          <div style="display: flex; flex-direction: column; gap: 5px; font-size: 11.5px;">
+            <div style="padding: 4px 8px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; color: #f87171;">• Attendance Shortage: +35 pts</div>
+            <div style="padding: 4px 8px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; color: #f87171;">• Low DAA CIA Score: +28 pts</div>
+            <div style="padding: 4px 8px; background: rgba(251, 146, 60, 0.1); border-radius: 6px; color: #fb923c;">• Exam Proximity Factor: +12 pts</div>
+            <div style="padding: 4px 8px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; color: #d4d4d8;">• Overdue Study Tasks: +7 pts</div>
+          </div>
+        </div>
+
+        <!-- HyperIntervene Action Plan -->
+        <div class="card" style="border-left: 3px solid var(--green);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong style="font-size: 14px; color: #ffffff;">3. HyperIntervene Action Plan</strong>
+            <span class="pill pill-real">Closed-Loop</span>
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
+            <p style="margin: 0; color: #e4e4e7;"><strong>Prescribed Action:</strong> 5-Day DAA Dynamic Programming Fast-Track & VisuAlgo Modules</p>
+            <div style="display: flex; justify-content: space-between; color: var(--text-muted); font-size: 11px;">
+              <span>👤 <strong>Assignee:</strong> Prof. Ramesh (Mentor)</span>
+              <span>📅 <strong>Deadline:</strong> 5 Days</span>
+            </div>
+            <div style="padding: 6px 10px; background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 8px; color: #34d399; font-size: 11px;">
+              ✓ Verified Outcome Score: 92/100 ➔ Risk Drops to <strong>24% (STABLE)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-tagline">
+        DETECT RISK <span class="sep">➔</span> EXPLAIN WHY <span class="sep">➔</span> PRESCRIBE ACTION <span class="sep">➔</span> ASSIGN DEADLINE <span class="sep">➔</span> RE-EVALUATE
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 5: COMPLETE CAMPUS ECOSYSTEM ==================== -->
     <div class="slide-content" id="slide-5">
-      <span class="slide-tag">Financial Operations & Revenue Hub</span>
-      <h2 class="slide-title">Smart Fee Payment & <span>Razorpay Ledger</span></h2>
+      <span class="slide-tag">Multi-Stakeholder Experience</span>
+      <h2 class="slide-title">One Platform. <span class="grad">Every Campus Stakeholder.</span></h2>
       <p class="slide-subtitle">
-        Eliminating manual fee verification, WhatsApp screenshot confusion, and accounting reconciliation discrepancies.
-      </p>
-
-      <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="card">
-          <div class="card-icon">🔐</div>
-          <h4>Server-Side Security</h4>
-          <p>Orders created in paise after server DB check. Cryptographic HMAC-SHA256 signature verified server-side. Secret is never sent to frontend.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🧾</div>
-          <h4>Instant Digital Receipts</h4>
-          <p>Generates official university receipts (<code>HC-FEE-2026-XXXXX</code>) upon payment capture with full printable layout and transaction reference.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🏛️</div>
-          <h4>Admin Department Analytics</h4>
-          <p>Live collection rate tracking across Computer Science, Electronics, and Mechanical with 1-click overdue smart reminder dispatching.</p>
-        </div>
-      </div>
-
-      <div class="flow-box">
-        <div class="flow-step">
-          <div class="flow-badge">1</div>
-          <strong>Student / Parent</strong>
-          <span>Click "Pay Online"</span>
-        </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-step">
-          <div class="flow-badge">2</div>
-          <strong>Server Order</strong>
-          <span>Razorpay in Paise</span>
-        </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-step">
-          <div class="flow-badge">3</div>
-          <strong>Checkout SDK</strong>
-          <span>Cards / UPI Test</span>
-        </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-step">
-          <div class="flow-badge">4</div>
-          <strong>HMAC Verification</strong>
-          <span>Crypto SHA256 Match</span>
-        </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-step" style="color: var(--green);">
-          <div class="flow-badge" style="background: rgba(52, 211, 153, 0.2); border-color: var(--green); color: var(--green);">✓</div>
-          <strong>Fee Marked PAID</strong>
-          <span>Receipt Generated</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== SLIDE 6 ==================== -->
-    <div class="slide-content" id="slide-6">
-      <span class="slide-tag">Learning Hub & Parent Governance</span>
-      <h2 class="slide-title">Curated Learning & <span>Parent Ecosystem</span></h2>
-      <p class="slide-subtitle">
-        Providing legitimate academic literature, interactive visual simulators, and instant home-college communication.
-      </p>
-
-      <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="card">
-          <div class="card-icon">📖</div>
-          <h4>Verified Literature</h4>
-          <p>Curated official publisher textbooks (MIT Press, Pearson, McGraw-Hill) for DSA, Digital Electronics, COA, and DAA without pirated links.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🎮</div>
-          <h4>Interactive Simulators</h4>
-          <p>Direct 1-click integration with <strong>EveryCircuit</strong> (Logic Gates, Flip-Flops) and <strong>VisuAlgo</strong> (Data Structures & Graph Traversal).</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">📲</div>
-          <h4>Parent Gateways</h4>
-          <p>Real <strong>Fast2SMS</strong> Indian mobile dispatch + 1-Click preformatted <strong>WhatsApp</strong> student academic twin progress reports.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== SLIDE 7 ==================== -->
-    <div class="slide-content" id="slide-7">
-      <span class="slide-tag">Technical Architecture & Stack</span>
-      <h2 class="slide-title">Production-Grade <span>Technical Stack</span></h2>
-      <p class="slide-subtitle">
-        Modern, modular, and cloud-ready full-stack architecture running with zero legacy bloat.
+        Customized, role-based workflows designed for high usability across students, mentors, parents, and administrative leadership.
       </p>
 
       <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr);">
         <div class="card">
-          <span style="font-size: 11px; color: var(--accent-skin); font-weight: 700;">FRONTEND LAYER</span>
-          <h4>React 18 + Vite</h4>
-          <p>Custom glassmorphism UI, Chart.js, WebRTC video proctoring, Razorpay Standard SDK.</p>
+          <div class="card-icon">🎓</div>
+          <h4>Student Portal</h4>
+          <ul>
+            <li>Student 360° Digital Twin</li>
+            <li>AI Adaptive Study Planner</li>
+            <li>AI Career Roadmaps</li>
+            <li>Learning Hub & Simulators</li>
+            <li>Online Exam & Proctoring</li>
+            <li>Razorpay Fee Payment</li>
+          </ul>
         </div>
         <div class="card">
-          <span style="font-size: 11px; color: var(--accent-skin); font-weight: 700;">BACKEND LAYER</span>
-          <h4>Node.js Express</h4>
-          <p>Async SQL connection pool, REST API routing, crypto HMAC-SHA256 signature verifier.</p>
+          <div class="card-icon">👩‍🏫</div>
+          <h4>Faculty Portal</h4>
+          <ul>
+            <li>Predictive Risk Triage</li>
+            <li>Explainable Risk Breakdown</li>
+            <li>HyperIntervene Modal</li>
+            <li>Face Recognition Attendance</li>
+            <li>Exam Violations Review</li>
+            <li>Course Marks Entry</li>
+          </ul>
         </div>
         <div class="card">
-          <span style="font-size: 11px; color: var(--accent-skin); font-weight: 700;">AI ENGINE</span>
-          <h4>Dual LLM (Groq)</h4>
-          <p>Qwen 3.8-27B & Gemini 1.5 Flash with sub-200ms latency and ERP database context injection.</p>
+          <div class="card-icon">👨‍👩‍👦</div>
+          <h4>Parent Portal</h4>
+          <ul>
+            <li>Linked Child Digital Twin</li>
+            <li>Live Attendance & Marks</li>
+            <li>AI Holistic Progress Summary</li>
+            <li>1-Click Razorpay Fee Pay</li>
+            <li>Fast2SMS Mobile Alerts</li>
+            <li>1-Click WhatsApp Reports</li>
+          </ul>
         </div>
         <div class="card">
-          <span style="font-size: 11px; color: var(--accent-skin); font-weight: 700;">DATABASE & AUTH</span>
-          <h4>SQLite / Postgres</h4>
-          <p>17 structured tables, JWT Token authentication, bcrypt hashing, strict RBAC isolation.</p>
+          <div class="card-icon">🏛️</div>
+          <h4>Admin Console</h4>
+          <ul>
+            <li>Department Fee Analytics</li>
+            <li>Collection Rate Tracking</li>
+            <li>Overdue Invoice Triage</li>
+            <li>Smart Alert Reminders</li>
+            <li>Department CRUD Controls</li>
+            <li>Multi-Campus Isolation</li>
+          </ul>
         </div>
       </div>
     </div>
 
-    <!-- ==================== SLIDE 8 ==================== -->
-    <div class="slide-content" id="slide-8">
-      <span class="slide-tag">Executive Summary & Next Steps</span>
-      <h2 class="slide-title">Measurable Impact & <span>Future Roadmap</span></h2>
+    <!-- ==================== SLIDE 6: REAL FEATURES & TECH STACK ==================== -->
+    <div class="slide-content" id="slide-6">
+      <span class="slide-tag">Production Implementations</span>
+      <h2 class="slide-title">Intelligence Meets <span class="grad">Real Campus Operations</span></h2>
       <p class="slide-subtitle">
-        A plug-and-play operating system that elevates college retention, financial health, and academic excellence.
+        Backed by production-grade cryptographic security, sub-200ms dual LLMs, and verified external learning integrations.
       </p>
 
-      <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 1.5rem;">
+      <div class="cards-grid" style="grid-template-columns: 1.2fr 1fr;">
+        <!-- Left: Real Modules -->
         <div class="card">
-          <div class="metric-hero">80%</div>
-          <h4>Faculty Overhead Reduction</h4>
-          <p>Automated risk triage and prescriptive intervention replaces hours of manual sheet checking.</p>
+          <span style="font-size: 11px; color: var(--purple-light); font-weight: 700;">OPERATIONAL INNOVATIONS</span>
+          <h4 style="font-size: 1.1rem; margin-bottom: 0.2rem;">Razorpay & Learning Hub</h4>
+          
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px;">
+            <div style="padding: 8px 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 8px;">
+              <strong>💳 Razorpay Standard Checkout:</strong> Orders created in paise, verified server-side with HMAC-SHA256, idempotent ledger capture, and digital receipts (<code>HC-FEE-2026-XXXXX</code>).
+            </div>
+            <div style="padding: 8px 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 8px;">
+              <strong>📚 Curated Learning Hub:</strong> Verified literature (MIT Press, Pearson) + direct links to <span class="pill pill-ext">VisuAlgo</span> & <span class="pill pill-ext">EveryCircuit</span> simulators.
+            </div>
+            <div style="padding: 8px 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 8px;">
+              <strong>📲 Real Fast2SMS & WhatsApp:</strong> Real Indian mobile SMS gateway integration + formatted student twin WhatsApp progress dispatcher.
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Technical Stack -->
+        <div class="card">
+          <span style="font-size: 11px; color: var(--champagne-skin); font-weight: 700;">PROVEN TECH STACK</span>
+          <h4 style="font-size: 1.1rem; margin-bottom: 0.2rem;">Full-Stack Architecture</h4>
+          
+          <ul style="line-height: 1.7; font-size: 12.5px;">
+            <li><strong>Frontend:</strong> React 18, Vite, Chart.js, WebRTC, Razorpay SDK</li>
+            <li><strong>Backend:</strong> Node.js, Express, async connection pooling</li>
+            <li><strong>AI Core:</strong> Dual LLM (Groq Qwen 3.8-27B + Gemini 1.5)</li>
+            <li><strong>Database:</strong> SQLite3 / PostgreSQL (17 structured tables)</li>
+            <li><strong>Security:</strong> JWT, bcrypt, HMAC-SHA256, strict RBAC</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 7: IMPACT & ROADMAP ==================== -->
+    <div class="slide-content" id="slide-7">
+      <span class="slide-tag">Executive Summary & Next Horizons</span>
+      <h2 class="slide-title">From Legacy ERP to an <span class="grad">Intelligent Campus</span></h2>
+      <p class="slide-subtitle">
+        Eliminating failure before it starts through proactive intelligence, automated financial reconciliation, and continuous student support.
+      </p>
+
+      <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 1.25rem;">
+        <div class="card">
+          <div style="font-size: 2.5rem; font-weight: 900; color: var(--purple-light);">80%</div>
+          <h4>Faculty Triage Reduction</h4>
+          <p>Automated risk identification and action prescription replaces hours of manual sheet checking.</p>
         </div>
         <div class="card">
-          <div class="metric-hero">100%</div>
-          <h4>Automated Reconciliation</h4>
+          <div style="font-size: 2.5rem; font-weight: 900; color: var(--champagne-skin);">100%</div>
+          <h4>Reconciliation Accuracy</h4>
           <p>Cryptographic Razorpay server verification eliminates financial ledger discrepancies.</p>
         </div>
         <div class="card">
-          <div class="metric-hero">Week 3</div>
+          <div style="font-size: 2.5rem; font-weight: 900; color: var(--green);">Week 3</div>
           <h4>Early Academic Support</h4>
           <p>Catches declining student trajectory in Month 1 rather than after end-semester detention.</p>
         </div>
       </div>
 
-      <div style="text-align: center; padding: 1rem; background: rgba(216, 178, 150, 0.08); border-radius: 14px; border: 1px solid var(--border-card);">
-        <strong style="color: var(--accent-light); font-size: 1.1rem;">
-          HyperCampus AI: Turning University Data into Explainable Decisions and Guaranteed Student Success.
-        </strong>
+      <!-- Roadmap strip -->
+      <div style="padding: 10px 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; gap: 8px;">
+        <span><strong>🔭 Future Roadmap:</strong></span>
+        <span>• Real BLE Smartwatch sync</span>
+        <span>• RTSP Camera stream CV ingestion</span>
+        <span>• Multi-institutional cross-campus federations</span>
       </div>
+
+      <div class="bottom-tagline" style="margin-top: 1rem;">
+        HYPERCAMPUS AI : TURNING CAMPUS DATA INTO EXPLAINABLE DECISIONS & ACTION
+      </div>
+    </div>
+
+    <!-- Speaker Notes Drawer Overlay -->
+    <div class="notes-drawer" id="notesDrawer">
+      <div class="notes-title">
+        <span id="notesHeading">🎙️ Speaker Script (Slide 1 — 30s)</span>
+        <span style="cursor: pointer;" onclick="toggleNotes()">✕ Close</span>
+      </div>
+      <p class="notes-body" id="notesText">
+        "Colleges today have gigabytes of attendance and marks data, but they lack connected intelligence. HyperCampus AI transforms this passive data into real-time Student Digital Twins, Explainable Risk models, and closed-loop interventions."
+      </p>
     </div>
 
     <!-- Bottom Footer Navigation Controls -->
@@ -711,6 +857,7 @@
       <div class="dots-container" id="dotsContainer"></div>
 
       <div class="nav-controls">
+        <button class="nav-btn" onclick="toggleNotes()">🎙️ Speaker Notes</button>
         <button class="nav-btn" onclick="window.print()">🖨️ Export PDF</button>
         <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
       </div>
@@ -720,7 +867,38 @@
 
   <script>
     let currentSlide = 1;
-    const totalSlides = 8;
+    const totalSlides = 7;
+
+    const speakerNotes = [
+      {
+        title: "Slide 1: The Hook (30 Seconds)",
+        text: "Judges, colleges today already possess enormous amounts of data—attendance, marks, and fees. The real problem is that this data sits in silos, discovered too late. HyperCampus AI is the first Intelligent Campus Operating System that connects these signals to explain why a student is struggling, assign targeted interventions, and verify academic recovery."
+      },
+      {
+        title: "Slide 2: The Real Problem (45 Seconds)",
+        text: "In traditional universities, a student skips 3 classes in week 2, fails a mid-term in week 4, and has fee dues in week 6. Because these sit in separate tables, nobody connects the dots until the student is detained. Faculty are overburdened, parents are left in the dark, and administrators struggle with manual financial reconciliation. The problem is not lack of data—it is lack of connected intelligence."
+      },
+      {
+        title: "Slide 3: The Architecture Solution (60 Seconds)",
+        text: "HyperCampus AI introduces a unified brain. Our engine queries multi-table ERP logs into a Student 360° Digital Twin with 6 transparent benchmarks. When risk is detected, our Explainable AI breaks down the exact point contributions, and HyperIntervene AI synthesizes a closed-loop recovery plan with assigned mentors, strict deadlines, and automatic re-evaluation upon completion."
+      },
+      {
+        title: "Slide 4: The Killer Feature — Closed-Loop Action (90 Seconds)",
+        text: "Here is our core innovation with Ritu, a real 2nd-year CSE student case. Her attendance dropped to 65% and her DAA score dropped. Traditional ERPs show an opaque 82% risk. HyperCampus AI explains WHY: +35 points attendance shortage, +28 points DAA concept gap. Then, HyperIntervene AI prescribes the exact recovery: 5 days of DAA Dynamic Programming practice with VisuAlgo simulators, assigned to her faculty mentor. Once completed, risk recalibrates to 24% STABLE. Detect, Explain, Intervene, Track, Improve."
+      },
+      {
+        title: "Slide 5: Multi-Stakeholder Ecosystem (60 Seconds)",
+        text: "Every campus stakeholder has a dedicated, tailored portal. Students get adaptive study planners, career roadmaps, and online proctoring. Faculty get automated risk triage and face attendance scanners. Parents get live attendance, Fast2SMS mobile alerts, and 1-click WhatsApp progress reports. Administrators get real-time department fee collection analytics and multi-campus management."
+      },
+      {
+        title: "Slide 6: Real Operations & Technology (60 Seconds)",
+        text: "Everything you see is backed by real engineering. Our Smart Fee system uses Razorpay Standard Checkout in paise with HMAC-SHA256 server verification, idempotent ledger logging, and instant printable digital receipts. Our Learning Hub provides verified publisher literature with direct VisuAlgo and EveryCircuit simulator integrations. Under the hood, we run React 18, Node.js Express, 17 relational SQL tables, and sub-200ms Groq LLM inference."
+      },
+      {
+        title: "Slide 7: Measurable Impact & Closing (45 Seconds)",
+        text: "HyperCampus AI reduces faculty manual tracking by 80%, provides 100% automated fee reconciliation, and enables early intervention in Week 3 instead of end-semester failure. HyperCampus AI does not just tell a college what happened—it explains why, prescribes what to do next, and tracks whether it worked. Thank you!"
+      }
+    ];
 
     function renderDots() {
       const container = document.getElementById('dotsContainer');
@@ -746,6 +924,13 @@
       document.getElementById('prevBtn').style.opacity = currentSlide === 1 ? '0.4' : '1';
       document.getElementById('nextBtn').style.opacity = currentSlide === totalSlides ? '0.4' : '1';
 
+      // Update speaker notes
+      const note = speakerNotes[currentSlide - 1];
+      if (note) {
+        document.getElementById('notesHeading').innerText = `🎙️ ${note.title}`;
+        document.getElementById('notesText').innerText = `"${note.text}"`;
+      }
+
       renderDots();
     }
 
@@ -757,12 +942,18 @@
       showSlide(index);
     }
 
-    // Keyboard Shortcuts (Arrow keys & Space)
+    function toggleNotes() {
+      document.getElementById('notesDrawer').classList.toggle('open');
+    }
+
+    // Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
         changeSlide(1);
       } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
         changeSlide(-1);
+      } else if (e.key === 'n' || e.key === 'N') {
+        toggleNotes();
       }
     });
 
