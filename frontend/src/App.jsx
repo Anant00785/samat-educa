@@ -91,6 +91,7 @@ export default function App() {
             <Route path="/student/360" element={<Student360 />} />
             <Route path="/student/learning-hub" element={<LearningHub />} />
             <Route path="/student/study-plan" element={<StudyPlanner />} />
+            <Route path="/student/study-planner" element={<StudyPlanner />} />
             <Route path="/student/career" element={<CareerGuidance />} />
             <Route path="/student/wellness" element={<StressDetection />} />
             <Route path="/student/wearable" element={<WearableWellness />} />

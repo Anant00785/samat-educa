@@ -304,7 +304,7 @@ export default function StudentDashboard() {
                   <div style={{ display: 'flex', gap: '8px' }}>
                     {act.action_type === 'RECOVERY_PLAN' && (
                       <Link 
-                        to="/student/study-planner"
+                        to="/student/study-plan"
                         style={{
                           padding: '8px 14px',
                           background: 'linear-gradient(135deg, #F3E5D8 0%, #D8B296 50%, #C99E80 100%)',

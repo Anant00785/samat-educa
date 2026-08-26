@@ -447,7 +447,7 @@ export default function Student360() {
 
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <Link
-            to="/student/study-planner"
+            to="/student/study-plan"
             style={{
               padding: '10px 18px',
               background: 'linear-gradient(135deg, #F3E5D8 0%, #D8B296 50%, #C99E80 100%)',
