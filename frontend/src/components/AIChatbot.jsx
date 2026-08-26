@@ -143,21 +143,24 @@ export default function AIChatbot() {
           position: 'fixed',
           bottom: '2rem',
           right: '2rem',
-          width: '60px',
-          height: '60px',
+          width: '56px',
+          height: '56px',
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+          background: 'rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
           color: 'white',
-          fontSize: '24px',
-          border: 'none',
-          boxShadow: '0 8px 32px rgba(99,102,241,0.4)',
+          fontSize: '22px',
+          border: '1px solid rgba(255, 255, 255, 0.18)',
+          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(124, 107, 196, 0.25)',
           cursor: 'pointer',
           zIndex: 9999,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transition: 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
+        title="Open Multilingual AI Counselor"
       >
         {isOpen ? '✕' : '🤖'}
       </button>
@@ -169,45 +172,65 @@ export default function AIChatbot() {
           right: '2rem',
           width: '380px',
           height: '540px',
-          background: 'rgba(12, 14, 28, 0.95)',
-          backdropFilter: 'blur(25px)',
+          background: 'rgba(14, 14, 20, 0.94)',
+          backdropFilter: 'blur(28px)',
+          WebkitBackdropFilter: 'blur(28px)',
           border: '1px solid var(--border)',
           borderRadius: '20px',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.7)',
+          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(124, 107, 196, 0.15)',
           zIndex: 9998,
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          animation: 'slideUp 0.3s ease-out'
+          animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
         }}>
           {/* HEADER WITH LANGUAGE SELECTOR */}
           <div style={{
-            padding: '0.9rem 1rem',
-            background: 'rgba(255,255,255,0.03)',
-            borderBottom: '1px solid var(--border)',
+            padding: '0.9rem 1.1rem',
+            background: 'rgba(255, 255, 255, 0.02)',
+            borderBottom: '1px solid var(--border-subtle)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🤖</div>
+              <div style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '16px'
+              }}>
+                🤖
+              </div>
               <div>
-                <h3 style={{ margin: 0, fontSize: '0.95rem', color: 'white' }}>EduERP Guide</h3>
+                <h3 style={{ margin: 0, fontSize: '0.92rem', color: '#ffffff', fontWeight: '600' }}>EduERP Guide</h3>
                 <span style={{ fontSize: '10px', color: '#34d399', fontWeight: '500' }}>● Multilingual Voice AI</span>
               </div>
             </div>
 
             {/* LANGUAGE SELECTOR PILL */}
-            <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.4)', padding: '3px', borderRadius: '20px', border: '1px solid var(--border)' }}>
+            <div style={{
+              display: 'flex',
+              gap: '3px',
+              background: 'rgba(0, 0, 0, 0.5)',
+              padding: '3px',
+              borderRadius: '20px',
+              border: '1px solid var(--border)'
+            }}>
               <button 
                 onClick={() => setLanguage('en')}
                 style={{
-                  background: language === 'en' ? '#6366f1' : 'transparent',
+                  background: language === 'en' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
                   border: 'none',
-                  color: 'white',
+                  color: language === 'en' ? '#ffffff' : '#a1a1aa',
                   borderRadius: '12px',
                   padding: '2px 8px',
-                  fontSize: '11px',
+                  fontSize: '10.5px',
                   cursor: 'pointer',
                   fontWeight: '600'
                 }}
@@ -217,12 +240,12 @@ export default function AIChatbot() {
               <button 
                 onClick={() => setLanguage('hi')}
                 style={{
-                  background: language === 'hi' ? '#6366f1' : 'transparent',
+                  background: language === 'hi' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
                   border: 'none',
-                  color: 'white',
+                  color: language === 'hi' ? '#ffffff' : '#a1a1aa',
                   borderRadius: '12px',
                   padding: '2px 8px',
-                  fontSize: '11px',
+                  fontSize: '10.5px',
                   cursor: 'pointer',
                   fontWeight: '600'
                 }}
@@ -232,12 +255,12 @@ export default function AIChatbot() {
               <button 
                 onClick={() => setLanguage('bn')}
                 style={{
-                  background: language === 'bn' ? '#6366f1' : 'transparent',
+                  background: language === 'bn' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
                   border: 'none',
-                  color: 'white',
+                  color: language === 'bn' ? '#ffffff' : '#a1a1aa',
                   borderRadius: '12px',
                   padding: '2px 8px',
-                  fontSize: '11px',
+                  fontSize: '10.5px',
                   cursor: 'pointer',
                   fontWeight: '600'
                 }}
@@ -258,26 +281,26 @@ export default function AIChatbot() {
             overflowY: 'auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.8rem'
+            gap: '0.75rem'
           }}>
             {messages.map((m, i) => (
               <div key={i} style={{
                 alignSelf: m.sender === 'user' ? 'flex-end' : 'flex-start',
                 maxWidth: '85%',
-                background: m.sender === 'user' ? '#6366f1' : 'rgba(255,255,255,0.06)',
-                padding: '0.7rem 1rem',
+                background: m.sender === 'user' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.035)',
+                padding: '0.75rem 1rem',
                 borderRadius: m.sender === 'user' ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
-                color: 'white',
+                color: '#ffffff',
                 fontSize: '13px',
-                lineHeight: '1.4',
-                border: '1px solid var(--border)'
+                lineHeight: '1.45',
+                border: `1px solid ${m.sender === 'user' ? 'rgba(255, 255, 255, 0.2)' : 'var(--border)'}`
               }}>
                 {m.text}
               </div>
             ))}
             {isTyping && (
-              <div style={{ alignSelf: 'flex-start', color: 'var(--text-light)', fontSize: '12px', fontStyle: 'italic' }}>
-                EduERP Guide is thinking...
+              <div style={{ alignSelf: 'flex-start', color: 'var(--text-muted)', fontSize: '12px', fontStyle: 'italic' }}>
+                EduERP Guide is synthesizing advice...
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -285,9 +308,9 @@ export default function AIChatbot() {
 
           {/* INPUT BAR */}
           <div style={{
-            padding: '0.8rem 1rem',
-            borderTop: '1px solid var(--border)',
-            background: 'rgba(0,0,0,0.3)',
+            padding: '0.75rem 1rem',
+            borderTop: '1px solid var(--border-subtle)',
+            background: 'rgba(0, 0, 0, 0.35)',
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem'
@@ -298,14 +321,15 @@ export default function AIChatbot() {
                 width: '36px',
                 height: '36px',
                 borderRadius: '50%',
-                background: isListening ? '#ef4444' : 'rgba(255,255,255,0.08)',
-                border: 'none',
-                color: 'white',
+                background: isListening ? 'rgba(239, 68, 68, 0.25)' : 'rgba(255, 255, 255, 0.05)',
+                border: `1px solid ${isListening ? '#ef4444' : 'var(--border)'}`,
+                color: isListening ? '#f87171' : '#ffffff',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '16px'
+                fontSize: '15px',
+                transition: 'all 0.2s ease'
               }}
               title="Click to speak (English, Hindi, Bengali)"
             >
@@ -314,11 +338,11 @@ export default function AIChatbot() {
             <input 
               style={{
                 flex: 1,
-                background: 'rgba(255,255,255,0.05)',
+                background: 'rgba(255, 255, 255, 0.04)',
                 border: '1px solid var(--border)',
                 borderRadius: '20px',
                 padding: '0.5rem 1rem',
-                color: 'white',
+                color: '#ffffff',
                 outline: 'none',
                 fontSize: '13px'
               }}
@@ -333,14 +357,16 @@ export default function AIChatbot() {
                 width: '36px',
                 height: '36px',
                 borderRadius: '50%',
-                background: '#6366f1',
+                background: '#ffffff',
                 border: 'none',
-                color: 'white',
+                color: '#000000',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '14px'
+                fontSize: '13px',
+                fontWeight: 'bold',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.4)'
               }}
             >
               ➤

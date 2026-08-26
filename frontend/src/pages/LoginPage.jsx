@@ -47,10 +47,6 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      <div className="login-bg-orb login-bg-orb-1" />
-      <div className="login-bg-orb login-bg-orb-2" />
-      <div className="login-bg-orb login-bg-orb-3" />
-
       <div className="login-wrapper">
         <div className="login-brand">
           <div className="brand-icon">⚡</div>
@@ -76,6 +72,7 @@ export default function LoginPage() {
                 autoComplete="email"
               />
             </div>
+
             <div className="field-group">
               <label htmlFor="password" className="field-label">Password</label>
               <input
@@ -90,7 +87,7 @@ export default function LoginPage() {
               />
             </div>
 
-            {error && <div className="alert alert-error">{error}</div>}
+            {error && <div className="alert alert-error" style={{ marginBottom: '1.25rem' }}>{error}</div>}
 
             <button type="submit" className="btn-login" disabled={loading}>
               {loading ? <span className="btn-spinner" /> : 'Sign In'}
@@ -99,11 +96,11 @@ export default function LoginPage() {
 
           <div className="demo-section">
             <p className="demo-label">Quick 1-Click Demo Login</p>
-            <div className="demo-buttons" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-              <button className="demo-btn demo-admin"   onClick={() => fillDemo('admin')}> 🛡️ Admin </button>
-              <button className="demo-btn demo-faculty" onClick={() => fillDemo('faculty')}> 👩‍🏫 Faculty </button>
-              <button className="demo-btn demo-student" onClick={() => fillDemo('student')}> 🎓 Student </button>
-              <button className="demo-btn" style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', border: '1px solid rgba(168, 85, 247, 0.3)' }} onClick={() => fillDemo('parent')}> 👨‍👩‍👧 Parent </button>
+            <div className="demo-buttons">
+              <button type="button" className="demo-btn" onClick={() => fillDemo('admin')}> 🛡️ Admin </button>
+              <button type="button" className="demo-btn" onClick={() => fillDemo('faculty')}> 👩‍🏫 Faculty </button>
+              <button type="button" className="demo-btn" onClick={() => fillDemo('student')}> 🎓 Student </button>
+              <button type="button" className="demo-btn" onClick={() => fillDemo('parent')}> 👨‍👩‍👧 Parent </button>
             </div>
           </div>
         </div>

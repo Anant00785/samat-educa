@@ -5,6 +5,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import AIChatbot from './components/AIChatbot';
+import AnimatedBackground from './components/AnimatedBackground';
 
 // Pages
 import LoginPage from './pages/LoginPage';
@@ -59,6 +60,7 @@ function DashboardLayout() {
 export default function App() {
   return (
     <AuthProvider>
+      <AnimatedBackground />
       <BrowserRouter>
         <Routes>
           {/* Public */}
