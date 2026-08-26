@@ -37,6 +37,10 @@ const gamificationRoutes = require('./routes/gamification');
 const wearableRoutes = require('./routes/wearable');
 const cctvRoutes = require('./routes/cctv');
 const smsRoutes = require('./routes/sms');
+const interventionRoutes = require('./routes/interventions');
+const student360Routes = require('./routes/student360');
+const learningHubRoutes = require('./routes/learningHub');
+const paymentRoutes = require('./routes/payments');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
@@ -59,6 +63,10 @@ app.use('/api/gamification', gamificationRoutes);
 app.use('/api/wearable', wearableRoutes);
 app.use('/api/cctv', cctvRoutes);
 app.use('/api/sms', smsRoutes);
+app.use('/api/interventions', interventionRoutes);
+app.use('/api/student-360', student360Routes);
+app.use('/api/learning-hub', learningHubRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // 404 fallback
 app.use((req, res) => {

@@ -21,6 +21,8 @@ import CCTVMonitor from './pages/admin/CCTVMonitor';
 
 // Student Pages
 import StudentDashboard from './pages/student/StudentDashboard';
+import Student360 from './pages/student/Student360';
+import LearningHub from './pages/student/LearningHub';
 import AttendancePage from './pages/student/AttendancePage';
 import MarksPage from './pages/student/MarksPage';
 import FeesPage from './pages/student/FeesPage';
@@ -75,6 +77,7 @@ export default function App() {
           <Route element={<PrivateRoute roles={['ADMIN']}><DashboardLayout /></PrivateRoute>}>
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/predictive" element={<PredictiveAnalytics />} />
+            <Route path="/admin/student-360/:prnParam" element={<Student360 />} />
             <Route path="/admin/cctv" element={<CCTVMonitor />} />
             <Route path="/admin/students" element={<ManageStudents />} />
             <Route path="/admin/faculty" element={<ManageFaculty />} />
@@ -85,6 +88,8 @@ export default function App() {
           {/* ── STUDENT ── */}
           <Route element={<PrivateRoute roles={['STUDENT']}><DashboardLayout /></PrivateRoute>}>
             <Route path="/student" element={<StudentDashboard />} />
+            <Route path="/student/360" element={<Student360 />} />
+            <Route path="/student/learning-hub" element={<LearningHub />} />
             <Route path="/student/study-plan" element={<StudyPlanner />} />
             <Route path="/student/career" element={<CareerGuidance />} />
             <Route path="/student/wellness" element={<StressDetection />} />
@@ -101,6 +106,7 @@ export default function App() {
             <Route path="/faculty" element={<FacultyDashboard />} />
             <Route path="/faculty/attendance" element={<MarkAttendance />} />
             <Route path="/faculty/predictive" element={<PredictiveAnalytics />} />
+            <Route path="/faculty/student-360/:prnParam" element={<Student360 />} />
             <Route path="/faculty/exam-violations" element={<ExamViolationsReview />} />
             <Route path="/faculty/create-exam" element={<CreateExam />} />
           </Route>

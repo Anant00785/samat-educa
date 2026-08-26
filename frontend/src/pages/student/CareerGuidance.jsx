@@ -9,15 +9,23 @@ const PRESET_ROLES = [
   'Data Scientist & Analytics Lead'
 ];
 
+const DEFAULT_SKILLS = {
+  'AI / Machine Learning Engineer': 'Python, SQL, PyTorch, Linear Algebra',
+  'Full-Stack Cloud Developer': 'JavaScript, React, Node.js, HTML, CSS',
+  'Cybersecurity & Network Analyst': 'Linux, Networking, TCP/IP, Python, Wireshark',
+  'Data Scientist & Analytics Lead': 'Python, SQL, Pandas, Statistics, Excel'
+};
+
 export default function CareerGuidance() {
   const { user } = useAuth();
   const prn = user?.prn || 'PRN000';
   
   const [selectedRole, setSelectedRole] = useState('AI / Machine Learning Engineer');
-  const [skillsInput, setSkillsInput] = useState('Python, SQL, C++, Basic Data Structures');
+  const [skillsInput, setSkillsInput] = useState('Python, SQL, PyTorch, Linear Algebra');
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -25,8 +33,12 @@ export default function CareerGuidance() {
         setLoading(true);
         const res = await API.get(`/career/profile/${prn}`);
         setProfile(res.data);
-        if (res.data.targetRole) setSelectedRole(res.data.targetRole);
-        if (res.data.skillsAcquired?.length > 0) setSkillsInput(res.data.skillsAcquired.join(', '));
+        if (res.data.targetRole) {
+          setSelectedRole(res.data.targetRole);
+        }
+        if (res.data.skillsAcquired?.length > 0) {
+          setSkillsInput(res.data.skillsAcquired.join(', '));
+        }
       } catch (err) {
         console.error("Error loading career profile:", err);
       } finally {
@@ -35,6 +47,13 @@ export default function CareerGuidance() {
     }
     load();
   }, [prn]);
+
+  const handleRoleChange = (newRole) => {
+    setSelectedRole(newRole);
+    if (DEFAULT_SKILLS[newRole]) {
+      setSkillsInput(DEFAULT_SKILLS[newRole]);
+    }
+  };
 
   const handleAnalyze = async () => {
     try {
@@ -45,6 +64,8 @@ export default function CareerGuidance() {
         currentSkills: skillsInput
       });
       setProfile(res.data.analysis);
+      setToastMessage(`🎉 Career Roadmap synthesized for ${res.data.analysis.targetRole || selectedRole}!`);
+      setTimeout(() => setToastMessage(null), 4000);
     } catch (err) {
       console.error(err);
       alert("Error analyzing career path.");
@@ -63,46 +84,78 @@ export default function CareerGuidance() {
   }
 
   return (
-    <div className="page-content" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div className="page-content" style={{ padding: '2rem', maxWidth: '1100px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
+      {/* TOAST MESSAGE */}
+      {toastMessage && (
+        <div style={{
+          padding: '1rem 1.5rem',
+          background: 'linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(216, 178, 150, 0.15))',
+          border: '1px solid #34d399',
+          borderRadius: '12px',
+          color: '#34d399',
+          fontWeight: '600',
+          fontSize: '14px',
+          animation: 'fadeIn 0.3s ease'
+        }}>
+          {toastMessage}
+        </div>
+      )}
+
       {/* HEADER SECTION */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.1))',
-        border: '1px solid var(--border)',
+        background: 'linear-gradient(135deg, rgba(230, 203, 184, 0.08), rgba(212, 175, 148, 0.03))',
+        border: '1px solid rgba(230, 203, 184, 0.18)',
         borderRadius: '20px',
         padding: '2rem',
         backdropFilter: 'blur(20px)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.5rem' }}>
-          <span style={{ fontSize: '28px' }}>🚀</span>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '700', margin: 0 }}>AI Career Path & Skill Gap Analyzer</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '0.6rem' }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '12px',
+            background: 'linear-gradient(135deg, rgba(230, 203, 184, 0.2), rgba(212, 175, 148, 0.1))',
+            border: '1px solid rgba(230, 203, 184, 0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px'
+          }}>
+            🚀
+          </div>
+          <div>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: '700', margin: 0, color: '#fafafa' }}>
+              AI Career Path & Skill Gap Analyzer
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', margin: '4px 0 0 0', fontSize: '0.92rem' }}>
+              Align your coursework and lab practice toward high-demand industry roles with AI milestone roadmaps.
+            </p>
+          </div>
         </div>
-        <p style={{ color: 'var(--text-light)', margin: 0, fontSize: '0.95rem', maxWidth: '700px' }}>
-          Align your coursework, lab practice, and certifications toward high-demand industry roles. The AI model identifies your technical skill gap and synthesizes an actionable milestone roadmap.
-        </p>
 
         {/* INPUT CONTROLS */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.2rem', marginTop: '1.5rem' }}>
-          <div className="field-group">
-            <label className="field-label" style={{ color: 'var(--text-dark)', fontWeight: '600' }}>Target Career Role</label>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '1.8rem' }}>
+          <div className="field-group" style={{ margin: 0 }}>
+            <label className="field-label" style={{ color: '#e4e4e7', fontWeight: '600' }}>Target Career Role</label>
             <select 
               className="field-input" 
               value={selectedRole} 
-              onChange={(e) => setSelectedRole(e.target.value)}
+              onChange={(e) => handleRoleChange(e.target.value)}
               style={{ background: 'rgba(0,0,0,0.4)', color: 'white', borderRadius: '10px' }}
             >
               {PRESET_ROLES.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
           </div>
 
-          <div className="field-group">
-            <label className="field-label" style={{ color: 'var(--text-dark)', fontWeight: '600' }}>Your Current Skills (comma separated)</label>
+          <div className="field-group" style={{ margin: 0 }}>
+            <label className="field-label" style={{ color: '#e4e4e7', fontWeight: '600' }}>Your Current Skills (comma separated)</label>
             <input 
               type="text" 
               className="field-input" 
               value={skillsInput} 
               onChange={(e) => setSkillsInput(e.target.value)}
-              placeholder="e.g. Python, SQL, React, C++"
+              placeholder="e.g. Python, SQL, Linux, Networking"
               style={{ background: 'rgba(0,0,0,0.4)', color: 'white', borderRadius: '10px' }}
             />
           </div>
@@ -111,10 +164,26 @@ export default function CareerGuidance() {
         <button 
           onClick={handleAnalyze} 
           disabled={analyzing}
-          className="btn-primary" 
-          style={{ marginTop: '1.2rem', padding: '0.9rem 2rem', fontWeight: '600', borderRadius: '12px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          style={{
+            marginTop: '1.5rem',
+            padding: '0.85rem 2rem',
+            background: 'linear-gradient(135deg, #F3E5D8 0%, #D8B296 50%, #C99E80 100%)',
+            color: '#1a120c',
+            border: '1px solid rgba(255, 255, 255, 0.6)',
+            borderRadius: '10px',
+            fontWeight: '700',
+            fontSize: '14px',
+            cursor: analyzing ? 'wait' : 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            boxShadow: '0 4px 18px rgba(216, 178, 150, 0.3)',
+            transition: 'all 0.25s ease'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
         >
-          {analyzing ? 'Synthesizing Roadmap...' : '⚡ Generate AI Gap Analysis & Roadmap'}
+          {analyzing ? '⚡ Synthesizing Roadmap...' : '⚡ Generate AI Gap Analysis & Roadmap'}
         </button>
       </div>
 
@@ -125,44 +194,43 @@ export default function CareerGuidance() {
             
             {/* MATCH SCORE CARD */}
             <div style={{
-              background: 'rgba(15, 23, 42, 0.7)',
+              background: 'rgba(18, 18, 24, 0.65)',
               border: '1px solid var(--border)',
               borderRadius: '16px',
               padding: '1.8rem',
-              backdropFilter: 'blur(16px)',
+              backdropFilter: 'blur(20px)',
               textAlign: 'center',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <span style={{ fontSize: '12px', color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600' }}>
                 Role Alignment Match
               </span>
               <div style={{
-                fontSize: '3.5rem',
+                fontSize: '3.6rem',
                 fontWeight: '800',
-                margin: '1rem 0',
-                background: 'linear-gradient(135deg, #34d399, #6366f1)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
+                margin: '0.8rem 0',
+                color: profile.matchPercentage >= 70 ? '#34d399' : '#D8B296',
+                letterSpacing: '-1px'
               }}>
                 {profile.matchPercentage}%
               </div>
-              <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-light)' }}>
-                Targeting: <strong>{profile.targetRole || selectedRole}</strong>
+              <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)' }}>
+                Targeting: <strong style={{ color: '#ffffff' }}>{profile.targetRole || selectedRole}</strong>
               </p>
             </div>
 
             {/* SKILLS ACQUIRED */}
             <div style={{
-              background: 'rgba(15, 23, 42, 0.7)',
+              background: 'rgba(18, 18, 24, 0.65)',
               border: '1px solid var(--border)',
               borderRadius: '16px',
               padding: '1.8rem',
-              backdropFilter: 'blur(16px)'
+              backdropFilter: 'blur(20px)'
             }}>
-              <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', color: '#34d399', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.05rem', color: '#34d399', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span>✅</span> Validated Skills
               </h4>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -170,11 +238,11 @@ export default function CareerGuidance() {
                   <span key={idx} style={{
                     padding: '6px 12px',
                     borderRadius: '20px',
-                    background: 'rgba(52, 211, 153, 0.12)',
-                    border: '1px solid rgba(52, 211, 153, 0.3)',
+                    background: 'rgba(52, 211, 153, 0.1)',
+                    border: '1px solid rgba(52, 211, 153, 0.25)',
                     color: '#34d399',
                     fontSize: '12px',
-                    fontWeight: '500'
+                    fontWeight: '600'
                   }}>
                     {s}
                   </span>
@@ -184,13 +252,13 @@ export default function CareerGuidance() {
 
             {/* SKILLS MISSING / GAP */}
             <div style={{
-              background: 'rgba(15, 23, 42, 0.7)',
+              background: 'rgba(18, 18, 24, 0.65)',
               border: '1px solid var(--border)',
               borderRadius: '16px',
               padding: '1.8rem',
-              backdropFilter: 'blur(16px)'
+              backdropFilter: 'blur(20px)'
             }}>
-              <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', color: '#f87171', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.05rem', color: '#f87171', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span>🎯</span> Critical Skill Gap
               </h4>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -198,11 +266,11 @@ export default function CareerGuidance() {
                   <span key={idx} style={{
                     padding: '6px 12px',
                     borderRadius: '20px',
-                    background: 'rgba(239, 68, 68, 0.12)',
-                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.25)',
                     color: '#f87171',
                     fontSize: '12px',
-                    fontWeight: '500'
+                    fontWeight: '600'
                   }}>
                     + {s}
                   </span>
@@ -214,50 +282,50 @@ export default function CareerGuidance() {
 
           {/* ROADMAP TIMELINE */}
           <div style={{
-            background: 'rgba(15, 23, 42, 0.7)',
+            background: 'rgba(18, 18, 24, 0.65)',
             border: '1px solid var(--border)',
             borderRadius: '16px',
             padding: '2rem',
-            backdropFilter: 'blur(16px)'
+            backdropFilter: 'blur(20px)'
           }}>
-            <h3 style={{ margin: '0 0 1.5rem 0', fontSize: '1.3rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h3 style={{ margin: '0 0 1.5rem 0', fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '10px', color: '#fafafa' }}>
               <span>🗺️</span> Recommended Learning Roadmap
             </h3>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               {profile.roadmap?.map((step, idx) => (
                 <div key={idx} style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '1.5rem',
-                  padding: '1rem 1.5rem',
-                  background: step.status === 'COMPLETED' ? 'rgba(52, 211, 153, 0.05)' : 'rgba(255, 255, 255, 0.02)',
-                  borderLeft: `4px solid ${step.status === 'COMPLETED' ? '#34d399' : step.status === 'IN_PROGRESS' ? '#6366f1' : '#64748b'}`,
-                  borderTop: '1px solid var(--border)',
-                  borderRight: '1px solid var(--border)',
-                  borderBottom: '1px solid var(--border)',
+                  padding: '1.1rem 1.4rem',
+                  background: step.status === 'COMPLETED' ? 'rgba(52, 211, 153, 0.04)' : 'rgba(255, 255, 255, 0.02)',
+                  borderLeft: `4px solid ${step.status === 'COMPLETED' ? '#34d399' : step.status === 'IN_PROGRESS' ? '#D8B296' : 'rgba(255,255,255,0.1)'}`,
+                  borderTop: '1px solid var(--border-subtle)',
+                  borderRight: '1px solid var(--border-subtle)',
+                  borderBottom: '1px solid var(--border-subtle)',
                   borderRadius: '12px'
                 }}>
                   <div style={{
-                    width: '36px',
-                    height: '36px',
+                    width: '34px',
+                    height: '34px',
                     borderRadius: '50%',
-                    background: step.status === 'COMPLETED' ? '#34d399' : step.status === 'IN_PROGRESS' ? '#6366f1' : 'rgba(255,255,255,0.1)',
-                    color: 'white',
+                    background: step.status === 'COMPLETED' ? '#34d399' : step.status === 'IN_PROGRESS' ? '#D8B296' : 'rgba(255,255,255,0.08)',
+                    color: step.status === 'IN_PROGRESS' ? '#1a120c' : '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontWeight: 'bold',
-                    fontSize: '14px'
+                    fontWeight: '700',
+                    fontSize: '13px'
                   }}>
                     {step.status === 'COMPLETED' ? '✓' : step.step || idx + 1}
                   </div>
                   <div style={{ flex: 1 }}>
-                    <strong style={{ fontSize: '14px', color: 'var(--text-dark)' }}>{step.title}</strong>
+                    <strong style={{ fontSize: '14px', color: '#ffffff' }}>{step.title}</strong>
                   </div>
                   <span className="badge" style={{
-                    background: step.status === 'COMPLETED' ? 'rgba(52, 211, 153, 0.15)' : step.status === 'IN_PROGRESS' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255,255,255,0.05)',
-                    color: step.status === 'COMPLETED' ? '#34d399' : step.status === 'IN_PROGRESS' ? '#818cf8' : '#94a3b8'
+                    background: step.status === 'COMPLETED' ? 'rgba(52, 211, 153, 0.12)' : step.status === 'IN_PROGRESS' ? 'rgba(216, 178, 150, 0.12)' : 'rgba(255,255,255,0.04)',
+                    color: step.status === 'COMPLETED' ? '#34d399' : step.status === 'IN_PROGRESS' ? '#D8B296' : '#a1a1aa'
                   }}>
                     {step.status}
                   </span>

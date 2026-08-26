@@ -6,7 +6,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-// Comprehensive local skill templates for deterministic fallback
+// Comprehensive local skill templates for instant deterministic fallback
 const ROLE_TEMPLATES = {
     'AI / Machine Learning Engineer': {
         required: ['Python', 'Linear Algebra', 'PyTorch / TensorFlow', 'Data Structures', 'Model Deployment (Docker/FastAPI)', 'MLOps'],
@@ -72,63 +72,88 @@ router.get('/profile/:prn', authenticateToken, async (req, res) => {
 router.post('/analyze', authenticateToken, async (req, res) => {
     const { prn, targetRole, currentSkills } = req.body;
     try {
-        const userSkills = Array.isArray(currentSkills) ? currentSkills : (currentSkills || 'Python, C++, SQL').split(',').map(s => s.trim());
+        const userSkills = Array.isArray(currentSkills) 
+            ? currentSkills 
+            : (currentSkills || 'Python, C++, SQL').split(',').map(s => s.trim()).filter(Boolean);
+            
         const roleKey = Object.keys(ROLE_TEMPLATES).find(k => k.toLowerCase().includes(targetRole?.toLowerCase())) || 'AI / Machine Learning Engineer';
         const template = ROLE_TEMPLATES[roleKey] || ROLE_TEMPLATES['AI / Machine Learning Engineer'];
 
-        // AI Generation with Gemini
-        let analysis = null;
-        if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.length > 10) {
-            try {
-                const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-                const prompt = `
-                    You are an expert AI Career Mentor for university students.
-                    Target Role: "${targetRole}"
-                    Student's Current Skills: "${userSkills.join(', ')}"
-                    
-                    Perform a strict skill gap analysis and roadmap generation.
-                    Return ONLY valid raw JSON adhering to this structure without markdown formatting or code fences:
-                    {
-                      "matchPercentage": <number between 30 and 95>,
-                      "skillsAcquired": ["Skill 1", "Skill 2"],
-                      "skillsMissing": ["Missing 1", "Missing 2"],
-                      "recommendedProjects": ["Project 1", "Project 2", "Project 3"],
-                      "recommendedCertifications": ["Cert 1", "Cert 2"],
-                      "roadmap": [
-                        { "step": 1, "title": "Milestone 1 description", "status": "IN_PROGRESS" },
-                        { "step": 2, "title": "Milestone 2 description", "status": "PENDING" },
-                        { "step": 3, "title": "Milestone 3 description", "status": "PENDING" },
-                        { "step": 4, "title": "Milestone 4 description", "status": "PENDING" }
-                      ]
-                    }
-                `;
-                const result = await model.generateContent(prompt);
-                let jsonText = result.response.text().trim();
-                if (jsonText.startsWith('```json')) jsonText = jsonText.substring(7);
-                if (jsonText.endsWith('```')) jsonText = jsonText.substring(0, jsonText.length - 3);
-                analysis = JSON.parse(jsonText);
-            } catch (aiErr) {
-                console.log("Gemini Career Analysis Fallback:", aiErr.message);
-            }
-        }
+        // Compute instant deterministic gap analysis first
+        const missing = template.required.filter(r => !userSkills.some(s => s.toLowerCase() === r.toLowerCase() || r.toLowerCase().includes(s.toLowerCase())));
+        const acquired = userSkills;
+        const matchScore = Math.min(95, Math.max(35, Math.round(((template.required.length - missing.length) / template.required.length) * 100)));
+        
+        let analysis = {
+            targetRole: targetRole || roleKey,
+            matchPercentage: matchScore,
+            skillsAcquired: acquired,
+            skillsMissing: missing.length > 0 ? missing : ['Advanced System Design', 'Cloud Scalability'],
+            recommendedProjects: template.projects,
+            recommendedCertifications: template.certifications,
+            roadmap: [
+                { step: 1, title: `Strengthen core foundations in ${missing[0] || 'Core Domain'}`, status: 'IN_PROGRESS' },
+                { step: 2, title: `Build Capstone Project: ${template.projects[0]}`, status: 'PENDING' },
+                { step: 3, title: `Master ${missing[1] || 'Hands-on Tools & Frameworks'}`, status: 'PENDING' },
+                { step: 4, title: `Achieve Industry Certification: ${template.certifications[0]}`, status: 'PENDING' }
+            ]
+        };
 
-        // Local Fallback if Gemini fails or is not configured
-        if (!analysis) {
-            const missing = template.required.filter(r => !userSkills.some(s => s.toLowerCase() === r.toLowerCase()));
-            const matchScore = Math.max(40, Math.round(((template.required.length - missing.length) / template.required.length) * 100));
-            analysis = {
-                matchPercentage: matchScore,
-                skillsAcquired: userSkills,
-                skillsMissing: missing,
-                recommendedProjects: template.projects,
-                recommendedCertifications: template.certifications,
-                roadmap: [
-                    { step: 1, title: `Strengthen core foundations in ${missing[0] || 'Core Subject'}`, status: 'IN_PROGRESS' },
-                    { step: 2, title: `Build Capstone Project: ${template.projects[0]}`, status: 'PENDING' },
-                    { step: 3, title: `Gain hands-on proficiency in ${missing[1] || 'Cloud Deployment'}`, status: 'PENDING' },
-                    { step: 4, title: `Complete Certification: ${template.certifications[0]}`, status: 'PENDING' }
-                ]
-            };
+        // Try Groq LLM enhancement first, fallback to Gemini
+        const groqPrompt = `Analyze student career path. Target Role: "${targetRole || roleKey}", Current Skills: "${userSkills.join(', ')}". Return valid raw JSON only without markdown: {"matchPercentage": ${matchScore}, "skillsAcquired": ${JSON.stringify(acquired)}, "skillsMissing": ${JSON.stringify(missing)}, "roadmap": [{"step": 1, "title": "Milestone 1", "status": "IN_PROGRESS"}, {"step": 2, "title": "Milestone 2", "status": "PENDING"}, {"step": 3, "title": "Milestone 3", "status": "PENDING"}, {"step": 4, "title": "Milestone 4", "status": "PENDING"}]}`;
+        
+        if (process.env.GROQ_API_KEY) {
+            try {
+                const https = require('https');
+                const gRes = await new Promise((resolve) => {
+                    const reqBody = JSON.stringify({
+                        model: 'qwen/qwen3.8-27b',
+                        messages: [
+                            { role: 'system', content: 'You are an expert career guidance AI. Return valid raw JSON only.' },
+                            { role: 'user', content: groqPrompt }
+                        ],
+                        max_tokens: 350,
+                        temperature: 0.5
+                    });
+                    const req = https.request({
+                        hostname: 'api.groq.com',
+                        port: 443,
+                        path: '/openai/v1/chat/completions',
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + process.env.GROQ_API_KEY,
+                            'Content-Type': 'application/json',
+                            'Content-Length': Buffer.byteLength(reqBody)
+                        },
+                        timeout: 3000
+                    }, res => {
+                        let d = '';
+                        res.on('data', c => d += c);
+                        res.on('end', () => {
+                            try {
+                                const j = JSON.parse(d);
+                                resolve(j.choices?.[0]?.message?.content);
+                            } catch { resolve(null); }
+                        });
+                    });
+                    req.on('error', () => resolve(null));
+                    req.on('timeout', () => { req.destroy(); resolve(null); });
+                    req.write(reqBody);
+                    req.end();
+                });
+
+                if (gRes) {
+                    let cleaned = gRes.trim();
+                    if (cleaned.startsWith('```json')) cleaned = cleaned.substring(7);
+                    if (cleaned.endsWith('```')) cleaned = cleaned.substring(0, cleaned.length - 3);
+                    const parsed = JSON.parse(cleaned);
+                    if (parsed.roadmap && parsed.matchPercentage) {
+                        analysis = { ...analysis, ...parsed, targetRole: targetRole || roleKey };
+                    }
+                }
+            } catch (gErr) {
+                console.log("Groq career fallback:", gErr.message);
+            }
         }
 
         // Save or update in database
@@ -139,12 +164,12 @@ router.post('/analyze', authenticateToken, async (req, res) => {
                     UPDATE Career_Profiles 
                     SET target_role = ?, skills_acquired = ?, skills_missing = ?, match_percentage = ?, roadmap_json = ?, updated_at = CURRENT_TIMESTAMP
                     WHERE prn = ?
-                `, [targetRole, analysis.skillsAcquired.join(', '), analysis.skillsMissing.join(', '), analysis.matchPercentage, JSON.stringify(analysis.roadmap), prn]);
+                `, [targetRole || roleKey, analysis.skillsAcquired.join(', '), analysis.skillsMissing.join(', '), analysis.matchPercentage, JSON.stringify(analysis.roadmap), prn]);
             } else {
                 await db.execute(`
                     INSERT INTO Career_Profiles (prn, target_role, skills_acquired, skills_missing, match_percentage, roadmap_json)
                     VALUES (?, ?, ?, ?, ?, ?)
-                `, [prn, targetRole, analysis.skillsAcquired.join(', '), analysis.skillsMissing.join(', '), analysis.matchPercentage, JSON.stringify(analysis.roadmap)]);
+                `, [prn, targetRole || roleKey, analysis.skillsAcquired.join(', '), analysis.skillsMissing.join(', '), analysis.matchPercentage, JSON.stringify(analysis.roadmap)]);
             }
         }
 

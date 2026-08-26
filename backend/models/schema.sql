@@ -232,3 +232,28 @@ CREATE TABLE IF NOT EXISTS CCTV_Analytics (
     recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (campus_id) REFERENCES Campuses(campus_id) ON DELETE CASCADE
 );
+
+-- 20. HyperIntervene AI — Active Interventions & Tracking
+CREATE TABLE IF NOT EXISTS Interventions (
+    intervention_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_prn VARCHAR(20) NOT NULL,
+    risk_score INTEGER NOT NULL,
+    risk_level VARCHAR(20) NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    reason TEXT NOT NULL,
+    owner_role VARCHAR(20) NOT NULL,
+    owner_name VARCHAR(100),
+    priority VARCHAR(20) CHECK(priority IN ('LOW', 'MEDIUM', 'HIGH', 'URGENT')) DEFAULT 'HIGH',
+    status VARCHAR(20) CHECK(status IN ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'MISSED', 'CANCELLED')) DEFAULT 'PENDING',
+    due_date DATE NOT NULL,
+    action_type VARCHAR(50) DEFAULT 'RECOVERY_PLAN',
+    completed_at TIMESTAMP,
+    outcome TEXT,
+    outcome_score INTEGER,
+    created_by VARCHAR(50) DEFAULT 'HyperIntervene AI',
+    timeline_json TEXT,
+    metadata_json TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_prn) REFERENCES Students(prn) ON DELETE CASCADE
+);

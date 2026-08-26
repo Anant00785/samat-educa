@@ -14,6 +14,8 @@ const menuItems = {
   ],
   STUDENT: [
     { path: '/student', label: 'Dashboard', icon: '🏠' },
+    { path: '/student/360', label: 'Student 360°', icon: '🎯' },
+    { path: '/student/learning-hub', label: 'Learning Hub', icon: '📚' },
     { path: '/student/study-plan', label: 'AI Study Planner', icon: '📅' },
     { path: '/student/career', label: 'AI Career Guide', icon: '🚀' },
     { path: '/student/wellness', label: 'Mood Fusion Check', icon: '🧠' },
