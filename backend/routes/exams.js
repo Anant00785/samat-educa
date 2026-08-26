@@ -11,25 +11,29 @@ let activeExam = {
             text: 'Which memory allocation scheme is most vulnerable to external fragmentation?',
             optionA: 'Segmentation',
             optionB: 'Paging',
-            correct: 'A'
+            correct: 'A',
+            explanation: 'Segmentation allocates variable-sized blocks of memory for logical modules, resulting in scattered free memory holes (external fragmentation). Paging uses fixed-sized frames to avoid external fragmentation.'
         },
         {
             text: 'In deep learning neural networks, which activation function mitigates the vanishing gradient problem?',
             optionA: 'ReLU (Rectified Linear Unit)',
             optionB: 'Sigmoid',
-            correct: 'A'
+            correct: 'A',
+            explanation: 'ReLU maintains a constant derivative of 1 for positive values (f\'(x) = 1), preventing gradient shrinkage in deep networks unlike Sigmoid which saturates near 0.'
         },
         {
             text: 'What is the primary function of the Translation Lookaside Buffer (TLB)?',
             optionA: 'Cache recent virtual-to-physical address translations',
             optionB: 'Store disk swap space sectors',
-            correct: 'A'
+            correct: 'A',
+            explanation: 'The TLB is a high-speed associative hardware cache storing recently used page table translations to speed up virtual memory access.'
         },
         {
             text: 'Which scheduling algorithm guarantees minimum average waiting time for a set of processes?',
             optionA: 'Shortest Job First (SJF)',
             optionB: 'First Come First Served (FCFS)',
-            correct: 'A'
+            correct: 'A',
+            explanation: 'SJF is provably optimal for minimizing average waiting time across non-preemptive job batches.'
         }
     ]
 };

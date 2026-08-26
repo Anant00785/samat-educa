@@ -9,7 +9,9 @@ export default function OnlineExam() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState('Waiting to start...');
   const [violations, setViolations] = useState([]);
-  const [examResult, setExamResult] = useState(null); // Score tracker
+  
+  // Results & Detailed Answer Review State
+  const [examResult, setExamResult] = useState(null); // { score, correctCount, totalCount, questions, answers, violations }
   
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
@@ -23,7 +25,7 @@ export default function OnlineExam() {
   // Track student's selected answers (e.g. { 0: 'A', 1: 'B' })
   const [answers, setAnswers] = useState({});
 
-  useEffect(() => {
+  const fetchActiveExam = () => {
     API.get('/exams/active').then(res => {
       if (res.data.success) {
         setExam(res.data.exam);
@@ -31,6 +33,10 @@ export default function OnlineExam() {
         setStatus('No active exam currently published by Faculty.');
       }
     }).catch(err => setStatus('Error fetching exam'));
+  };
+
+  useEffect(() => {
+    fetchActiveExam();
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden' && isStarted) {
@@ -83,7 +89,7 @@ export default function OnlineExam() {
       setModel(loadedModel);
       setMaxPredictions(loadedModel.getTotalClasses());
 
-      // Use Native WebRTC instead of TeachableMachine wrapper to prevent suspension!
+      // Native WebRTC video capture
       const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 400, height: 400 } });
       if (videoRef.current) {
          videoRef.current.srcObject = stream;
@@ -91,7 +97,6 @@ export default function OnlineExam() {
       }
 
       setStatus("AI Proctor Active (Webcam & Screen Recorded)");
-      
       requestRef.current = requestAnimationFrame(loop);
     } catch (err) {
       console.error(err);
@@ -109,7 +114,6 @@ export default function OnlineExam() {
         requestRef.current = requestAnimationFrame(loop);
       }
     } else {
-      // Loop until video is ready
       requestRef.current = requestAnimationFrame(loop);
     }
   };
@@ -117,14 +121,12 @@ export default function OnlineExam() {
   const predict = async () => {
     if (!model || !videoRef.current) return;
     
-    // Pass the native video tag directly to TM
     const { pose, posenetOutput } = await model.estimatePose(videoRef.current);
     const prediction = await model.predict(posenetOutput);
 
     let isCheating = false;
     let isMissing = false;
 
-    // If posenet cannot find a body, or confidence is very low, the student left the frame
     if (!pose || pose.score < 0.20) {
       isCheating = true;
       isMissing = true;
@@ -139,7 +141,7 @@ export default function OnlineExam() {
 
     if (isCheating) {
       suspiciousFrames.current += 1;
-      if (suspiciousFrames.current > 45) { // 45 frames ~ 1.5 seconds
+      if (suspiciousFrames.current > 45) {
         addViolation(isMissing ? 'Student Not Visible in Camera' : 'Suspicious Body Movement or Phone Detected');
       }
     } else {
@@ -153,8 +155,6 @@ export default function OnlineExam() {
     const canvas = canvasRef.current;
     if (!canvas || !videoRef.current) return;
     const ctx = canvas.getContext('2d');
-    
-    // Clear previous drawing
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (pose) {
@@ -162,9 +162,7 @@ export default function OnlineExam() {
         const minPartConfidence = 0.5;
         window.tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx, 5, '#00d2ff', '#00d2ff');
         window.tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx, 3, '#ff00aa');
-      } catch (e) {
-        // ignore skeleton drawing errors if any
-      }
+      } catch (e) {}
     }
   };
 
@@ -189,9 +187,17 @@ export default function OnlineExam() {
 
       await API.post('/exams/submit', payload);
       
-      setExamResult(finalScore); // Show results page
+      // Store complete review data
+      setExamResult({
+        score: finalScore,
+        correctCount,
+        totalCount: exam.questions.length,
+        questions: exam.questions,
+        userAnswers: { ...answers },
+        violations: [...violations]
+      });
 
-      // Cleanup
+      // Cleanup camera streams
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       if (videoRef.current && videoRef.current.srcObject) {
          videoRef.current.srcObject.getTracks().forEach(t => t.stop());
@@ -199,7 +205,6 @@ export default function OnlineExam() {
       if (screenRef.current) screenRef.current.getTracks().forEach(t => t.stop());
       
       setIsStarted(false);
-      setExam(null);
     } catch (err) {
       alert("Failed to submit exam");
     } finally {
@@ -207,39 +212,197 @@ export default function OnlineExam() {
     }
   };
 
+  const handleRetake = () => {
+    setExamResult(null);
+    setAnswers({});
+    setViolations([]);
+    setIsStarted(false);
+    fetchActiveExam();
+  };
+
   return (
-    <div style={{ padding: '2rem', display: 'flex', gap: '2rem', minHeight: '100vh' }}>
+    <div style={{ padding: '2rem', display: 'flex', gap: '2rem', minHeight: '100vh', flexWrap: 'wrap' }}>
       {/* EXAM PANE */}
       <div style={{
-        flex: 2, background: 'var(--bg-glass)', backdropFilter: 'blur(10px)',
+        flex: 2, minWidth: '340px', background: 'var(--bg-glass)', backdropFilter: 'blur(10px)',
         borderRadius: '16px', padding: '2rem', border: '1px solid var(--border-color)'
       }}>
         {examResult !== null ? (
-          // SCORE RESULTS VIEW
-          <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎉</div>
-            <h2>Exam Successfully Submitted!</h2>
-            <h1 style={{ fontSize: '3rem', color: examResult >= 50 ? 'green' : 'red', margin: '2rem 0' }}>
-              Score: {examResult}%
-            </h1>
-            {violations.length > 0 && (
-              <p style={{ color: 'red', fontWeight: 'bold' }}>
-                Note: Violations were sent to your teacher for review!
+          // ==========================================
+          // 🏆 COMPREHENSIVE RESULT & ANSWER REVIEW VIEW
+          // ==========================================
+          <div>
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <div style={{ fontSize: '3.5rem', marginBottom: '0.5rem' }}>
+                {examResult.score >= 75 ? '🎉' : examResult.score >= 50 ? '👍' : '📚'}
+              </div>
+              <h2 style={{ fontSize: '1.8rem', margin: 0 }}>Exam Evaluation & Answer Review</h2>
+              <p style={{ color: 'var(--text-secondary)', marginTop: '4px' }}>
+                Review your submitted answers, correct solutions, and conceptual explanations below.
               </p>
+            </div>
+
+            {/* PERFORMANCE METRICS TILES */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+              <div style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid var(--border)', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-light)', textTransform: 'uppercase' }}>Final Score</span>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: examResult.score >= 50 ? '#34d399' : '#f87171' }}>
+                  {examResult.score}%
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid var(--border)', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-light)', textTransform: 'uppercase' }}>Correct Answers</span>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#34d399' }}>
+                  {examResult.correctCount} / {examResult.totalCount}
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid var(--border)', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-light)', textTransform: 'uppercase' }}>Incorrect</span>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#f87171' }}>
+                  {examResult.totalCount - examResult.correctCount}
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid var(--border)', borderRadius: '12px', padding: '1rem', textAlign: 'center' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-light)', textTransform: 'uppercase' }}>AI Violations</span>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: examResult.violations.length > 0 ? '#f87171' : '#34d399' }}>
+                  {examResult.violations.length}
+                </div>
+              </div>
+            </div>
+
+            {examResult.violations.length > 0 && (
+              <div style={{ padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', borderRadius: '10px', color: '#f87171', marginBottom: '2rem', fontSize: '13px' }}>
+                <strong>⚠️ Integrity Notice:</strong> {examResult.violations.join(' | ')} (Flagged for faculty review).
+              </div>
             )}
-            <button 
-              onClick={() => window.location.href = '/student'}
-              style={{
-                marginTop: '2rem', padding: '1rem 2rem', fontSize: '1.1rem',
-                background: 'linear-gradient(135deg, var(--accent-1), var(--accent-2))',
-                border: 'none', color: 'white', borderRadius: '8px', cursor: 'pointer'
-              }}
-            >
-              Return to Dashboard
-            </button>
+
+            {/* QUESTION-BY-QUESTION ANSWER BREAKDOWN */}
+            <h3 style={{ fontSize: '1.3rem', margin: '0 0 1.2rem 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>📝</span> Detailed Question-by-Question Solution Breakdown
+            </h3>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2.5rem' }}>
+              {examResult.questions.map((q, i) => {
+                const userChoice = examResult.userAnswers[i];
+                const isCorrect = userChoice === q.correct;
+
+                return (
+                  <div key={i} style={{
+                    background: isCorrect ? 'rgba(52, 211, 153, 0.05)' : 'rgba(239, 68, 68, 0.05)',
+                    borderLeft: `5px solid ${isCorrect ? '#34d399' : '#ef4444'}`,
+                    borderTop: '1px solid var(--border)',
+                    borderRight: '1px solid var(--border)',
+                    borderBottom: '1px solid var(--border)',
+                    borderRadius: '12px',
+                    padding: '1.5rem'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                      <strong style={{ fontSize: '1.05rem', color: 'var(--text-dark)' }}>
+                        Q{i+1}. {q.text}
+                      </strong>
+                      <span className="badge" style={{
+                        background: isCorrect ? 'rgba(52, 211, 153, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                        color: isCorrect ? '#34d399' : '#f87171',
+                        fontWeight: '700',
+                        fontSize: '12px'
+                      }}>
+                        {isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                      </span>
+                    </div>
+
+                    {/* OPTIONS DISPLAY */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1rem' }}>
+                      <div style={{
+                        padding: '0.8rem 1rem',
+                        borderRadius: '8px',
+                        background: q.correct === 'A' 
+                          ? 'rgba(52, 211, 153, 0.15)' 
+                          : userChoice === 'A' 
+                          ? 'rgba(239, 68, 68, 0.15)' 
+                          : 'rgba(0,0,0,0.2)',
+                        border: `1px solid ${q.correct === 'A' ? '#34d399' : userChoice === 'A' ? '#ef4444' : 'var(--border)'}`,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        fontSize: '13px'
+                      }}>
+                        <span><strong>A)</strong> {q.optionA}</span>
+                        {q.correct === 'A' && <span style={{ color: '#34d399', fontWeight: 'bold' }}>✓ Correct Answer</span>}
+                        {userChoice === 'A' && q.correct !== 'A' && <span style={{ color: '#f87171', fontWeight: 'bold' }}>✗ Your Choice</span>}
+                      </div>
+
+                      <div style={{
+                        padding: '0.8rem 1rem',
+                        borderRadius: '8px',
+                        background: q.correct === 'B' 
+                          ? 'rgba(52, 211, 153, 0.15)' 
+                          : userChoice === 'B' 
+                          ? 'rgba(239, 68, 68, 0.15)' 
+                          : 'rgba(0,0,0,0.2)',
+                        border: `1px solid ${q.correct === 'B' ? '#34d399' : userChoice === 'B' ? '#ef4444' : 'var(--border)'}`,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        fontSize: '13px'
+                      }}>
+                        <span><strong>B)</strong> {q.optionB}</span>
+                        {q.correct === 'B' && <span style={{ color: '#34d399', fontWeight: 'bold' }}>✓ Correct Answer</span>}
+                        {userChoice === 'B' && q.correct !== 'B' && <span style={{ color: '#f87171', fontWeight: 'bold' }}>✗ Your Choice</span>}
+                      </div>
+                    </div>
+
+                    {/* CONCEPTUAL EXPLANATION */}
+                    {q.explanation && (
+                      <div style={{
+                        padding: '0.8rem 1rem',
+                        background: 'rgba(99, 102, 241, 0.08)',
+                        border: '1px solid rgba(99, 102, 241, 0.2)',
+                        borderRadius: '8px',
+                        fontSize: '12px',
+                        color: '#cbd5e1',
+                        lineHeight: '1.5'
+                      }}>
+                        <strong style={{ color: '#a5b4fc', display: 'block', marginBottom: '2px' }}>💡 Concept Explanation:</strong>
+                        {q.explanation}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* ACTION BUTTONS */}
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+              <button 
+                onClick={handleRetake}
+                style={{
+                  padding: '0.9rem 2rem', fontSize: '1rem', fontWeight: '600',
+                  background: 'linear-gradient(135deg, #0284c7, #2563eb)',
+                  border: 'none', color: 'white', borderRadius: '10px', cursor: 'pointer'
+                }}
+              >
+                🔄 Retake Assessment for Practice
+              </button>
+
+              <button 
+                onClick={() => window.location.href = '/student'}
+                style={{
+                  padding: '0.9rem 2rem', fontSize: '1rem', fontWeight: '600',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid var(--border)', color: 'white', borderRadius: '10px', cursor: 'pointer'
+                }}
+              >
+                📊 Return to Dashboard
+              </button>
+            </div>
           </div>
         ) : (
-          // EXAM TAKING VIEW
+          // ==========================================
+          // 📝 EXAM TAKING VIEW
+          // ==========================================
           <>
             <h2>Online Examination: {exam ? exam.title : 'No Exam Started'}</h2>
             <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
@@ -285,11 +448,11 @@ export default function OnlineExam() {
                   <div key={i} style={{ marginBottom: '1.5rem', background: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>
                     <p style={{ fontSize: '1.1rem', marginBottom: '1rem' }}><strong>{i+1}. {q.text}</strong></p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '8px', cursor: 'pointer' }}>
-                        <input type="radio" name={`q${i}`} value="A" onChange={() => setAnswers({...answers, [i]: 'A'})} required /> A) {q.optionA}
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '10px', background: answers[i] === 'A' ? 'rgba(99, 102, 241, 0.2)' : 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '8px', cursor: 'pointer', border: answers[i] === 'A' ? '1px solid #6366f1' : '1px solid transparent' }}>
+                        <input type="radio" name={`q${i}`} value="A" checked={answers[i] === 'A'} onChange={() => setAnswers({...answers, [i]: 'A'})} required /> A) {q.optionA}
                       </label>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '8px', cursor: 'pointer' }}>
-                        <input type="radio" name={`q${i}`} value="B" onChange={() => setAnswers({...answers, [i]: 'B'})} required /> B) {q.optionB}
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '10px', background: answers[i] === 'B' ? 'rgba(99, 102, 241, 0.2)' : 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '8px', cursor: 'pointer', border: answers[i] === 'B' ? '1px solid #6366f1' : '1px solid transparent' }}>
+                        <input type="radio" name={`q${i}`} value="B" checked={answers[i] === 'B'} onChange={() => setAnswers({...answers, [i]: 'B'})} required /> B) {q.optionB}
                       </label>
                     </div>
                   </div>
@@ -301,10 +464,10 @@ export default function OnlineExam() {
                   style={{
                     marginTop: '2rem', padding: '1rem 2rem', fontSize: '1.1rem',
                     background: 'green', border: 'none', color: 'white', 
-                    borderRadius: '8px', cursor: 'pointer', width: '100%'
+                    borderRadius: '8px', cursor: 'pointer', width: '100%', fontWeight: 'bold'
                   }}
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit Exam'}
+                  {isSubmitting ? 'Submitting & Evaluating Answers...' : 'Submit & Review Answers'}
                 </button>
               </form>
             )}
@@ -314,7 +477,7 @@ export default function OnlineExam() {
 
       {/* PROCTORING PANE */}
       <div style={{
-        flex: 1, background: 'var(--bg-glass)', backdropFilter: 'blur(10px)',
+        flex: 1, minWidth: '280px', background: 'var(--bg-glass)', backdropFilter: 'blur(10px)',
         borderRadius: '16px', padding: '2rem', border: '1px solid var(--border-color)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', maxHeight: '600px'
       }}>
@@ -332,7 +495,7 @@ export default function OnlineExam() {
             muted 
             style={{ 
               position: 'absolute', width: '100%', height: '100%', 
-              objectFit: 'cover', transform: 'scaleX(-1)', // mirror the video natively
+              objectFit: 'cover', transform: 'scaleX(-1)',
               display: isStarted ? 'block' : 'none' 
             }} 
           />
