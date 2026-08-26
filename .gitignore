@@ -1,0 +1,17 @@
+node_modules/
+**/node_modules/
+.env
+**/.env
+.env.local
+**/.env.local
+dist/
+**/dist/
+database.sqlite
+**/database.sqlite
+.gemini/
+venv/
+**/venv/
+venv310/
+__pycache__/
+**/*.pyc
+.DS_Store
