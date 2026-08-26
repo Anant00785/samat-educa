@@ -844,23 +844,161 @@ html, body {
 }
 
 .status-pill {
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
   font-size: 0.75rem;
-  font-weight: 600;
-  display: inline-block;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .pill-green {
-  background: rgba(52, 211, 153, 0.15);
-  color: #34d399;
-  border: 1px solid rgba(52, 211, 153, 0.3);
+  background: rgba(52, 211, 153, 0.15) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(52, 211, 153, 0.35) !important;
 }
 
 .pill-orange {
-  background: rgba(249, 115, 22, 0.15);
-  color: #fb923c;
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  background: rgba(249, 115, 22, 0.15) !important;
+  color: #fb923c !important;
+  border: 1px solid rgba(249, 115, 22, 0.35) !important;
+}
+
+.pill-red {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+}
+
+.pill-blue {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: #60a5fa !important;
+  border: 1px solid rgba(59, 130, 246, 0.35) !important;
+}
+
+.pill-purple {
+  background: rgba(168, 85, 247, 0.15) !important;
+  color: #c084fc !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+}
+
+/* Tab Bar & Modern Segmented Controls */
+.tab-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(18, 18, 24, 0.75);
+  border: 1px solid var(--border);
+  padding: 6px;
+  border-radius: 14px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  margin-bottom: 0.5rem;
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.tab-active {
+  background: linear-gradient(135deg, rgba(216, 178, 150, 0.22), rgba(216, 178, 150, 0.08)) !important;
+  border: 1px solid rgba(216, 178, 150, 0.45) !important;
+  color: #F3E5D8 !important;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Mini Bar Track & Fill */
+.mini-bar-track {
+  width: 100%;
+  max-width: 120px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.mini-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.att-fill-ok {
+  background: linear-gradient(90deg, #34d399, #10b981);
+}
+
+.att-fill-low {
+  background: linear-gradient(90deg, #f87171, #ef4444);
+}
+
+.text-success {
+  color: #34d399 !important;
+  font-weight: 600;
+}
+
+.text-danger {
+  color: #f87171 !important;
+  font-weight: 600;
+}
+
+.text-warning {
+  color: #fb923c !important;
+  font-weight: 600;
+}
+
+/* Marks Card Styles */
+.marks-card {
+  background: rgba(18, 18, 24, 0.65);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.5rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  margin-bottom: 1.25rem;
+}
+
+.marks-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3.5rem 2rem;
+  background: rgba(18, 18, 24, 0.5);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .empty-row {

@@ -67,7 +67,30 @@ export default function Navbar() {
         </span>
       </div>
 
-      <div className="navbar-right" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+      <div className="navbar-right" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <a
+          href="/presentation.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            padding: '5px 12px',
+            background: 'rgba(216, 178, 150, 0.12)',
+            border: '1px solid rgba(216, 178, 150, 0.3)',
+            borderRadius: '20px',
+            color: '#F3E5D8',
+            fontSize: '11.5px',
+            fontWeight: '700',
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            transition: 'all 0.2s'
+          }}
+          title="Open Hackathon Master Presentation Deck"
+        >
+          <span>📊</span> Pitch Deck ↗
+        </a>
+
         <NotificationDropdown />
 
         <div className="navbar-user" style={{

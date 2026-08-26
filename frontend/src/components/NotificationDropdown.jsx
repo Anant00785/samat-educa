@@ -57,6 +57,37 @@ export default function NotificationDropdown() {
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
 
+  const formatAlertTime = (dateStr) => {
+    if (!dateStr) return 'Just now';
+    try {
+      // Normalize SQLite UTC timestamp
+      let isoStr = dateStr;
+      if (!dateStr.includes('Z') && !dateStr.includes('+')) {
+        isoStr = dateStr.replace(' ', 'T') + 'Z';
+      }
+      const alertDate = new Date(isoStr);
+      const now = new Date();
+      const diffMs = now - alertDate;
+      const diffSec = Math.floor(diffMs / 1000);
+      const diffMin = Math.floor(diffSec / 60);
+      const diffHour = Math.floor(diffMin / 60);
+      const diffDay = Math.floor(diffHour / 24);
+
+      let relative = '';
+      if (diffSec < 45) relative = 'Just now';
+      else if (diffMin < 60) relative = `${diffMin}m ago`;
+      else if (diffHour < 24) relative = `${diffHour}h ago`;
+      else if (diffDay === 1) relative = 'Yesterday';
+      else if (diffDay < 7) relative = `${diffDay}d ago`;
+      else relative = alertDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
+
+      const timeStr = alertDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+      return `${relative} (${timeStr})`;
+    } catch {
+      return 'Recent';
+    }
+  };
+
   const getSeverityStyle = (sev) => {
     switch (sev) {
       case 'CRITICAL': return { bg: 'rgba(239, 68, 68, 0.1)', border: '#ef4444', text: '#f87171', icon: '🚨' };
@@ -205,8 +236,8 @@ export default function NotificationDropdown() {
                     <p style={{ margin: 0, fontSize: '12px', color: '#e4e4e7', lineHeight: '1.4' }}>
                       {n.message}
                     </p>
-                    <span style={{ display: 'block', marginTop: '4px', fontSize: '10px', color: 'var(--text-muted)' }}>
-                      {new Date(n.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {n.type}
+                    <span style={{ display: 'block', marginTop: '4px', fontSize: '10.5px', color: 'var(--text-muted)' }}>
+                      🕒 {formatAlertTime(n.created_at)} • <strong style={{ color: 'var(--accent-skin)' }}>{n.type}</strong>
                     </span>
                   </div>
                 );

@@ -55,7 +55,7 @@ export default function AdminDashboard() {
   const statCards = [
     { label: 'Total Students',    value: stats.students,    icon: '🎓', color: 'stat-blue',   link: '/admin/students' },
     { label: 'Total Faculty',     value: stats.faculty,     icon: '👩‍🏫', color: 'stat-purple', link: '/admin/faculty' },
-    { label: 'Departments',       value: stats.departments, icon: '🏛️', color: 'stat-green',  link: '#' },
+    { label: 'Departments',       value: stats.departments, icon: '🏛️', color: 'stat-green',  link: '/admin/departments' },
     { label: 'Pending Fee Dues',  value: stats.pendingFees, icon: '💰', color: 'stat-orange', link: '/admin/fees' },
   ];
 
@@ -134,6 +134,10 @@ export default function AdminDashboard() {
             <Link to="/admin/faculty" className="action-card">
               <span className="action-icon">➕</span>
               <span>Add New Faculty</span>
+            </Link>
+            <Link to="/admin/departments" className="action-card">
+              <span className="action-icon">🏛️</span>
+              <span>Manage Departments</span>
             </Link>
             <Link to="/admin/fees" className="action-card">
               <span className="action-icon">💳</span>

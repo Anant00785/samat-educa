@@ -8,6 +8,8 @@ export default function AdminFees() {
   const [deptFilter, setDeptFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [actionToast, setActionToast] = useState(null);
+  const [sendingId, setSendingId] = useState(null);
+  const [sentIds, setSentIds] = useState([]);
 
   const fetchFeeData = async () => {
     try {
@@ -31,12 +33,16 @@ export default function AdminFees() {
 
   const handleSendReminder = async (fee_id) => {
     try {
+      setSendingId(fee_id);
       const res = await API.post('/fees/admin/send-reminder', { fee_id });
-      setActionToast(res.data.message || "Fee reminder dispatched successfully!");
-      setTimeout(() => setActionToast(null), 4000);
+      setSentIds(prev => [...prev, fee_id]);
+      setActionToast(res.data.message || "Fee reminder alert dispatched successfully to student & parent!");
+      setTimeout(() => setActionToast(null), 5000);
     } catch (err) {
       console.error(err);
       alert("Failed to send reminder alert.");
+    } finally {
+      setSendingId(null);
     }
   };
 
@@ -272,18 +278,23 @@ export default function AdminFees() {
 
                 <button
                   onClick={() => handleSendReminder(od.fee_id)}
+                  disabled={sendingId === od.fee_id}
                   style={{
-                    padding: '8px 16px',
-                    background: 'rgba(239, 68, 68, 0.15)',
-                    border: '1px solid rgba(239, 68, 68, 0.4)',
-                    color: '#f87171',
-                    borderRadius: '8px',
+                    padding: '9px 18px',
+                    background: sentIds.includes(od.fee_id) ? 'rgba(52, 211, 153, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                    border: sentIds.includes(od.fee_id) ? '1px solid #34d399' : '1px solid rgba(239, 68, 68, 0.4)',
+                    color: sentIds.includes(od.fee_id) ? '#34d399' : '#f87171',
+                    borderRadius: '10px',
                     fontWeight: '700',
                     fontSize: '12px',
-                    cursor: 'pointer'
+                    cursor: sendingId === od.fee_id ? 'wait' : 'pointer',
+                    transition: 'all 0.2s ease',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px'
                   }}
                 >
-                  📢 Send Smart Reminder
+                  {sendingId === od.fee_id ? '⏳ Dispatching...' : sentIds.includes(od.fee_id) ? '✓ Reminder Sent' : '📢 Send Smart Reminder'}
                 </button>
               </div>
             ))}
@@ -388,17 +399,20 @@ export default function AdminFees() {
                       {inv.status !== 'PAID' ? (
                         <button
                           onClick={() => handleSendReminder(inv.fee_id)}
+                          disabled={sendingId === inv.fee_id}
                           style={{
-                            padding: '4px 10px',
-                            background: 'transparent',
-                            border: '1px solid rgba(216, 178, 150, 0.4)',
-                            color: '#F3E5D8',
-                            borderRadius: '6px',
+                            padding: '5px 12px',
+                            background: sentIds.includes(inv.fee_id) ? 'rgba(52, 211, 153, 0.15)' : 'rgba(216, 178, 150, 0.08)',
+                            border: sentIds.includes(inv.fee_id) ? '1px solid #34d399' : '1px solid rgba(216, 178, 150, 0.35)',
+                            color: sentIds.includes(inv.fee_id) ? '#34d399' : '#F3E5D8',
+                            borderRadius: '8px',
                             fontSize: '11.5px',
-                            cursor: 'pointer'
+                            fontWeight: '600',
+                            cursor: sendingId === inv.fee_id ? 'wait' : 'pointer',
+                            transition: 'all 0.2s ease'
                           }}
                         >
-                          Remind
+                          {sendingId === inv.fee_id ? 'Sending...' : sentIds.includes(inv.fee_id) ? '✓ Sent' : '📢 Remind'}
                         </button>
                       ) : (
                         <span style={{ color: 'var(--text-muted)', fontSize: '11.5px' }}>✓ Cleared</span>
