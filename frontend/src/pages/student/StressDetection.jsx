@@ -8,12 +8,13 @@ export default function StressDetection() {
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
   
-  const [stream, setStream] = useState(null);
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [cameraLoading, setCameraLoading] = useState(false);
+  const [cameraError, setCameraError] = useState(null);
+  
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const [hasCamera, setHasCamera] = useState(false);
-  const [cameraError, setCameraError] = useState(null);
   const [history, setHistory] = useState([]);
 
   const prn = user?.role === 'STUDENT' ? user?.prn : (user?.prn || 'PRN000');
@@ -29,34 +30,62 @@ export default function StressDetection() {
     }
   };
 
-  const startCamera = async () => {
-    setCameraError(null);
-    try {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        const s = await navigator.mediaDevices.getUserMedia({ 
-          video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' } 
-        });
-        streamRef.current = s;
-        setStream(s);
-        setHasCamera(true);
+  useEffect(() => {
+    fetchHistory();
+    return () => {
+      stopCamera();
+    };
+  }, []);
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = s;
-          videoRef.current.onloadedmetadata = async () => {
-            try {
-              await videoRef.current.play();
-            } catch (playErr) {
-              console.warn("Video auto-play suppressed:", playErr);
-            }
-          };
+  // Robust User-Triggered Camera Start (Guaranteed by Browser Security Policy on HTTPS)
+  const startCamera = async () => {
+    setCameraLoading(true);
+    setCameraError(null);
+
+    // Stop any existing tracks first
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+      streamRef.current = null;
+    }
+
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("Your browser does not support webcam access. Please use Chrome or Edge over HTTPS.");
+      }
+
+      // Simple, universally supported video constraint
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false
+      });
+
+      streamRef.current = stream;
+      setIsCameraActive(true);
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.setAttribute("playsinline", "true");
+        videoRef.current.muted = true;
+        
+        // Explicitly trigger play
+        try {
+          await videoRef.current.play();
+        } catch (playErr) {
+          console.warn("Play error:", playErr);
         }
-      } else {
-        setCameraError("Camera device not supported in this browser.");
       }
     } catch (err) {
-      console.error("Camera access error:", err);
-      setHasCamera(false);
-      setCameraError(err.message || "Camera permission not granted.");
+      console.error("Camera Error:", err);
+      setIsCameraActive(false);
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        setCameraError("Camera permission was denied. Please click the lock icon in your browser address bar and allow Camera access.");
+      } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        setCameraError("No webcam found on this device.");
+      } else {
+        setCameraError(err.message || "Could not access camera.");
+      }
+    } finally {
+      setCameraLoading(false);
     }
   };
 
@@ -68,26 +97,16 @@ export default function StressDetection() {
     if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
-    setStream(null);
-    setHasCamera(false);
+    setIsCameraActive(false);
   };
 
+  // Re-attach video stream if DOM updates
   useEffect(() => {
-    startCamera();
-    fetchHistory();
-
-    return () => {
-      stopCamera();
-    };
-  }, []);
-
-  // When stream changes, ensure videoRef plays it
-  useEffect(() => {
-    if (stream && videoRef.current) {
-      videoRef.current.srcObject = stream;
+    if (isCameraActive && streamRef.current && videoRef.current) {
+      videoRef.current.srcObject = streamRef.current;
       videoRef.current.play().catch(e => console.warn(e));
     }
-  }, [stream]);
+  }, [isCameraActive]);
 
   const handleAnalyze = async () => {
     if (!text.trim()) {
@@ -100,7 +119,7 @@ export default function StressDetection() {
 
     try {
       let imageBase64 = null;
-      if (hasCamera && videoRef.current && videoRef.current.videoWidth > 0) {
+      if (isCameraActive && videoRef.current && videoRef.current.videoWidth > 0) {
         const video = videoRef.current;
         const canvas = canvasRef.current || document.createElement('canvas');
         canvas.width = video.videoWidth || 320;
@@ -166,7 +185,7 @@ export default function StressDetection() {
             <h3 style={{ margin: 0, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span>📷</span> 1. Look at the camera
             </h3>
-            {hasCamera ? (
+            {isCameraActive && (
               <button 
                 onClick={stopCamera}
                 style={{
@@ -182,22 +201,6 @@ export default function StressDetection() {
               >
                 Stop Cam
               </button>
-            ) : (
-              <button 
-                onClick={startCamera}
-                style={{
-                  padding: '4px 10px',
-                  background: 'rgba(52, 211, 153, 0.2)',
-                  color: '#34d399',
-                  border: '1px solid #34d399',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontSize: '11px',
-                  fontWeight: '600'
-                }}
-              >
-                Enable Cam
-              </button>
             )}
           </div>
 
@@ -207,7 +210,7 @@ export default function StressDetection() {
             height: '240px',
             background: '#050508',
             borderRadius: '12px',
-            border: `2px solid ${hasCamera ? '#6366f1' : 'var(--border)'}`,
+            border: `2px solid ${isCameraActive ? '#34d399' : 'var(--border)'}`,
             overflow: 'hidden',
             position: 'relative',
             display: 'flex',
@@ -224,31 +227,45 @@ export default function StressDetection() {
                 height: '100%',
                 objectFit: 'cover',
                 transform: 'scaleX(-1)',
-                display: hasCamera ? 'block' : 'none'
+                display: isCameraActive ? 'block' : 'none'
               }}
             />
 
-            {!hasCamera && (
-              <div style={{ textAlign: 'center', padding: '1rem' }}>
-                <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>📷</span>
-                <p style={{ color: 'var(--text-light)', fontSize: '13px', margin: '0 0 10px 0' }}>
-                  {cameraError || "Camera is turned off or not permitted."}
-                </p>
+            {!isCameraActive && (
+              <div style={{ textAlign: 'center', padding: '1.5rem' }}>
+                <span style={{ fontSize: '3rem', display: 'block', marginBottom: '0.8rem' }}>📷</span>
+                {cameraError ? (
+                  <p style={{ color: '#f87171', fontSize: '12px', margin: '0 0 12px 0', lineHeight: '1.4' }}>
+                    {cameraError}
+                  </p>
+                ) : (
+                  <p style={{ color: 'var(--text-light)', fontSize: '13px', margin: '0 0 12px 0' }}>
+                    Click below to allow camera for real-time facial emotion recognition.
+                  </p>
+                )}
                 <button 
                   onClick={startCamera}
+                  disabled={cameraLoading}
                   style={{
-                    padding: '8px 16px',
+                    padding: '10px 20px',
                     background: 'linear-gradient(135deg, #6366f1, #a855f7)',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
-                    fontSize: '12px',
-                    fontWeight: '600',
-                    cursor: 'pointer'
+                    fontSize: '13px',
+                    fontWeight: '700',
+                    cursor: cameraLoading ? 'wait' : 'pointer',
+                    boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
                   }}
                 >
-                  Start Camera Feed
+                  {cameraLoading ? 'Opening Camera...' : '🚀 Start Camera Scanner'}
                 </button>
+              </div>
+            )}
+
+            {isCameraActive && (
+              <div style={{ position: 'absolute', top: '8px', left: '8px', background: 'rgba(0,0,0,0.6)', padding: '2px 8px', borderRadius: '4px', color: '#34d399', fontSize: '10px', fontWeight: 'bold' }}>
+                ● CAMERA ACTIVE
               </div>
             )}
           </div>
