@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import API from '../../api/axios';
 
 export default function CCTVMonitor() {
@@ -6,6 +6,15 @@ export default function CCTVMonitor() {
   const [loading, setLoading] = useState(true);
   const [selectedZone, setSelectedZone] = useState(null);
   const [actionMessage, setActionMessage] = useState(null);
+
+  // Live IP Stream / Webcam State
+  const [ipCameraUrl, setIpCameraUrl] = useState('');
+  const [isLiveStreamActive, setIsLiveStreamActive] = useState(false);
+  const [streamSource, setStreamSource] = useState('SIMULATED'); // 'SIMULATED' | 'IP_URL' | 'WEBCAM'
+
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
 
   const fetchCCTV = async () => {
     try {
@@ -24,6 +33,11 @@ export default function CCTVMonitor() {
 
   useEffect(() => {
     fetchCCTV();
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(t => t.stop());
+      }
+    };
   }, []);
 
   const triggerAnomaly = async (camName) => {
@@ -49,6 +63,45 @@ export default function CCTVMonitor() {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  // Start Live Webcam
+  const startLiveWebcam = async () => {
+    try {
+      setStreamSource('WEBCAM');
+      setIsLiveStreamActive(true);
+      const s = await navigator.mediaDevices.getUserMedia({ video: true });
+      streamRef.current = s;
+      if (videoRef.current) {
+        videoRef.current.srcObject = s;
+      }
+      setActionMessage('📹 Live camera connected as CCTV Surveillance node!');
+      setTimeout(() => setActionMessage(null), 4000);
+    } catch (err) {
+      console.error(err);
+      alert("Could not access camera for CCTV feed.");
+    }
+  };
+
+  // Connect Mobile IP Webcam
+  const connectIpCamera = () => {
+    if (!ipCameraUrl.trim()) {
+      alert("Please enter a valid IP Webcam URL (e.g. http://192.168.1.15:8080/video)");
+      return;
+    }
+    setStreamSource('IP_URL');
+    setIsLiveStreamActive(true);
+    setActionMessage(`📹 Mobile IP Camera connected to ${selectedZone?.camera_name || 'CAM-01'}!`);
+    setTimeout(() => setActionMessage(null), 4000);
+  };
+
+  const stopLiveFeed = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+      streamRef.current = null;
+    }
+    setStreamSource('SIMULATED');
+    setIsLiveStreamActive(false);
   };
 
   if (loading) {
@@ -117,10 +170,97 @@ export default function CCTVMonitor() {
         </div>
       </div>
 
+      {/* LIVE MOBILE IP WEBCAM HOOKUP BAR */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(99, 102, 241, 0.12))',
+        border: '1px solid rgba(6, 182, 212, 0.3)',
+        borderRadius: '16px',
+        padding: '1.2rem 1.5rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '1rem'
+      }}>
+        <div>
+          <strong style={{ fontSize: '14px', color: 'var(--text-dark)', display: 'block' }}>
+            🔴 Connect Real IP Webcam or Phone Camera
+          </strong>
+          <span style={{ fontSize: '12px', color: 'var(--text-light)' }}>
+            Enter IP Webcam app stream URL (e.g. <code>http://192.168.1.15:8080/video</code>) or start direct laptop webcam.
+          </span>
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <input 
+            type="text" 
+            placeholder="http://192.168.x.x:8080/video"
+            value={ipCameraUrl}
+            onChange={(e) => setIpCameraUrl(e.target.value)}
+            style={{
+              padding: '6px 12px',
+              borderRadius: '8px',
+              border: '1px solid var(--border)',
+              background: 'rgba(0,0,0,0.4)',
+              color: 'white',
+              fontSize: '12px',
+              width: '230px'
+            }}
+          />
+          <button 
+            onClick={connectIpCamera}
+            style={{
+              padding: '6px 12px',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
+              color: 'white',
+              border: 'none',
+              fontWeight: '600',
+              fontSize: '12px',
+              cursor: 'pointer'
+            }}
+          >
+            Connect IP URL
+          </button>
+          <button 
+            onClick={startLiveWebcam}
+            style={{
+              padding: '6px 12px',
+              borderRadius: '8px',
+              background: 'rgba(255,255,255,0.08)',
+              color: 'white',
+              border: '1px solid var(--border)',
+              fontWeight: '600',
+              fontSize: '12px',
+              cursor: 'pointer'
+            }}
+          >
+            📷 Use Laptop Cam
+          </button>
+          {isLiveStreamActive && (
+            <button 
+              onClick={stopLiveFeed}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                background: 'rgba(239, 68, 68, 0.2)',
+                color: '#f87171',
+                border: '1px solid #ef4444',
+                fontWeight: '600',
+                fontSize: '12px',
+                cursor: 'pointer'
+              }}
+            >
+              Disconnect Feed
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* FEED & DETAIL SPLIT */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
         
-        {/* LIVE CAMERA FEED SIMULATOR */}
+        {/* CAMERA FEED SCREEN */}
         <div style={{
           background: 'rgba(15, 23, 42, 0.7)',
           border: '1px solid var(--border)',
@@ -136,14 +276,14 @@ export default function CCTVMonitor() {
               🔴 Feed: {selectedZone?.camera_name || 'CAM-01'} ({selectedZone?.zone_location})
             </strong>
             <span className="badge" style={{ background: selectedZone?.anomaly_detected ? 'rgba(239, 68, 68, 0.2)' : 'rgba(52, 211, 153, 0.2)', color: selectedZone?.anomaly_detected ? '#f87171' : '#34d399' }}>
-              {selectedZone?.anomaly_detected ? '⚠️ ANOMALY' : 'LIVE'}
+              {selectedZone?.anomaly_detected ? '⚠️ ANOMALY' : isLiveStreamActive ? 'LIVE BROADCAST' : 'SIMULATED FEED'}
             </span>
           </div>
 
-          {/* SIMULATED CAMERA SCREEN */}
+          {/* SCREEN CONTAINER */}
           <div style={{
             width: '100%',
-            height: '240px',
+            height: '260px',
             background: '#050508',
             borderRadius: '12px',
             border: `2px solid ${selectedZone?.anomaly_detected ? '#ef4444' : '#6366f1'}`,
@@ -154,33 +294,49 @@ export default function CCTVMonitor() {
             justifyContent: 'center',
             boxShadow: '0 0 30px rgba(0,0,0,0.8)'
           }}>
-            {/* Grid overlay */}
-            <div style={{
-              position: 'absolute',
-              top: 0, left: 0, right: 0, bottom: 0,
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
-              backgroundSize: '20px 20px',
-              pointerEvents: 'none'
-            }} />
+            {streamSource === 'WEBCAM' ? (
+              <video ref={videoRef} autoPlay playsInline muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : streamSource === 'IP_URL' ? (
+              <img 
+                src={ipCameraUrl} 
+                alt="Live IP CCTV Stream" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={() => {
+                  alert("Could not load IP stream. Ensure your phone and computer are on the same Wi-Fi!");
+                  setStreamSource('SIMULATED');
+                }}
+              />
+            ) : (
+              <>
+                {/* Grid overlay for simulated radar */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0, left: 0, right: 0, bottom: 0,
+                  backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
+                  backgroundSize: '20px 20px',
+                  pointerEvents: 'none'
+                }} />
 
-            <div style={{ textAlign: 'center', zIndex: 2 }}>
-              <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>
-                {selectedZone?.anomaly_detected ? '🚨' : '👥'}
-              </div>
-              <div style={{ fontSize: '1.4rem', fontWeight: '800', color: 'white' }}>
-                {selectedZone?.occupancy_count} / {selectedZone?.capacity} Occupants
-              </div>
-              <span style={{ fontSize: '12px', color: '#94a3b8' }}>
-                Computer Vision Density Estimation: {Math.round(((selectedZone?.occupancy_count || 0) / (selectedZone?.capacity || 1)) * 100)}%
-              </span>
-            </div>
+                <div style={{ textAlign: 'center', zIndex: 2 }}>
+                  <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>
+                    {selectedZone?.anomaly_detected ? '🚨' : '👥'}
+                  </div>
+                  <div style={{ fontSize: '1.4rem', fontWeight: '800', color: 'white' }}>
+                    {selectedZone?.occupancy_count} / {selectedZone?.capacity} Occupants
+                  </div>
+                  <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+                    Computer Vision Density: {Math.round(((selectedZone?.occupancy_count || 0) / (selectedZone?.capacity || 1)) * 100)}%
+                  </span>
+                </div>
+              </>
+            )}
 
-            <div style={{ position: 'absolute', top: '10px', left: '10px', fontSize: '10px', color: '#34d399', fontFamily: 'monospace' }}>
-              REC • 30 FPS • 1080p
+            <div style={{ position: 'absolute', top: '10px', left: '10px', fontSize: '10px', color: '#34d399', fontFamily: 'monospace', zIndex: 5, background: 'rgba(0,0,0,0.6)', padding: '2px 6px', borderRadius: '4px' }}>
+              REC • 30 FPS • 1080p • {streamSource}
             </div>
           </div>
 
-          {/* SIMULATION CONTROLS FOR SELECTED ZONE */}
+          {/* SIMULATION CONTROLS */}
           <div style={{ width: '100%', display: 'flex', gap: '10px', marginTop: '1.2rem' }}>
             <button 
               onClick={() => triggerAnomaly(selectedZone?.camera_name)}

@@ -11,6 +11,11 @@ export default function WearableWellness() {
   const [simulating, setSimulating] = useState(false);
   const [message, setMessage] = useState(null);
 
+  // Web Bluetooth Real Device State
+  const [isBluetoothConnecting, setIsBluetoothConnecting] = useState(false);
+  const [bluetoothDeviceName, setBluetoothDeviceName] = useState(null);
+  const [liveBluetoothHr, setLiveBluetoothHr] = useState(null);
+
   const fetchTelemetry = async () => {
     try {
       setLoading(true);
@@ -41,6 +46,52 @@ export default function WearableWellness() {
     }
   };
 
+  // Real Web Bluetooth Heart Rate Connection
+  const connectBluetoothSmartwatch = async () => {
+    if (!navigator.bluetooth) {
+      alert("Web Bluetooth is not supported in this browser. Please use Google Chrome or Microsoft Edge.");
+      return;
+    }
+
+    try {
+      setIsBluetoothConnecting(true);
+      const device = await navigator.bluetooth.requestDevice({
+        filters: [{ services: ['heart_rate'] }],
+        optionalServices: ['battery_service']
+      });
+
+      setBluetoothDeviceName(device.name || 'Bluetooth Pulse Band');
+      const server = await device.gatt.connect();
+      const service = await server.getPrimaryService('heart_rate');
+      const characteristic = await service.getCharacteristic('heart_rate_measurement');
+      
+      await characteristic.startNotifications();
+      characteristic.addEventListener('characteristicvaluechanged', handleHeartRateNotification);
+
+      setMessage(`🎉 Connected to ${device.name || 'Bluetooth Heart Rate Monitor'}!`);
+      setTimeout(() => setMessage(null), 4000);
+    } catch (err) {
+      console.warn("Bluetooth connection canceled/failed:", err);
+    } finally {
+      setIsBluetoothConnecting(false);
+    }
+  };
+
+  const handleHeartRateNotification = async (event) => {
+    const value = event.target.value;
+    const hr = value.getUint8(1);
+    setLiveBluetoothHr(hr);
+
+    // Save live reading to backend database
+    try {
+      await API.post('/wearable/simulate-reading', {
+        prn,
+        heart_rate: hr,
+        mode: hr > 95 ? 'EXAM_STRESS' : 'NORMAL'
+      });
+    } catch (e) {}
+  };
+
   if (loading) {
     return (
       <div className="page-loading" style={{ textAlign: 'center', padding: '5rem' }}>
@@ -51,7 +102,8 @@ export default function WearableWellness() {
   }
 
   const tel = data?.currentTelemetry || {};
-  const isHighStress = tel.stress_index > 65;
+  const displayHr = liveBluetoothHr || tel.heart_rate;
+  const isHighStress = (tel.stress_index > 65) || (displayHr > 95);
 
   return (
     <div className="page-content" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -95,20 +147,29 @@ export default function WearableWellness() {
           </p>
         </div>
 
-        <div style={{
-          background: 'rgba(52, 211, 153, 0.1)',
-          border: '1px solid rgba(52, 211, 153, 0.3)',
-          padding: '8px 16px',
-          borderRadius: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          color: '#34d399',
-          fontWeight: '600',
-          fontSize: '13px'
-        }}>
-          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34d399', boxShadow: '0 0 8px #34d399' }} />
-          Sensor Sync Online (Demo Stream)
+        {/* BLUETOOTH PAIRING BUTTON */}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <button 
+            onClick={connectBluetoothSmartwatch}
+            disabled={isBluetoothConnecting}
+            style={{
+              padding: '10px 18px',
+              borderRadius: '25px',
+              background: bluetoothDeviceName ? 'linear-gradient(135deg, #059669, #10b981)' : 'linear-gradient(135deg, #3b82f6, #6366f1)',
+              color: 'white',
+              border: 'none',
+              fontWeight: '600',
+              fontSize: '13px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 15px rgba(99, 102, 241, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <span>{bluetoothDeviceName ? '🟢' : '📶'}</span>
+            {isBluetoothConnecting ? 'Searching Band...' : bluetoothDeviceName ? `Paired: ${bluetoothDeviceName}` : 'Pair Real Bluetooth Watch'}
+          </button>
         </div>
       </div>
 
@@ -126,10 +187,12 @@ export default function WearableWellness() {
         }}>
           <span style={{ fontSize: '24px' }}>❤️</span>
           <span style={{ display: 'block', fontSize: '12px', color: 'var(--text-light)', textTransform: 'uppercase', marginTop: '6px' }}>Heart Rate</span>
-          <div style={{ fontSize: '2.5rem', fontWeight: '800', margin: '0.5rem 0', color: tel.heart_rate > 90 ? '#f87171' : '#34d399' }}>
-            {tel.heart_rate} <span style={{ fontSize: '1rem', fontWeight: '500' }}>BPM</span>
+          <div style={{ fontSize: '2.5rem', fontWeight: '800', margin: '0.5rem 0', color: displayHr > 90 ? '#f87171' : '#34d399' }}>
+            {displayHr} <span style={{ fontSize: '1rem', fontWeight: '500' }}>BPM</span>
           </div>
-          <span style={{ fontSize: '11px', color: 'var(--text-light)' }}>Resting Target: 60-80 BPM</span>
+          <span style={{ fontSize: '11px', color: bluetoothDeviceName ? '#34d399' : 'var(--text-light)', fontWeight: bluetoothDeviceName ? '600' : 'normal' }}>
+            {bluetoothDeviceName ? '⚡ Streaming via Web Bluetooth' : 'Resting Target: 60-80 BPM'}
+          </span>
         </div>
 
         {/* HRV */}
@@ -250,33 +313,6 @@ export default function WearableWellness() {
           >
             ⚡ Normal Study Focus (HR 76, HRV 60)
           </button>
-        </div>
-      </div>
-
-      {/* HARDWARE / API INTEGRATION READY SPECIFICATION */}
-      <div style={{
-        background: 'rgba(15, 23, 42, 0.5)',
-        border: '1px solid var(--border)',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        backdropFilter: 'blur(16px)'
-      }}>
-        <h4 style={{ margin: '0 0 0.8rem 0', fontSize: '1rem', color: 'var(--text-light)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>🔌</span> Hardware Integration Specification (Production Ready)
-        </h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem', fontSize: '12px', color: 'var(--text-light)' }}>
-          <div style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
-            <strong style={{ color: 'var(--text-dark)', display: 'block', marginBottom: '4px' }}>Fitbit Web API v1.2</strong>
-            OAuth 2.0 Authorization Code Flow • Scopes: <code>heartrate</code>, <code>sleep</code>, <code>activity</code>
-          </div>
-          <div style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
-            <strong style={{ color: 'var(--text-dark)', display: 'block', marginBottom: '4px' }}>Garmin Health SDK</strong>
-            Real-time Stress Index & Body Battery PUSH Webhooks via Enterprise Companion API
-          </div>
-          <div style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
-            <strong style={{ color: 'var(--text-dark)', display: 'block', marginBottom: '4px' }}>Apple HealthKit Sync</strong>
-            Direct iOS Client BLE sync via native CoreBluetooth & HealthKit telemetry daemon
-          </div>
         </div>
       </div>
 

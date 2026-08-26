@@ -7,6 +7,11 @@ export default function ParentDashboard() {
   const [loading, setLoading] = useState(true);
   const [generatingSummary, setGeneratingSummary] = useState(false);
 
+  // SMS & WhatsApp State
+  const [parentPhone, setParentPhone] = useState('');
+  const [sendingSms, setSendingSms] = useState(false);
+  const [smsStatus, setSmsStatus] = useState(null);
+
   const fetchChildInfo = async () => {
     try {
       setLoading(true);
@@ -39,6 +44,51 @@ export default function ParentDashboard() {
     }
   };
 
+  // 1-Click Real WhatsApp Dispatch
+  const sendWhatsAppReport = () => {
+    if (!childData) return;
+    const marksText = childData.marks?.map(m => `• ${m.subject}: ${m.score}/${m.total}`).join('%0A') || 'Consistent Coursework';
+    const text = `🎓 *HyperCampus AI — Student Academic Report*%0A%0A` +
+      `👤 *Student:* ${childData.first_name} ${childData.last_name} (${childData.prn})%0A` +
+      `🏛️ *Department:* ${childData.department}, Sem ${childData.semester}%0A` +
+      `📋 *Attendance:* ${childData.attendancePercentage}%25 (${childData.presentCount}/${childData.totalClasses} Classes)%0A` +
+      `💳 *Fee Status:* ${childData.fees?.status || 'PAID'}%0A%0A` +
+      `📊 *Recent Evaluations:*%0A${marksText}%0A%0A` +
+      `🤖 *AI Holistic Summary:*%0A${encodeURIComponent(summary)}%0A%0A` +
+      `_Generated automatically by HyperCampus AI Campus OS_`;
+
+    const cleanPhone = parentPhone.replace(/[^0-9]/g, '');
+    const url = cleanPhone.length === 10
+      ? `https://wa.me/91${cleanPhone}?text=${text}`
+      : `https://wa.me/?text=${text}`;
+
+    window.open(url, '_blank');
+  };
+
+  // Fast2SMS Real Indian Mobile Dispatch
+  const sendFast2SMS = async () => {
+    if (!parentPhone || parentPhone.replace(/[^0-9]/g, '').length < 10) {
+      alert("Please enter a valid 10-digit mobile number for Fast2SMS dispatch.");
+      return;
+    }
+    try {
+      setSendingSms(true);
+      const res = await API.post('/sms/send-alert', {
+        phoneNumber: parentPhone,
+        studentName: `${childData.first_name} ${childData.last_name}`,
+        prn: childData.prn,
+        customMessage: `HyperCampus AI: ${childData.first_name} has ${childData.attendancePercentage}% attendance. View full progress on Parent Portal.`
+      });
+      setSmsStatus(`✅ Real SMS dispatched to +91 ${res.data.phoneNumber}!`);
+      setTimeout(() => setSmsStatus(null), 5000);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to dispatch SMS via gateway.");
+    } finally {
+      setSendingSms(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="page-loading" style={{ textAlign: 'center', padding: '5rem' }}>
@@ -61,6 +111,22 @@ export default function ParentDashboard() {
   return (
     <div className="page-content" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
+      {/* SMS STATUS TOAST */}
+      {smsStatus && (
+        <div style={{
+          padding: '1rem 1.5rem',
+          background: 'linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(99, 102, 241, 0.2))',
+          border: '1px solid #34d399',
+          borderRadius: '12px',
+          color: '#34d399',
+          fontWeight: '600',
+          fontSize: '14px',
+          animation: 'fadeIn 0.3s ease'
+        }}>
+          {smsStatus}
+        </div>
+      )}
+
       {/* HEADER CARD */}
       <div style={{
         background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.1))',
@@ -130,6 +196,78 @@ export default function ParentDashboard() {
               {childData.fees?.status || 'PAID'}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* REAL SMS & WHATSAPP GATEWAY DISPATCHER CARD */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(99, 102, 241, 0.12))',
+        border: '1px solid rgba(34, 197, 94, 0.3)',
+        borderRadius: '16px',
+        padding: '1.5rem',
+        backdropFilter: 'blur(16px)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '1rem'
+      }}>
+        <div>
+          <h3 style={{ margin: '0 0 4px 0', fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span>📲</span> Live WhatsApp & Fast2SMS Gateway Dispatcher
+          </h3>
+          <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-light)' }}>
+            Send real-time attendance, grades, and AI summaries directly to parents' mobile phone numbers.
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <input 
+            type="tel"
+            value={parentPhone}
+            onChange={(e) => setParentPhone(e.target.value)}
+            placeholder="Enter 10-digit Mobile No."
+            style={{
+              padding: '8px 12px',
+              borderRadius: '8px',
+              border: '1px solid var(--border)',
+              background: 'rgba(0,0,0,0.4)',
+              color: 'white',
+              fontSize: '13px',
+              width: '210px'
+            }}
+          />
+          <button 
+            onClick={sendFast2SMS}
+            disabled={sendingSms}
+            style={{
+              padding: '8px 14px',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #0284c7, #2563eb)',
+              color: 'white',
+              border: 'none',
+              fontWeight: '600',
+              fontSize: '12px',
+              cursor: 'pointer'
+            }}
+          >
+            {sendingSms ? 'Sending...' : '📨 Send Real SMS'}
+          </button>
+          <button 
+            onClick={sendWhatsAppReport}
+            style={{
+              padding: '8px 14px',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+              color: 'white',
+              border: 'none',
+              fontWeight: '600',
+              fontSize: '12px',
+              cursor: 'pointer'
+            }}
+          >
+            📱 Send via WhatsApp
+          </button>
         </div>
       </div>
 
