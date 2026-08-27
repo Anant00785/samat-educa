@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HyperCampus AI — Hackathon Winning Pitch Deck</title>
+  <title>HyperCampus AI — Role-Wise Master Presentation Deck</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-dark: #07060a;
-      --bg-card: rgba(16, 14, 24, 0.75);
-      --border-card: rgba(167, 139, 250, 0.22);
+      --bg-card: rgba(16, 14, 24, 0.78);
+      --border-card: rgba(167, 139, 250, 0.24);
       --border-subtle: rgba(255, 255, 255, 0.08);
       --purple-main: #8b5cf6;
       --purple-light: #c4b5fd;
@@ -24,6 +24,7 @@
       --green: #34d399;
       --red: #f87171;
       --orange: #fb923c;
+      --blue: #60a5fa;
     }
 
     * {
@@ -50,7 +51,7 @@
     .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(130px);
+      filter: blur(140px);
       pointer-events: none;
       z-index: 0;
     }
@@ -59,30 +60,30 @@
       height: 700px;
       top: -180px;
       left: -120px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
     }
     .orb-2 {
       width: 750px;
       height: 750px;
       bottom: -220px;
       right: -120px;
-      background: radial-gradient(circle, rgba(216, 178, 150, 0.14) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(216, 178, 150, 0.16) 0%, transparent 70%);
     }
 
     /* Deck Master Container */
     .deck-container {
       position: relative;
       z-index: 10;
-      width: 93vw;
-      max-width: 1420px;
-      height: 88vh;
-      max-height: 900px;
-      background: rgba(13, 11, 20, 0.82);
+      width: 94vw;
+      max-width: 1440px;
+      height: 89vh;
+      max-height: 920px;
+      background: rgba(13, 11, 20, 0.85);
       backdrop-filter: blur(36px);
       -webkit-backdrop-filter: blur(36px);
       border: 1px solid var(--border-card);
       border-radius: 26px;
-      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.95), 0 0 50px rgba(139, 92, 246, 0.06);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.95), 0 0 50px rgba(139, 92, 246, 0.08);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -90,7 +91,7 @@
 
     /* Header Bar */
     .deck-header {
-      padding: 1.1rem 2.5rem;
+      padding: 1rem 2.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -127,7 +128,7 @@
     /* Slide Content Area */
     .slide-content {
       flex: 1;
-      padding: 2.25rem 3.5rem;
+      padding: 2rem 3rem;
       display: none;
       flex-direction: column;
       justifyContent: center;
@@ -140,12 +141,12 @@
 
     /* Footer Navigation */
     .deck-footer {
-      padding: 1rem 2.5rem;
+      padding: 0.9rem 2.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-top: 1px solid var(--border-subtle);
-      background: rgba(8, 7, 13, 0.7);
+      background: rgba(8, 7, 13, 0.75);
     }
     .nav-controls {
       display: flex;
@@ -185,28 +186,28 @@
     }
     .dot.active {
       background: var(--purple-main);
-      width: 30px;
+      width: 28px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
     }
 
     /* Typography */
     .slide-tag {
-      font-size: 11.5px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.12em;
       color: var(--champagne-skin);
       font-weight: 800;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: block;
     }
     .slide-title {
-      font-size: 2.5rem;
+      font-size: 2.3rem;
       font-weight: 900;
       letter-spacing: -1px;
       line-height: 1.15;
       color: #ffffff;
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.6rem;
     }
     .slide-title span.grad {
       background: linear-gradient(135deg, #ffffff 0%, var(--purple-light) 50%, var(--champagne-skin) 100%);
@@ -214,68 +215,84 @@
       -webkit-text-fill-color: transparent;
     }
     .slide-subtitle {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: var(--text-muted);
-      line-height: 1.55;
-      max-width: 960px;
-      margin-bottom: 1.75rem;
+      line-height: 1.5;
+      max-width: 980px;
+      margin-bottom: 1.25rem;
     }
 
-    /* Cards Grid */
-    .cards-grid {
+    /* Feature Cards Grid (4 & 3 Columns) */
+    .features-grid-4 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
       width: 100%;
     }
-    .card {
+    .features-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.15rem;
+      width: 100%;
+    }
+    .feature-card {
       background: rgba(255, 255, 255, 0.025);
       border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 1.5rem;
+      border-radius: 14px;
+      padding: 1.15rem;
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
+      gap: 0.45rem;
       transition: all 0.2s ease;
       position: relative;
     }
-    .card:hover {
+    .feature-card:hover {
       border-color: var(--border-card);
       background: rgba(255, 255, 255, 0.04);
       transform: translateY(-2px);
     }
-    .card-icon {
-      font-size: 24px;
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+    .feature-icon {
+      font-size: 18px;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
       background: var(--purple-dim);
       border: 1px solid rgba(139, 92, 246, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
-    .card h4 {
-      font-size: 1.15rem;
+    .feature-card h4 {
+      font-size: 1rem;
       font-weight: 700;
       color: #ffffff;
+      line-height: 1.2;
     }
-    .card p {
-      font-size: 13px;
+    .feature-card p {
+      font-size: 12px;
       color: var(--text-muted);
-      line-height: 1.48;
+      line-height: 1.45;
+      margin: 0;
     }
-    .card ul {
-      padding-left: 1.2rem;
-      font-size: 12.5px;
+    .feature-card ul {
+      padding-left: 1.1rem;
+      font-size: 11.5px;
       color: var(--text-muted);
-      line-height: 1.6;
+      line-height: 1.5;
+      margin: 0;
     }
 
-    /* Status & Type Badges */
+    /* Badges */
     .pill {
-      font-size: 10px;
-      padding: 2px 7px;
+      font-size: 9.5px;
+      padding: 2px 6px;
       border-radius: 4px;
       font-weight: 700;
       text-transform: uppercase;
@@ -303,12 +320,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 1.25rem 1.5rem;
-      margin-top: 1.25rem;
+      border-radius: 14px;
+      padding: 0.9rem 1.25rem;
+      margin-top: 1rem;
       flex-wrap: wrap;
     }
     .flow-node {
@@ -316,50 +333,49 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 5px;
+      gap: 4px;
       flex: 1;
-      min-width: 120px;
+      min-width: 110px;
     }
     .flow-num {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       background: var(--purple-dim);
       border: 1px solid rgba(139, 92, 246, 0.4);
       color: var(--purple-light);
       font-weight: 800;
-      font-size: 12px;
+      font-size: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .flow-node strong {
-      font-size: 12.5px;
+      font-size: 11.5px;
       color: #ffffff;
     }
     .flow-node span {
-      font-size: 10.5px;
+      font-size: 10px;
       color: var(--text-muted);
     }
     .flow-arrow {
       color: var(--purple-light);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       opacity: 0.7;
     }
 
-    /* Differentiator Bottom Banner */
     .bottom-tagline {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 12px;
-      padding: 0.9rem 1.5rem;
+      padding: 0.75rem 1.25rem;
       background: linear-gradient(90deg, rgba(139, 92, 246, 0.08), rgba(216, 178, 150, 0.08));
       border: 1px solid var(--border-card);
-      border-radius: 12px;
-      margin-top: 1.25rem;
-      font-size: 13.5px;
+      border-radius: 10px;
+      margin-top: 1rem;
+      font-size: 12.5px;
       font-weight: 800;
       letter-spacing: 0.04em;
       color: var(--champagne-light);
@@ -368,16 +384,16 @@
       color: var(--purple-main);
     }
 
-    /* Speaker Notes Modal Overlay */
+    /* Speaker Notes Overlay */
     .notes-drawer {
       position: absolute;
-      bottom: 60px;
+      bottom: 58px;
       left: 2.5rem;
       right: 2.5rem;
       background: rgba(10, 9, 16, 0.96);
       border: 1px solid var(--purple-main);
       border-radius: 14px;
-      padding: 1.25rem 1.75rem;
+      padding: 1.15rem 1.5rem;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
       display: none;
       z-index: 50;
@@ -387,7 +403,7 @@
       display: block;
     }
     .notes-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -397,13 +413,13 @@
       justify-content: space-between;
     }
     .notes-body {
-      font-size: 13px;
+      font-size: 12.5px;
       color: #e4e4e7;
       line-height: 1.5;
     }
 
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -437,58 +453,66 @@
 </head>
 <body>
 
-  <!-- Ambient Glow Background -->
+  <!-- Ambient Glow -->
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
 
-  <!-- Master Presentation Deck Box -->
+  <!-- Master Container -->
   <div class="deck-container">
     
-    <!-- Top Deck Header -->
+    <!-- Top Bar -->
     <div class="deck-header">
       <div class="brand">
         <span>🏛️</span>
         <span>HyperCampus AI</span>
-        <span class="badge-os">Intelligent Campus OS</span>
+        <span class="badge-os">Role-Based Intelligence OS</span>
       </div>
-      <div class="slide-counter" id="slideNum">Slide 1 / 7</div>
+      <div class="slide-counter" id="slideNum">Slide 1 / 8</div>
     </div>
 
-    <!-- ==================== SLIDE 1: THE HOOK ==================== -->
+    <!-- ==================== SLIDE 1: HOOK & IDENTITY ==================== -->
     <div class="slide-content active" id="slide-1">
-      <span class="slide-tag">Hackathon Master Pitch • Higher EdTech & Smart Governance</span>
+      <span class="slide-tag">Hackathon Pitch Deck • Role-Wise System Tour</span>
       <h1 class="slide-title">
         Next-Generation <span class="grad">Intelligent Campus</span><br />Operating System
       </h1>
       <p class="slide-subtitle">
-        From fragmented college data to <strong>Explainable Student Digital Twins</strong>, <strong>Autonomous Closed-Loop Interventions</strong>, and <strong>Cryptographic Razorpay Financial Reconciliations</strong>.
+        Transforming passive college ERP tables into <strong>Explainable Student Digital Twins</strong>, <strong>Autonomous Closed-Loop Interventions</strong>, and <strong>Stakeholder-Specific Action Centers</strong>.
       </p>
 
-      <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr);">
-        <div class="card">
-          <div class="card-icon">🎯</div>
-          <h4>Student 360°</h4>
-          <p>Real-time Digital Twin across 10 database tables with 6 transparent, deterministic health benchmarks.</p>
+      <div class="features-grid-4">
+        <div class="feature-card" style="border-top: 3px solid var(--purple-main);">
+          <div class="feature-head">
+            <div class="feature-icon">🎓</div>
+            <h4>Student Brain</h4>
+          </div>
+          <p>Student 360°, AI Adaptive Study Planner, Career Guidance, Learning Hub & Simulators.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">⚡</div>
-          <h4>HyperIntervene AI</h4>
-          <p>Closed-loop action engine: Risk ➔ Diagnosis ➔ Assigned Actions ➔ Strict Deadlines ➔ Recalibration.</p>
+        <div class="feature-card" style="border-top: 3px solid var(--champagne-skin);">
+          <div class="feature-head">
+            <div class="feature-icon">👩‍🏫</div>
+            <h4>Faculty Hub</h4>
+          </div>
+          <p>Predictive Risk Triage, Explainable Factor Breakdown, HyperIntervene AI & Face Attendance.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">💳</div>
-          <h4>Smart Fee Ledger</h4>
-          <p>Razorpay Standard Checkout in paise with HMAC-SHA256 verification & instant printable receipts.</p>
+        <div class="feature-card" style="border-top: 3px solid var(--green);">
+          <div class="feature-head">
+            <div class="feature-icon">👨‍👩‍👦</div>
+            <h4>Parent Portal</h4>
+          </div>
+          <p>Linked Child Digital Twin, 1-Click Razorpay Fee Pay, Real Fast2SMS & WhatsApp Reports.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">📚</div>
-          <h4>Learning Hub</h4>
-          <p>Curated university literature with EveryCircuit & VisuAlgo interactive visual simulator integrations.</p>
+        <div class="feature-card" style="border-top: 3px solid var(--blue);">
+          <div class="feature-head">
+            <div class="feature-icon">🏛️</div>
+            <h4>Admin Console</h4>
+          </div>
+          <p>Department Fee Analytics, Live Collection Tracking, Overdue Triage & Multi-Campus.</p>
         </div>
       </div>
 
       <div class="bottom-tagline">
-        DETECT <span class="sep">➔</span> EXPLAIN <span class="sep">➔</span> INTERVENE <span class="sep">➔</span> TRACK <span class="sep">➔</span> IMPROVE
+        DETECT RISK <span class="sep">➔</span> EXPLAIN WHY <span class="sep">➔</span> PRESCRIBE ACTION <span class="sep">➔</span> ASSIGN DEADLINE <span class="sep">➔</span> RE-EVALUATE
       </div>
     </div>
 
@@ -497,29 +521,29 @@
       <span class="slide-tag">The Higher Education Bottleneck</span>
       <h2 class="slide-title">A College Has Data. <span class="grad">Does It Have Intelligence?</span></h2>
       <p class="slide-subtitle">
-        Traditional college ERPs are passive digital filing cabinets. They record attendance, marks, and fees in silos without correlating early warning indicators.
+        Traditional college ERPs store attendance, marks, and fees in separate silos without connecting early warning signals.
       </p>
 
-      <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr);">
-        <div class="card" style="border-left: 3px solid var(--red);">
-          <span style="font-size: 11px; color: var(--red); font-weight: 700;">STUDENT FRICTION</span>
+      <div class="features-grid-4">
+        <div class="feature-card" style="border-left: 3px solid var(--red);">
+          <span style="font-size: 10px; color: var(--red); font-weight: 800;">1. STUDENTS</span>
           <h4>Academic Blindspots</h4>
-          <p>Students fall behind before anyone notices, cram aimlessly for exams, and lack clarity on career roadmaps.</p>
+          <p>Students fall behind without notice, cram aimlessly for exams, and lack clarity on industry career roadmaps.</p>
         </div>
-        <div class="card" style="border-left: 3px solid var(--orange);">
-          <span style="font-size: 11px; color: var(--orange); font-weight: 700;">FACULTY OVERLOAD</span>
-          <h4>Manual Tracking Void</h4>
+        <div class="feature-card" style="border-left: 3px solid var(--orange);">
+          <span style="font-size: 10px; color: var(--orange); font-weight: 800;">2. FACULTY</span>
+          <h4>Manual Overload</h4>
           <p>1 mentor manages 80+ students. Signal data is scattered, and intervention happens only after semester failure.</p>
         </div>
-        <div class="card" style="border-left: 3px solid var(--champagne-skin);">
-          <span style="font-size: 11px; color: var(--champagne-skin); font-weight: 700;">PARENT DISCONNECT</span>
-          <h4>Zero Transparency</h4>
-          <p>Parents only discover attendance shortages or fee dues at exam detention, causing panic and dispute.</p>
+        <div class="feature-card" style="border-left: 3px solid var(--champagne-skin);">
+          <span style="font-size: 10px; color: var(--champagne-skin); font-weight: 800;">3. PARENTS</span>
+          <h4>Zero Visibility</h4>
+          <p>Parents only discover attendance shortages or fee dues during exam detention, causing dispute and panic.</p>
         </div>
-        <div class="card" style="border-left: 3px solid var(--purple-main);">
-          <span style="font-size: 11px; color: var(--purple-light); font-weight: 700;">ADMIN INEFFICIENCY</span>
+        <div class="feature-card" style="border-left: 3px solid var(--purple-main);">
+          <span style="font-size: 10px; color: var(--purple-light); font-weight: 800;">4. ADMIN</span>
           <h4>Fragmented Ledgers</h4>
-          <p>Fee reconciliation relies on manual bank receipts and WhatsApp slips; zero departmental collection analytics.</p>
+          <p>Fee reconciliation relies on manual bank slips and WhatsApp screenshots; zero departmental collection rates.</p>
         </div>
       </div>
 
@@ -527,19 +551,19 @@
         <div class="flow-node">
           <div class="flow-num" style="border-color: var(--red); color: var(--red);">1</div>
           <strong>Attendance Drops</strong>
-          <span>Logged in Silo A</span>
+          <span>Silo A Record</span>
         </div>
         <div class="flow-arrow">+</div>
         <div class="flow-node">
           <div class="flow-num" style="border-color: var(--orange); color: var(--orange);">2</div>
-          <strong>Mid-Term Marks Fall</strong>
-          <span>Logged in Silo B</span>
+          <strong>Mid-Terms Fall</strong>
+          <span>Silo B Record</span>
         </div>
         <div class="flow-arrow">+</div>
         <div class="flow-node">
           <div class="flow-num" style="border-color: var(--champagne-skin); color: var(--champagne-skin);">3</div>
-          <strong>Fee Remains Pending</strong>
-          <span>Logged in Silo C</span>
+          <strong>Fee Overdue</strong>
+          <span>Silo C Record</span>
         </div>
         <div class="flow-arrow">➔</div>
         <div class="flow-node" style="color: var(--red);">
@@ -550,307 +574,375 @@
       </div>
     </div>
 
-    <!-- ==================== SLIDE 3: THE SOLUTION ==================== -->
+    <!-- ==================== SLIDE 3: ALL STUDENT FEATURES ==================== -->
     <div class="slide-content" id="slide-3">
-      <span class="slide-tag">The Architecture Transformation</span>
-      <h2 class="slide-title">One Connected <span class="grad">Intelligent Campus Brain</span></h2>
+      <span class="slide-tag">Stakeholder Deep-Dive • Module 1</span>
+      <h2 class="slide-title">🎓 Student Ecosystem: <span class="grad">Digital Twin & Self-Paced Growth</span></h2>
       <p class="slide-subtitle">
-        HyperCampus AI turns fragmented database rows into a continuous, explainable closed-loop intervention ecosystem.
+        Everything a student needs to track academic health, overcome weak concepts, prepare for careers, and clear dues.
       </p>
 
-      <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr);">
-        <div class="card" style="background: rgba(139, 92, 246, 0.04); border-color: var(--border-card);">
-          <div class="card-icon">🧠</div>
-          <h4>AI Intelligence</h4>
-          <ul>
-            <li>Predictive Risk Engine</li>
-            <li>Student 360° Digital Twin</li>
-            <li>Explainable Risk Factors</li>
-            <li>AI Counselor (Dual LLM)</li>
-          </ul>
+      <div class="features-grid-4">
+        <!-- 1. Student 360 -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">🎯</div>
+            <h4>Student 360° Twin</h4>
+          </div>
+          <p>Real-time synthesis across 10 tables: Academic, Attendance, Engagement, Study Consistency, Career, Wellness.</p>
         </div>
-        <div class="card" style="background: rgba(216, 178, 150, 0.04); border-color: rgba(216, 178, 150, 0.3);">
-          <div class="card-icon">🎯</div>
-          <h4>Student Success</h4>
-          <ul>
-            <li>AI Adaptive Study Planner</li>
-            <li>AI Career Guidance Roadmaps</li>
-            <li>Learning Hub & Concepts</li>
-            <li>Gamification & XP Streaks</li>
-          </ul>
-        </div>
-        <div class="card" style="background: rgba(52, 211, 153, 0.04); border-color: rgba(52, 211, 153, 0.3);">
-          <div class="card-icon">⚡</div>
-          <h4>Campus Operations</h4>
-          <ul>
-            <li>Razorpay Standard Checkout</li>
-            <li>Department Fee Analytics</li>
-            <li>Face Attendance Scanner</li>
-            <li>AI Exam Proctoring</li>
-          </ul>
-        </div>
-        <div class="card" style="background: rgba(255, 255, 255, 0.02); border-color: var(--border-subtle);">
-          <div class="card-icon">👥</div>
-          <h4>Unified Roles</h4>
-          <ul>
-            <li>Student Dashboard & Twin</li>
-            <li>Faculty Intervention Center</li>
-            <li>Parent SMS / WhatsApp Hub</li>
-            <li>Admin Financial Console</li>
-          </ul>
-        </div>
-      </div>
 
-      <div class="flow-strip">
-        <div class="flow-node">
-          <div class="flow-num">1</div>
-          <strong>Raw ERP Data</strong>
-          <span>10 Table Signals</span>
+        <!-- 2. AI Study Planner -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">📅</div>
+            <h4>AI Study Planner</h4>
+          </div>
+          <p>Auto-generates day-by-day revision timetables based on upcoming exam dates and weak subject scores.</p>
         </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-node">
-          <div class="flow-num">2</div>
-          <strong>Student 360°</strong>
-          <span>Digital Twin Scores</span>
+
+        <!-- 3. AI Career Guidance -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">🚀</div>
+            <h4>AI Career Guidance</h4>
+          </div>
+          <p>Groq LLM synthesizes 4-phase industry roadmaps, analyzes skill gaps, and suggests real capstone projects.</p>
         </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-node">
-          <div class="flow-num">3</div>
-          <strong>Explainable Risk</strong>
-          <span>Points Contribution</span>
+
+        <!-- 4. Learning Hub -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">📚</div>
+            <h4>Learning Hub & Simulators</h4>
+          </div>
+          <p>Curated university textbooks + direct visualizer links to <span class="pill pill-ext">VisuAlgo</span> & <span class="pill pill-ext">EveryCircuit</span>.</p>
         </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-node">
-          <div class="flow-num">4</div>
-          <strong>HyperIntervene AI</strong>
-          <span>Action + Assignee</span>
+
+        <!-- 5. AI Counselor & Voice Bot -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">💬</div>
+            <h4>AI Voice Counselor</h4>
+          </div>
+          <p>Context-aware multilingual voice assistant answering syllabus doubts and advising study strategies.</p>
         </div>
-        <div class="flow-arrow">➔</div>
-        <div class="flow-node" style="color: var(--green);">
-          <div class="flow-num" style="background: rgba(52, 211, 153, 0.2); border-color: var(--green); color: var(--green);">✓</div>
-          <strong>Re-Evaluation</strong>
-          <span>Verified Recovery</span>
+
+        <!-- 6. Gamification & Streaks -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">🏆</div>
+            <h4>Gamification & XP</h4>
+          </div>
+          <p>Daily study streaks, badge milestones, and campus-wide leaderboards rewarding consistency.</p>
+        </div>
+
+        <!-- 7. AI Exam & Proctoring -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">📝</div>
+            <h4>AI Proctoring & Exam</h4>
+          </div>
+          <p>In-browser secure tests with real-time head-pose angle tracking and multi-face violation logs.</p>
+        </div>
+
+        <!-- 8. Fee Payment Desk -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">💳</div>
+            <h4>Online Fee Desk</h4>
+          </div>
+          <p>Razorpay Standard Checkout with instant printable university digital receipts (<code>HC-FEE-2026-XXXXX</code>).</p>
         </div>
       </div>
     </div>
 
-    <!-- ==================== SLIDE 4: THE KILLER FEATURE ==================== -->
+    <!-- ==================== SLIDE 4: ALL FACULTY FEATURES ==================== -->
     <div class="slide-content" id="slide-4">
-      <span class="slide-tag">The Innovation Centerpiece</span>
-      <h2 class="slide-title">From “At Risk” to <span class="grad">“What Should We Do Next?”</span></h2>
+      <span class="slide-tag">Stakeholder Deep-Dive • Module 2</span>
+      <h2 class="slide-title">👩‍🏫 Faculty Portal: <span class="grad">Predictive Triage & HyperIntervene</span></h2>
       <p class="slide-subtitle">
-        Moving beyond passive alerts into deterministic, assignable closed-loop recovery workflows with verifiable deadlines.
+        Empowering educators to spot struggling students in Week 3, understand root causes, and deploy closed-loop recovery.
       </p>
 
-      <div class="cards-grid" style="grid-template-columns: 1.1fr 1fr 1.3fr;">
-        <!-- Demo Case Profile -->
-        <div class="card" style="border-left: 3px solid var(--red);">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <strong style="font-size: 14px; color: #ffffff;">Ritu Patel (PRN000)</strong>
-            <span class="pill pill-demo">Demo Profile</span>
+      <div class="features-grid-3">
+        <!-- 1. Predictive Risk Triage -->
+        <div class="feature-card" style="border-left: 3px solid var(--red);">
+          <div class="feature-head">
+            <div class="feature-icon">🚨</div>
+            <h4>Predictive Risk Triage Desk</h4>
           </div>
-          <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">2nd Year CSE • Semester 5</p>
-          
-          <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 4px;">
-            <div style="display: flex; justify-content: space-between;"><span>Attendance:</span> <strong style="color: #f87171;">65% (Low)</strong></div>
-            <div style="display: flex; justify-content: space-between;"><span>DAA Mid-Term:</span> <strong style="color: #f87171;">22/50 (Falling)</strong></div>
-            <div style="display: flex; justify-content: space-between;"><span>Semester Exam:</span> <strong style="color: #fb923c;">14 Days Left</strong></div>
-            <div style="display: flex; justify-content: space-between;"><span>Tuition Fee:</span> <strong style="color: #fb923c;">₹50,000 Pending</strong></div>
-          </div>
+          <p>Auto-categorizes entire student cohorts by risk severity (<code>CRITICAL</code>, <code>HIGH</code>, <code>MODERATE</code>, <code>STABLE</code>) with 1-click twin view.</p>
         </div>
 
-        <!-- Explainable Factors -->
-        <div class="card" style="border-left: 3px solid var(--orange);">
-          <strong style="font-size: 14px; color: #ffffff;">2. Why? (Explainable Factors)</strong>
-          <p style="font-size: 12px; color: var(--text-muted); margin: 0;">Calculated Risk: <strong style="color: #f87171;">82% (CRITICAL)</strong></p>
-          
-          <div style="display: flex; flex-direction: column; gap: 5px; font-size: 11.5px;">
-            <div style="padding: 4px 8px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; color: #f87171;">• Attendance Shortage: +35 pts</div>
-            <div style="padding: 4px 8px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; color: #f87171;">• Low DAA CIA Score: +28 pts</div>
-            <div style="padding: 4px 8px; background: rgba(251, 146, 60, 0.1); border-radius: 6px; color: #fb923c;">• Exam Proximity Factor: +12 pts</div>
-            <div style="padding: 4px 8px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; color: #d4d4d8;">• Overdue Study Tasks: +7 pts</div>
+        <!-- 2. Explainable AI Risk -->
+        <div class="feature-card" style="border-left: 3px solid var(--orange);">
+          <div class="feature-head">
+            <div class="feature-icon">🔍</div>
+            <h4>Explainable AI ("Why at Risk?")</h4>
           </div>
+          <p>Mathematical factor breakdown: Attendance shortage (+35 pts), low mid-term CIA (+28 pts), exam proximity (+12 pts).</p>
         </div>
 
-        <!-- HyperIntervene Action Plan -->
-        <div class="card" style="border-left: 3px solid var(--green);">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <strong style="font-size: 14px; color: #ffffff;">3. HyperIntervene Action Plan</strong>
-            <span class="pill pill-real">Closed-Loop</span>
+        <!-- 3. HyperIntervene Action Center -->
+        <div class="feature-card" style="border-left: 3px solid var(--green);">
+          <div class="feature-head">
+            <div class="feature-icon">⚡</div>
+            <h4>HyperIntervene Action Center</h4>
           </div>
-          
-          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
-            <p style="margin: 0; color: #e4e4e7;"><strong>Prescribed Action:</strong> 5-Day DAA Dynamic Programming Fast-Track & VisuAlgo Modules</p>
-            <div style="display: flex; justify-content: space-between; color: var(--text-muted); font-size: 11px;">
-              <span>👤 <strong>Assignee:</strong> Prof. Ramesh (Mentor)</span>
-              <span>📅 <strong>Deadline:</strong> 5 Days</span>
-            </div>
-            <div style="padding: 6px 10px; background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 8px; color: #34d399; font-size: 11px;">
-              ✓ Verified Outcome Score: 92/100 ➔ Risk Drops to <strong>24% (STABLE)</strong>
-            </div>
+          <p>Prescribes targeted remedial practice, assigns faculty mentors, enforces 5-day deadlines, and re-evaluates upon verified completion.</p>
+        </div>
+
+        <!-- 4. Face Recognition Attendance -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">📷</div>
+            <h4>Face Recognition Attendance</h4>
           </div>
+          <p>Automated webcam face mesh scanner matching enrolled student landmarks, preventing proxy attendance.</p>
+        </div>
+
+        <!-- 5. Exam Violations Review -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">🛡️</div>
+            <h4>Exam Violations Review Desk</h4>
+          </div>
+          <p>Chronological audit log of proctored exam suspicious activities (tab switches, head turns, multiple persons detected).</p>
+        </div>
+
+        <!-- 6. Marks & Attendance Entry -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">📊</div>
+            <h4>Direct Gradebook & Alert Dispatch</h4>
+          </div>
+          <p>Fast CIA and practical marks entry with 1-click targeted academic alert broadcasts to students and parents.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 5: ALL PARENT FEATURES ==================== -->
+    <div class="slide-content" id="slide-5">
+      <span class="slide-tag">Stakeholder Deep-Dive • Module 3</span>
+      <h2 class="slide-title">👨‍👩‍👦 Parent Portal: <span class="grad">Complete Academic Transparency</span></h2>
+      <p class="slide-subtitle">
+        Bridging the communication gap between home and college with real-time tracking, SMS, WhatsApp, and 1-click fee pay.
+      </p>
+
+      <div class="features-grid-3">
+        <!-- 1. Linked Child Twin -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">👶</div>
+            <h4>Linked Child Digital Twin</h4>
+          </div>
+          <p>Authenticated access to linked child's real-time attendance %, subject-wise test marks, and academic consistency score.</p>
+        </div>
+
+        <!-- 2. AI Holistic Summary -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">🧠</div>
+            <h4>AI Holistic Progress Summary</h4>
+          </div>
+          <p>Dynamic 3-bullet natural language explanation of student performance, highlighting key strengths and areas needing attention.</p>
+        </div>
+
+        <!-- 3. 1-Click Razorpay Child Fee Pay -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">💳</div>
+            <h4>1-Click Child Fee Payment</h4>
+          </div>
+          <p>Pay pending semester dues directly via Razorpay Standard Checkout with instant downloadable digital tax receipts.</p>
+        </div>
+
+        <!-- 4. Real Fast2SMS Mobile Alerts -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">📲</div>
+            <h4>Real Fast2SMS Indian SMS Gateway</h4>
+          </div>
+          <p>Dispatches live SMS alerts directly to parent 10-digit mobile phones for attendance shortages and urgent notices.</p>
+        </div>
+
+        <!-- 5. 1-Click WhatsApp Progress Reports -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">💬</div>
+            <h4>1-Click WhatsApp Report Generator</h4>
+          </div>
+          <p>Encodes full student academic twin reports directly into WhatsApp for effortless family review and mentor discussions.</p>
+        </div>
+
+        <!-- 6. Direct Faculty Communication -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">👨‍🏫</div>
+            <h4>Faculty Advisor Contact Desk</h4>
+          </div>
+          <p>One-touch email and phone access to child's assigned departmental faculty mentor and academic counselor.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 6: ALL ADMIN & FINANCIAL FEATURES ==================== -->
+    <div class="slide-content" id="slide-6">
+      <span class="slide-tag">Stakeholder Deep-Dive • Module 4</span>
+      <h2 class="slide-title">🏛️ Admin Console: <span class="grad">Institutional & Financial Governance</span></h2>
+      <p class="slide-subtitle">
+        Executive command center providing real-time departmental fee analytics, cryptographic reconciliations, and campus control.
+      </p>
+
+      <div class="features-grid-3">
+        <!-- 1. Department Fee Analytics -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">📊</div>
+            <h4>Department Fee Collection Rates</h4>
+          </div>
+          <p>Live collection percentages and progress bars across Computer Science, Electronics, Mechanical, and Civil departments.</p>
+        </div>
+
+        <!-- 2. Cryptographic Razorpay Ledger -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">🔐</div>
+            <h4>Cryptographic Payment Ledger</h4>
+          </div>
+          <p>Server-side HMAC-SHA256 signature verification with idempotent logging in <code>Fee_Payments</code>, preventing duplicate capture.</p>
+        </div>
+
+        <!-- 3. Overdue Invoices Triage -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">🚨</div>
+            <h4>Overdue Invoices & Smart Reminders</h4>
+          </div>
+          <p>Pinpoints overdue fees with days-late calculation and 1-click **`📢 Send Smart Reminder`** instant alert dispatching.</p>
+        </div>
+
+        <!-- 4. Multi-Campus Architecture -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">🏢</div>
+            <h4>Multi-Campus Tenant Isolation</h4>
+          </div>
+          <p>Unified database schema with campus-level partitioning, enabling university groups to manage multiple branch colleges.</p>
+        </div>
+
+        <!-- 5. Department & User CRUD -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">⚙️</div>
+            <h4>Department & User Management</h4>
+          </div>
+          <p>Full create, update, and delete controls for departments, faculty accounts, and student enrollments with live counters.</p>
+        </div>
+
+        <!-- 6. Smart CCTV Desk Demo -->
+        <div class="feature-card">
+          <div class="feature-head">
+            <div class="feature-icon">📹</div>
+            <h4>Smart CCTV Surveillance <span class="pill pill-demo">Demo</span></h4>
+          </div>
+          <p>Campus zone headcount density, library occupancy simulation, and abnormal crowd surge security flags.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 7: THE CLOSED-LOOP STORY ==================== -->
+    <div class="slide-content" id="slide-7">
+      <span class="slide-tag">The Unifying Story • Real Use Case</span>
+      <h2 class="slide-title">How It All Connects: <span class="grad">Saving Ritu's Semester</span></h2>
+      <p class="slide-subtitle">
+        A demonstration showing how Student, Faculty, Parent, and Admin systems work together in a closed-loop recovery.
+      </p>
+
+      <div class="features-grid-4">
+        <!-- Step 1: Faculty Discovers -->
+        <div class="feature-card" style="border-top: 3px solid var(--red);">
+          <span style="font-size: 10px; color: var(--red); font-weight: 800;">STEP 1 • FACULTY</span>
+          <h4>Risk Flagged (82%)</h4>
+          <p>Faculty spots Ritu in Predictive Triage. Clicks <em>Explain Risk</em>: Low Attendance (+35) and Low DAA Mid-Term (+28).</p>
+        </div>
+
+        <!-- Step 2: HyperIntervene -->
+        <div class="feature-card" style="border-top: 3px solid var(--orange);">
+          <span style="font-size: 10px; color: var(--orange); font-weight: 800;">STEP 2 • INTERVENE</span>
+          <h4>Action Deployed</h4>
+          <p>Prescribes 5-Day Dynamic Programming Recovery + VisuAlgo Modules, assigned to Mentor with a 5-day deadline.</p>
+        </div>
+
+        <!-- Step 3: Student & Parent -->
+        <div class="feature-card" style="border-top: 3px solid var(--green);">
+          <span style="font-size: 10px; color: var(--green); font-weight: 800;">STEP 3 • RECOVERY</span>
+          <h4>Student & Parent Act</h4>
+          <p>Ritu completes AI Study tasks & Learning Hub simulators. Parent pays ₹50k fee dues in 1-click via Razorpay.</p>
+        </div>
+
+        <!-- Step 4: Admin & Re-evaluate -->
+        <div class="feature-card" style="border-top: 3px solid var(--blue);">
+          <span style="font-size: 10px; color: var(--blue); font-weight: 800;">STEP 4 • CLOSED-LOOP</span>
+          <h4>Risk Drops to 24%</h4>
+          <p>Verified score: 92/100. Admin dashboard reflects cleared fee, and Ritu's twin recalibrates to <strong>STABLE</strong>.</p>
         </div>
       </div>
 
       <div class="bottom-tagline">
-        DETECT RISK <span class="sep">➔</span> EXPLAIN WHY <span class="sep">➔</span> PRESCRIBE ACTION <span class="sep">➔</span> ASSIGN DEADLINE <span class="sep">➔</span> RE-EVALUATE
+        ONE CAMPUS <span class="sep">•</span> ONE INTELLIGENCE LAYER <span class="sep">•</span> ONE CONTINUOUS INTERVENTION LOOP
       </div>
     </div>
 
-    <!-- ==================== SLIDE 5: COMPLETE CAMPUS ECOSYSTEM ==================== -->
-    <div class="slide-content" id="slide-5">
-      <span class="slide-tag">Multi-Stakeholder Experience</span>
-      <h2 class="slide-title">One Platform. <span class="grad">Every Campus Stakeholder.</span></h2>
+    <!-- ==================== SLIDE 8: TECH STACK, IMPACT & ROADMAP ==================== -->
+    <div class="slide-content" id="slide-8">
+      <span class="slide-tag">Engineering Foundation & Next Horizons</span>
+      <h2 class="slide-title">Production Tech Stack & <span class="grad">Measurable Impact</span></h2>
       <p class="slide-subtitle">
-        Customized, role-based workflows designed for high usability across students, mentors, parents, and administrative leadership.
+        A modern, modular full-stack architecture running with zero legacy bloat, proven impact, and a clear future roadmap.
       </p>
 
-      <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr);">
-        <div class="card">
-          <div class="card-icon">🎓</div>
-          <h4>Student Portal</h4>
-          <ul>
-            <li>Student 360° Digital Twin</li>
-            <li>AI Adaptive Study Planner</li>
-            <li>AI Career Roadmaps</li>
-            <li>Learning Hub & Simulators</li>
-            <li>Online Exam & Proctoring</li>
-            <li>Razorpay Fee Payment</li>
-          </ul>
-        </div>
-        <div class="card">
-          <div class="card-icon">👩‍🏫</div>
-          <h4>Faculty Portal</h4>
-          <ul>
-            <li>Predictive Risk Triage</li>
-            <li>Explainable Risk Breakdown</li>
-            <li>HyperIntervene Modal</li>
-            <li>Face Recognition Attendance</li>
-            <li>Exam Violations Review</li>
-            <li>Course Marks Entry</li>
-          </ul>
-        </div>
-        <div class="card">
-          <div class="card-icon">👨‍👩‍👦</div>
-          <h4>Parent Portal</h4>
-          <ul>
-            <li>Linked Child Digital Twin</li>
-            <li>Live Attendance & Marks</li>
-            <li>AI Holistic Progress Summary</li>
-            <li>1-Click Razorpay Fee Pay</li>
-            <li>Fast2SMS Mobile Alerts</li>
-            <li>1-Click WhatsApp Reports</li>
-          </ul>
-        </div>
-        <div class="card">
-          <div class="card-icon">🏛️</div>
-          <h4>Admin Console</h4>
-          <ul>
-            <li>Department Fee Analytics</li>
-            <li>Collection Rate Tracking</li>
-            <li>Overdue Invoice Triage</li>
-            <li>Smart Alert Reminders</li>
-            <li>Department CRUD Controls</li>
-            <li>Multi-Campus Isolation</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== SLIDE 6: REAL FEATURES & TECH STACK ==================== -->
-    <div class="slide-content" id="slide-6">
-      <span class="slide-tag">Production Implementations</span>
-      <h2 class="slide-title">Intelligence Meets <span class="grad">Real Campus Operations</span></h2>
-      <p class="slide-subtitle">
-        Backed by production-grade cryptographic security, sub-200ms dual LLMs, and verified external learning integrations.
-      </p>
-
-      <div class="cards-grid" style="grid-template-columns: 1.2fr 1fr;">
-        <!-- Left: Real Modules -->
-        <div class="card">
-          <span style="font-size: 11px; color: var(--purple-light); font-weight: 700;">OPERATIONAL INNOVATIONS</span>
-          <h4 style="font-size: 1.1rem; margin-bottom: 0.2rem;">Razorpay & Learning Hub</h4>
-          
-          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px;">
-            <div style="padding: 8px 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 8px;">
-              <strong>💳 Razorpay Standard Checkout:</strong> Orders created in paise, verified server-side with HMAC-SHA256, idempotent ledger capture, and digital receipts (<code>HC-FEE-2026-XXXXX</code>).
-            </div>
-            <div style="padding: 8px 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 8px;">
-              <strong>📚 Curated Learning Hub:</strong> Verified literature (MIT Press, Pearson) + direct links to <span class="pill pill-ext">VisuAlgo</span> & <span class="pill pill-ext">EveryCircuit</span> simulators.
-            </div>
-            <div style="padding: 8px 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 8px;">
-              <strong>📲 Real Fast2SMS & WhatsApp:</strong> Real Indian mobile SMS gateway integration + formatted student twin WhatsApp progress dispatcher.
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: Technical Stack -->
-        <div class="card">
-          <span style="font-size: 11px; color: var(--champagne-skin); font-weight: 700;">PROVEN TECH STACK</span>
-          <h4 style="font-size: 1.1rem; margin-bottom: 0.2rem;">Full-Stack Architecture</h4>
-          
-          <ul style="line-height: 1.7; font-size: 12.5px;">
-            <li><strong>Frontend:</strong> React 18, Vite, Chart.js, WebRTC, Razorpay SDK</li>
-            <li><strong>Backend:</strong> Node.js, Express, async connection pooling</li>
-            <li><strong>AI Core:</strong> Dual LLM (Groq Qwen 3.8-27B + Gemini 1.5)</li>
-            <li><strong>Database:</strong> SQLite3 / PostgreSQL (17 structured tables)</li>
-            <li><strong>Security:</strong> JWT, bcrypt, HMAC-SHA256, strict RBAC</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== SLIDE 7: IMPACT & ROADMAP ==================== -->
-    <div class="slide-content" id="slide-7">
-      <span class="slide-tag">Executive Summary & Next Horizons</span>
-      <h2 class="slide-title">From Legacy ERP to an <span class="grad">Intelligent Campus</span></h2>
-      <p class="slide-subtitle">
-        Eliminating failure before it starts through proactive intelligence, automated financial reconciliation, and continuous student support.
-      </p>
-
-      <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 1.25rem;">
-        <div class="card">
-          <div style="font-size: 2.5rem; font-weight: 900; color: var(--purple-light);">80%</div>
+      <div class="features-grid-3" style="margin-bottom: 0.9rem;">
+        <div class="feature-card">
+          <div style="font-size: 2.2rem; font-weight: 900; color: var(--purple-light);">80%</div>
           <h4>Faculty Triage Reduction</h4>
-          <p>Automated risk identification and action prescription replaces hours of manual sheet checking.</p>
+          <p>Automated risk identification and action prescription replaces hours of manual spreadsheet checking.</p>
         </div>
-        <div class="card">
-          <div style="font-size: 2.5rem; font-weight: 900; color: var(--champagne-skin);">100%</div>
+        <div class="feature-card">
+          <div style="font-size: 2.2rem; font-weight: 900; color: var(--champagne-skin);">100%</div>
           <h4>Reconciliation Accuracy</h4>
-          <p>Cryptographic Razorpay server verification eliminates financial ledger discrepancies.</p>
+          <p>Cryptographic Razorpay server verification eliminates financial ledger discrepancies and tampering.</p>
         </div>
-        <div class="card">
-          <div style="font-size: 2.5rem; font-weight: 900; color: var(--green);">Week 3</div>
+        <div class="feature-card">
+          <div style="font-size: 2.2rem; font-weight: 900; color: var(--green);">Week 3</div>
           <h4>Early Academic Support</h4>
           <p>Catches declining student trajectory in Month 1 rather than after end-semester detention.</p>
         </div>
       </div>
 
-      <!-- Roadmap strip -->
-      <div style="padding: 10px 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; gap: 8px;">
-        <span><strong>🔭 Future Roadmap:</strong></span>
-        <span>• Real BLE Smartwatch sync</span>
-        <span>• RTSP Camera stream CV ingestion</span>
-        <span>• Multi-institutional cross-campus federations</span>
+      <div style="padding: 10px 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--text-muted); flex-wrap: wrap; gap: 8px;">
+        <span><strong>⚙️ Tech Stack:</strong> React 18, Vite, Node.js Express, Dual LLM (Groq Qwen 3.8-27B + Gemini), SQLite/Postgres (17 tables), JWT, Razorpay SDK.</span>
+        <span><strong>🔭 Roadmap:</strong> BLE Smartwatches • RTSP Cameras • Multi-Campus Federation</span>
       </div>
 
-      <div class="bottom-tagline" style="margin-top: 1rem;">
-        HYPERCAMPUS AI : TURNING CAMPUS DATA INTO EXPLAINABLE DECISIONS & ACTION
+      <div class="bottom-tagline" style="margin-top: 0.85rem;">
+        HYPERCAMPUS AI : TURNING CAMPUS DATA INTO EXPLAINABLE DECISIONS AND GUARANTEED STUDENT SUCCESS
       </div>
     </div>
 
-    <!-- Speaker Notes Drawer Overlay -->
+    <!-- Speaker Notes Overlay Drawer -->
     <div class="notes-drawer" id="notesDrawer">
       <div class="notes-title">
         <span id="notesHeading">🎙️ Speaker Script (Slide 1 — 30s)</span>
         <span style="cursor: pointer;" onclick="toggleNotes()">✕ Close</span>
       </div>
       <p class="notes-body" id="notesText">
-        "Colleges today have gigabytes of attendance and marks data, but they lack connected intelligence. HyperCampus AI transforms this passive data into real-time Student Digital Twins, Explainable Risk models, and closed-loop interventions."
+        "Judges, colleges today already possess gigabytes of data—attendance, marks, and fees. The real problem is that this data sits in silos, discovered too late. HyperCampus AI is the first Intelligent Campus Operating System that connects these signals into role-based action centers."
       </p>
     </div>
 
-    <!-- Bottom Footer Navigation Controls -->
+    <!-- Bottom Navigation Footer -->
     <div class="deck-footer">
       <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
       
@@ -867,36 +959,40 @@
 
   <script>
     let currentSlide = 1;
-    const totalSlides = 7;
+    const totalSlides = 8;
 
     const speakerNotes = [
       {
-        title: "Slide 1: The Hook (30 Seconds)",
-        text: "Judges, colleges today already possess enormous amounts of data—attendance, marks, and fees. The real problem is that this data sits in silos, discovered too late. HyperCampus AI is the first Intelligent Campus Operating System that connects these signals to explain why a student is struggling, assign targeted interventions, and verify academic recovery."
+        title: "Slide 1: Hook & Overview (30 Seconds)",
+        text: "Judges, modern universities struggle not with a lack of data, but with a lack of connected intelligence. HyperCampus AI is an Intelligent Campus Operating System engineered around 4 dedicated stakeholder hubs: Student Brain, Faculty Portal, Parent Transparency, and Admin Governance. Our core principle is: Detect Risk, Explain Why, Intervene, Track, and Improve."
       },
       {
-        title: "Slide 2: The Real Problem (45 Seconds)",
-        text: "In traditional universities, a student skips 3 classes in week 2, fails a mid-term in week 4, and has fee dues in week 6. Because these sit in separate tables, nobody connects the dots until the student is detained. Faculty are overburdened, parents are left in the dark, and administrators struggle with manual financial reconciliation. The problem is not lack of data—it is lack of connected intelligence."
+        title: "Slide 2: The Core Problem (45 Seconds)",
+        text: "In traditional colleges, a student misses 3 classes in week 2, fails a mid-term in week 4, and has fee dues in week 6. Because these records sit in disconnected tables, nobody connects the dots until the student is detained. Faculty are overwhelmed with manual monitoring, parents are left in the dark, and administrators struggle with manual financial reconciliation."
       },
       {
-        title: "Slide 3: The Architecture Solution (60 Seconds)",
-        text: "HyperCampus AI introduces a unified brain. Our engine queries multi-table ERP logs into a Student 360° Digital Twin with 6 transparent benchmarks. When risk is detected, our Explainable AI breaks down the exact point contributions, and HyperIntervene AI synthesizes a closed-loop recovery plan with assigned mentors, strict deadlines, and automatic re-evaluation upon completion."
+        title: "Slide 3: All Student Features (60 Seconds)",
+        text: "Here is the Student Ecosystem: First, Student 360° Digital Twin calculates 6 transparent scores across 10 tables. Second, our AI Adaptive Study Planner creates exam timetables based on weak subjects. Third, AI Career Guidance generates 4-phase industry roadmaps. Fourth, our Learning Hub integrates verified textbooks with VisuAlgo and EveryCircuit simulators. Students also have an AI Counselor, Gamification streaks, online proctoring, and instant Razorpay fee payment with digital receipts."
       },
       {
-        title: "Slide 4: The Killer Feature — Closed-Loop Action (90 Seconds)",
-        text: "Here is our core innovation with Ritu, a real 2nd-year CSE student case. Her attendance dropped to 65% and her DAA score dropped. Traditional ERPs show an opaque 82% risk. HyperCampus AI explains WHY: +35 points attendance shortage, +28 points DAA concept gap. Then, HyperIntervene AI prescribes the exact recovery: 5 days of DAA Dynamic Programming practice with VisuAlgo simulators, assigned to her faculty mentor. Once completed, risk recalibrates to 24% STABLE. Detect, Explain, Intervene, Track, Improve."
+        title: "Slide 4: All Faculty Features (60 Seconds)",
+        text: "For Faculty, we eliminate manual spreadsheet tracking: Our Predictive Risk Triage auto-sorts students into Critical, High, and Stable cohorts. Clicking Explain Risk breaks down exact mathematical point factors. Then, HyperIntervene AI prescribes targeted recovery modules, assigns mentors, and sets strict 5-day deadlines. Faculty also have Face Recognition attendance, exam violation logs, and gradebook entry."
       },
       {
-        title: "Slide 5: Multi-Stakeholder Ecosystem (60 Seconds)",
-        text: "Every campus stakeholder has a dedicated, tailored portal. Students get adaptive study planners, career roadmaps, and online proctoring. Faculty get automated risk triage and face attendance scanners. Parents get live attendance, Fast2SMS mobile alerts, and 1-click WhatsApp progress reports. Administrators get real-time department fee collection analytics and multi-campus management."
+        title: "Slide 5: All Parent Features (45 Seconds)",
+        text: "The Parent Portal bridges the home-college gap: Parents view their linked child's real-time attendance and marks, alongside an AI-generated progress summary. They can pay pending fees in 1 click via Razorpay, receive real SMS alerts on Indian mobile numbers via Fast2SMS, and export formatted progress reports directly to WhatsApp."
       },
       {
-        title: "Slide 6: Real Operations & Technology (60 Seconds)",
-        text: "Everything you see is backed by real engineering. Our Smart Fee system uses Razorpay Standard Checkout in paise with HMAC-SHA256 server verification, idempotent ledger logging, and instant printable digital receipts. Our Learning Hub provides verified publisher literature with direct VisuAlgo and EveryCircuit simulator integrations. Under the hood, we run React 18, Node.js Express, 17 relational SQL tables, and sub-200ms Groq LLM inference."
+        title: "Slide 6: All Admin & Financial Features (45 Seconds)",
+        text: "For Administration, we provide executive clarity: Live Department Fee Analytics track collection rates across Computer Science, Mechanical, and Electronics. Overdue invoices have 1-click Smart Reminder alerts. Payments are cryptographically verified via HMAC-SHA256 in our idempotent database ledger. Admins also manage multi-campus scaling and department CRUD operations."
       },
       {
-        title: "Slide 7: Measurable Impact & Closing (45 Seconds)",
-        text: "HyperCampus AI reduces faculty manual tracking by 80%, provides 100% automated fee reconciliation, and enables early intervention in Week 3 instead of end-semester failure. HyperCampus AI does not just tell a college what happened—it explains why, prescribes what to do next, and tracks whether it worked. Thank you!"
+        title: "Slide 7: The Unifying Case Study (60 Seconds)",
+        text: "Let us see all four portals in action with Ritu, a 2nd-year CSE student: Faculty detects Ritu's 82% risk due to attendance shortage and low DAA marks. HyperIntervene deploys a 5-day recovery plan with VisuAlgo practice. Ritu executes the plan on her Student Hub, while her parent clears the ₹50,000 fee via Razorpay. Upon completion, Ritu's risk drops to 24% STABLE, and the fee is updated in the Admin ledger."
+      },
+      {
+        title: "Slide 8: Tech Stack & Measurable Impact (45 Seconds)",
+        text: "HyperCampus AI is built on React 18, Node.js Express, 17 relational SQL tables, and sub-200ms Groq LLM inference. It reduces faculty tracking time by 80%, provides 100% automated fee reconciliation, and enables early intervention in Month 1 instead of end-semester failure. HyperCampus AI turns campus data into explainable decisions and guaranteed student success. Thank you!"
       }
     ];
 
