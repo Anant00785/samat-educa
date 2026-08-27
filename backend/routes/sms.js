@@ -56,14 +56,19 @@ router.post('/send-alert', authenticateToken, async (req, res) => {
             }
         }
 
-        // Log alert to database
+        // Log alert to database for portal tracking
         await db.execute(`
             INSERT INTO Alerts (target_role, student_prn, title, message, severity, type, is_read)
             VALUES ('PARENT', ?, 'Real SMS Dispatched to ' || ?, ?, 'INFO', 'SMS_ALERT', 0)
         `, [prn || 'PRN000', cleanedNumber, messageText]);
 
+        const isSuccess = fast2smsResponse?.return === true;
+        const gatewayMessage = fast2smsResponse?.message || (isSuccess ? 'SMS Dispatched via Gateway' : 'Fast2SMS gateway wallet activation required.');
+
         res.json({
             success: true,
+            isDelivered: isSuccess,
+            gatewayNotice: !isSuccess ? gatewayMessage : null,
             phoneNumber: cleanedNumber,
             message: messageText,
             gatewayResponse: fast2smsResponse || { return: true, message: 'SMS Dispatched via Gateway' }

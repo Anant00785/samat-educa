@@ -66,7 +66,7 @@ export default function Sidebar() {
               HyperCampus
             </span>
             <span style={{ fontSize: '9px', color: 'var(--accent-color)', fontWeight: '600', letterSpacing: '1px' }}>
-              INTELLIGENT OS
+              INTELLIGENT ERP
             </span>
           </div>
         </div>
