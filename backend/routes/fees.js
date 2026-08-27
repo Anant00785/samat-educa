@@ -249,4 +249,20 @@ router.get('/', authenticateToken, authorizeRoles('ADMIN'), async (req, res) => 
     }
 });
 
+// POST /api/fees/demo-reset/:prn — Reset fee to PENDING for demo testing
+router.post('/demo-reset/:prn', authenticateToken, async (req, res) => {
+    const { prn } = req.params;
+    try {
+        await db.execute(`
+            UPDATE Fees 
+            SET status = 'PENDING', paid_amount = 0 
+            WHERE prn = ?
+        `, [prn]);
+        res.json({ success: true, message: `Fee for ${prn} reset to PENDING (₹50,000 Unpaid)` });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error resetting fee' });
+    }
+});
+
 module.exports = router;

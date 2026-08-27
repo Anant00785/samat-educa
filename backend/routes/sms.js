@@ -40,8 +40,7 @@ router.post('/send-alert', authenticateToken, async (req, res) => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        route: 'v3',
-                        sender_id: 'TXTIND',
+                        route: 'q',
                         message: messageText,
                         language: 'english',
                         flash: 0,
@@ -50,7 +49,7 @@ router.post('/send-alert', authenticateToken, async (req, res) => {
                 });
 
                 fast2smsResponse = await response.json();
-                console.log('Fast2SMS Live Response:', fast2smsResponse);
+                console.log('Fast2SMS Live Gateway Response:', fast2smsResponse);
             } catch (smsErr) {
                 console.error('Fast2SMS Network Error:', smsErr.message);
             }
