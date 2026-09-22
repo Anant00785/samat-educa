@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import API from '../../api/axios';
 
 export default function FacultyRAGGenerator() {
   const { user } = useAuth();
@@ -34,11 +35,24 @@ export default function FacultyRAGGenerator() {
     }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     setIsGenerating(true);
 
-    setTimeout(() => {
-      const newBatch = [
+    try {
+      const res = await API.post('/rag/generate-questions', {
+        documentName: courseFile,
+        questionType,
+        difficulty,
+        count: questionCount
+      });
+
+      if (res.data.questions && Array.isArray(res.data.questions)) {
+        setGeneratedQuestions(res.data.questions);
+      }
+    } catch (err) {
+      console.error("RAG Question Generation Error:", err);
+      // Fallback
+      setGeneratedQuestions([
         {
           id: 1,
           type: 'MCQ',
@@ -59,19 +73,11 @@ export default function FacultyRAGGenerator() {
           difficulty: difficulty,
           question: `Differentiate between Binary Semaphores and Mutex Locks as discussed in ${courseFile}.`,
           correctAnswer: 'A mutex can only be unlocked by the process that locked it (ownership principle), whereas any process can signal a binary semaphore.'
-        },
-        {
-          id: 3,
-          type: 'CODING',
-          difficulty: 'HARD',
-          question: 'Write a pseudo-code implementation of the Producer-Consumer problem using Semaphores (mutex, empty, full).',
-          correctAnswer: 'Producer: wait(empty); wait(mutex); add_item(); signal(mutex); signal(full);'
         }
-      ];
-
-      setGeneratedQuestions(newBatch);
+      ]);
+    } finally {
       setIsGenerating(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -79,10 +85,10 @@ export default function FacultyRAGGenerator() {
       
       {/* HEADER */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(216, 178, 150, 0.12), rgba(139, 92, 246, 0.05))',
-        border: '1px solid rgba(216, 178, 150, 0.25)',
-        borderRadius: '20px',
-        padding: '1.8rem',
+        background: 'linear-gradient(135deg, rgba(216, 178, 150, 0.08), rgba(139, 92, 246, 0.03))',
+        border: '1px solid rgba(216, 178, 150, 0.2)',
+        borderRadius: '16px',
+        padding: '1.6rem',
         backdropFilter: 'blur(20px)',
         display: 'flex',
         justifyContent: 'space-between',
@@ -91,17 +97,16 @@ export default function FacultyRAGGenerator() {
         gap: '1rem'
       }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '24px' }}>✍️</span>
-            <h2 style={{ fontSize: '1.75rem', fontWeight: '800', margin: 0, color: '#fafafa' }}>
-              Faculty AI Assessment & Question Generator (RAG)
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: '700', margin: 0, color: '#fafafa', letterSpacing: '-0.02em' }}>
+              Faculty Assessment & Question Generator
             </h2>
-            <span className="badge" style={{ background: 'rgba(216, 178, 150, 0.2)', color: 'var(--accent-color)' }}>
-              RAG Generator
+            <span className="badge" style={{ background: 'rgba(216, 178, 150, 0.15)', color: 'var(--accent-color)', border: '1px solid rgba(216, 178, 150, 0.3)' }}>
+              RAG Synthesizer
             </span>
           </div>
-          <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.95rem' }}>
-            Upload syllabus notes, research papers, or chapter PDFs to auto-generate customized question papers with answer keys.
+          <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.9rem' }}>
+            Upload syllabus notes, research papers, or chapter PDFs to auto-generate customized question papers with evaluation keys.
           </p>
         </div>
       </div>
@@ -113,37 +118,36 @@ export default function FacultyRAGGenerator() {
         <div style={{
           background: 'rgba(18, 18, 24, 0.7)',
           border: '1px solid var(--border)',
-          borderRadius: '16px',
-          padding: '1.5rem',
+          borderRadius: '14px',
+          padding: '1.3rem',
           backdropFilter: 'blur(16px)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '1.25rem'
+          gap: '1.2rem'
         }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#ffffff', margin: 0 }}>
-            ⚙️ Generator Settings
+          <h3 style={{ fontSize: '0.95rem', fontWeight: '700', color: '#ffffff', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Generator Settings
           </h3>
 
           {/* DOCUMENT DROPZONE */}
           <div>
-            <label className="field-label" style={{ marginBottom: '6px', display: 'block' }}>Course Document / Notes PDF:</label>
+            <label className="field-label" style={{ marginBottom: '6px', display: 'block', fontSize: '12px' }}>Course Document / Notes PDF:</label>
             <div style={{
-              border: '2px dashed rgba(216, 178, 150, 0.4)',
-              borderRadius: '12px',
+              border: '2px dashed rgba(216, 178, 150, 0.3)',
+              borderRadius: '10px',
               padding: '1.2rem',
               textAlign: 'center',
               background: 'rgba(0, 0, 0, 0.3)',
               cursor: 'pointer'
             }}>
-              <span style={{ fontSize: '24px' }}>📄</span>
-              <div style={{ fontSize: '13px', fontWeight: '600', color: '#fafafa', marginTop: '4px' }}>
+              <div style={{ fontSize: '12.5px', fontWeight: '600', color: '#fafafa', marginTop: '2px' }}>
                 {courseFile}
               </div>
               <label style={{
                 display: 'inline-block',
                 marginTop: '8px',
                 padding: '5px 12px',
-                background: 'rgba(255, 255, 255, 0.08)',
+                background: 'rgba(255, 255, 255, 0.06)',
                 border: '1px solid var(--border)',
                 borderRadius: '6px',
                 fontSize: '11px',
@@ -158,12 +162,12 @@ export default function FacultyRAGGenerator() {
 
           {/* QUESTION TYPE */}
           <div>
-            <label className="field-label" style={{ marginBottom: '6px', display: 'block' }}>Question Format:</label>
+            <label className="field-label" style={{ marginBottom: '6px', display: 'block', fontSize: '12px' }}>Question Format:</label>
             <select
               value={questionType}
               onChange={e => setQuestionType(e.target.value)}
               className="field-input"
-              style={{ width: '100%', padding: '10px', background: 'rgba(0,0,0,0.5)', color: '#fff' }}
+              style={{ width: '100%', padding: '9px 12px', background: 'rgba(0,0,0,0.5)', color: '#fff', borderRadius: '8px', fontSize: '12.5px' }}
             >
               <option value="MIXED">Mixed (MCQ + Theory + Coding)</option>
               <option value="MCQ">Multiple Choice Only (MCQ)</option>
@@ -174,7 +178,7 @@ export default function FacultyRAGGenerator() {
 
           {/* DIFFICULTY */}
           <div>
-            <label className="field-label" style={{ marginBottom: '6px', display: 'block' }}>Difficulty Level:</label>
+            <label className="field-label" style={{ marginBottom: '6px', display: 'block', fontSize: '12px' }}>Difficulty Level:</label>
             <div style={{ display: 'flex', gap: '8px' }}>
               {['EASY', 'MEDIUM', 'HARD'].map(lvl => (
                 <button
@@ -183,9 +187,9 @@ export default function FacultyRAGGenerator() {
                   style={{
                     flex: 1,
                     padding: '8px',
-                    borderRadius: '8px',
+                    borderRadius: '6px',
                     border: `1px solid ${difficulty === lvl ? 'var(--accent-color)' : 'var(--border)'}`,
-                    background: difficulty === lvl ? 'rgba(216, 178, 150, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+                    background: difficulty === lvl ? 'rgba(216, 178, 150, 0.18)' : 'rgba(255, 255, 255, 0.03)',
                     color: difficulty === lvl ? 'var(--accent-color)' : 'var(--text-secondary)',
                     fontWeight: '700',
                     fontSize: '11.5px',
@@ -200,7 +204,7 @@ export default function FacultyRAGGenerator() {
 
           {/* NUMBER OF QUESTIONS */}
           <div>
-            <label className="field-label" style={{ marginBottom: '6px', display: 'block' }}>Number of Questions: ({questionCount})</label>
+            <label className="field-label" style={{ marginBottom: '6px', display: 'block', fontSize: '12px' }}>Number of Questions: ({questionCount})</label>
             <input
               type="range"
               min="3"
@@ -217,18 +221,18 @@ export default function FacultyRAGGenerator() {
             disabled={isGenerating}
             style={{
               width: '100%',
-              padding: '12px',
+              padding: '11px',
               background: 'linear-gradient(135deg, #F3E5D8 0%, #D8B296 50%, #C99E80 100%)',
               color: '#1a120c',
               border: 'none',
-              borderRadius: '10px',
-              fontWeight: '800',
-              fontSize: '13px',
+              borderRadius: '8px',
+              fontWeight: '700',
+              fontSize: '12.5px',
               cursor: isGenerating ? 'wait' : 'pointer',
-              boxShadow: '0 4px 16px rgba(216, 178, 150, 0.3)'
+              boxShadow: '0 4px 14px rgba(216, 178, 150, 0.25)'
             }}
           >
-            {isGenerating ? '⏳ Extracting & Generating...' : '✨ Generate Question Paper via RAG'}
+            {isGenerating ? 'Extracting & Synthesizing...' : 'Generate Question Paper via RAG'}
           </button>
         </div>
 
@@ -236,16 +240,16 @@ export default function FacultyRAGGenerator() {
         <div style={{
           background: 'rgba(18, 18, 24, 0.7)',
           border: '1px solid var(--border)',
-          borderRadius: '16px',
-          padding: '1.5rem',
+          borderRadius: '14px',
+          padding: '1.3rem',
           backdropFilter: 'blur(16px)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '1.25rem'
+          gap: '1.2rem'
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid var(--border)', flexWrap: 'wrap', gap: '8px' }}>
             <div>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#ffffff', margin: 0 }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#ffffff', margin: 0 }}>
                 Generated Assessment ({generatedQuestions.length} Questions)
               </h3>
               <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)' }}>
@@ -255,34 +259,34 @@ export default function FacultyRAGGenerator() {
 
             <div style={{ display: 'flex', gap: '8px' }}>
               <button
-                onClick={() => alert("Question Paper exported to Assessment Bank!")}
+                onClick={() => alert("Question Paper exported to Assessment Bank.")}
                 style={{
-                  padding: '7px 14px',
-                  background: 'rgba(139, 92, 246, 0.15)',
+                  padding: '7px 12px',
+                  background: 'rgba(139, 92, 246, 0.12)',
                   color: '#c4b5fd',
-                  border: '1px solid rgba(139, 92, 246, 0.35)',
-                  borderRadius: '8px',
-                  fontSize: '12px',
+                  border: '1px solid rgba(139, 92, 246, 0.3)',
+                  borderRadius: '6px',
+                  fontSize: '11.5px',
                   fontWeight: '600',
                   cursor: 'pointer'
                 }}
               >
-                💾 Save to Assessment Bank
+                Save to Assessment Bank
               </button>
               <button
                 onClick={() => window.print()}
                 style={{
-                  padding: '7px 14px',
-                  background: 'rgba(255, 255, 255, 0.08)',
+                  padding: '7px 12px',
+                  background: 'rgba(255, 255, 255, 0.06)',
                   border: '1px solid var(--border)',
                   color: '#ffffff',
-                  borderRadius: '8px',
-                  fontSize: '12px',
+                  borderRadius: '6px',
+                  fontSize: '11.5px',
                   fontWeight: '600',
                   cursor: 'pointer'
                 }}
               >
-                🖨️ Export PDF
+                Export PDF
               </button>
             </div>
           </div>
@@ -293,17 +297,17 @@ export default function FacultyRAGGenerator() {
               <div
                 key={q.id}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.025)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  borderRadius: '12px',
-                  padding: '1.2rem',
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                  borderRadius: '10px',
+                  padding: '1.1rem',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '8px'
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontWeight: '800', color: 'var(--accent-color)', fontSize: '13px' }}>
+                  <span style={{ fontWeight: '700', color: 'var(--accent-color)', fontSize: '12.5px' }}>
                     Q{idx + 1}. [{q.type}]
                   </span>
                   <span className="badge" style={{ fontSize: '10.5px' }}>
@@ -311,7 +315,7 @@ export default function FacultyRAGGenerator() {
                   </span>
                 </div>
 
-                <div style={{ fontWeight: '600', fontSize: '13.5px', color: '#ffffff', lineHeight: '1.5' }}>
+                <div style={{ fontWeight: '600', fontSize: '13px', color: '#ffffff', lineHeight: '1.5' }}>
                   {q.question}
                 </div>
 
@@ -323,13 +327,13 @@ export default function FacultyRAGGenerator() {
                         style={{
                           padding: '6px 10px',
                           borderRadius: '6px',
-                          background: opt === q.correctAnswer ? 'rgba(52, 211, 153, 0.12)' : 'rgba(0, 0, 0, 0.3)',
-                          border: `1px solid ${opt === q.correctAnswer ? 'rgba(52, 211, 153, 0.4)' : 'rgba(255, 255, 255, 0.05)'}`,
-                          fontSize: '12px',
+                          background: opt === q.correctAnswer ? 'rgba(52, 211, 153, 0.1)' : 'rgba(0, 0, 0, 0.3)',
+                          border: `1px solid ${opt === q.correctAnswer ? 'rgba(52, 211, 153, 0.35)' : 'rgba(255, 255, 255, 0.04)'}`,
+                          fontSize: '11.5px',
                           color: opt === q.correctAnswer ? '#34d399' : 'var(--text-secondary)'
                         }}
                       >
-                        {String.fromCharCode(65 + oIdx)}. {opt} {opt === q.correctAnswer && '✓'}
+                        {String.fromCharCode(65 + oIdx)}. {opt} {opt === q.correctAnswer && ' (Correct)'}
                       </div>
                     ))}
                   </div>
@@ -340,7 +344,7 @@ export default function FacultyRAGGenerator() {
                   borderLeft: '3px solid #34d399',
                   padding: '8px 12px',
                   borderRadius: '6px',
-                  fontSize: '12px',
+                  fontSize: '11.5px',
                   color: '#e4e4e7',
                   marginTop: '4px'
                 }}>

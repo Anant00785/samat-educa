@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import NotificationDropdown from './NotificationDropdown';
 
 const pageTitles = {
@@ -25,15 +26,16 @@ const pageTitles = {
   '/student/study-plan': 'AI Adaptive Study Planner',
   '/student/career':     'AI Career Path Guidance',
   '/student/wellness':   'Mood Fusion & Wellness Check',
-  '/student/wearable':   'Wearable BioStress Monitor',
   '/student/leaderboard':'Academic Gamification & Leaderboard',
   '/student/exam':       'AI Proctored Examination',
+  '/student/rag-assistant': 'Student Document Intelligence',
 
   '/parent':             'Parent Portal — Child Performance Dashboard',
 };
 
 export default function Navbar() {
   const { user } = useAuth();
+  const { theme, toggleTheme, isDark } = useTheme();
   const location = useLocation();
   const title = pageTitles[location.pathname] || 'HyperCampus AI';
 
@@ -63,11 +65,55 @@ export default function Navbar() {
           color: 'var(--accent-color)',
           fontWeight: '500'
         }}>
-          🏢 Tech Campus Pune
+          Tech Campus Pune
         </span>
       </div>
 
-      <div className="navbar-right" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div className="navbar-right" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+        {/* THEME TOGGLE BUTTON */}
+        <button
+          onClick={toggleTheme}
+          style={{
+            padding: '6px 12px',
+            background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(30, 64, 175, 0.08)',
+            border: `1px solid ${isDark ? 'var(--border)' : 'rgba(30, 64, 175, 0.3)'}`,
+            borderRadius: '20px',
+            color: isDark ? '#F3E5D8' : '#1e40af',
+            fontSize: '11.5px',
+            fontWeight: '700',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            transition: 'all 0.2s ease'
+          }}
+          title="Switch between Dark Obsidian and White & Dark Blue Mode"
+        >
+          {isDark ? (
+            <>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+              <span>White & Navy</span>
+            </>
+          ) : (
+            <>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+              <span>Dark Obsidian</span>
+            </>
+          )}
+        </button>
+
         <a
           href="/presentation.html"
           target="_blank"
@@ -77,7 +123,7 @@ export default function Navbar() {
             background: 'rgba(216, 178, 150, 0.12)',
             border: '1px solid rgba(216, 178, 150, 0.3)',
             borderRadius: '20px',
-            color: '#F3E5D8',
+            color: 'var(--accent-color)',
             fontSize: '11.5px',
             fontWeight: '700',
             textDecoration: 'none',
@@ -88,7 +134,7 @@ export default function Navbar() {
           }}
           title="Open Hackathon Master Presentation Deck"
         >
-          <span>📊</span> Pitch Deck ↗
+          Pitch Deck ↗
         </a>
 
         <NotificationDropdown />

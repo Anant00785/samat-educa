@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import PrivateRoute from './components/PrivateRoute';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
@@ -30,7 +31,6 @@ import OnlineExam from './pages/student/OnlineExam';
 import StressDetection from './pages/student/StressDetection';
 import StudyPlanner from './pages/student/StudyPlanner';
 import CareerGuidance from './pages/student/CareerGuidance';
-import WearableWellness from './pages/student/WearableWellness';
 import Leaderboard from './pages/student/Leaderboard';
 import StudentRAGAssistant from './pages/student/StudentRAGAssistant';
 
@@ -63,9 +63,10 @@ function DashboardLayout() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AnimatedBackground />
-      <BrowserRouter>
+    <ThemeProvider>
+      <AuthProvider>
+        <AnimatedBackground />
+        <BrowserRouter>
         <Routes>
           {/* Public */}
           <Route path="/login" element={<LoginPage />} />
@@ -96,7 +97,6 @@ export default function App() {
             <Route path="/student/study-planner" element={<StudyPlanner />} />
             <Route path="/student/career" element={<CareerGuidance />} />
             <Route path="/student/wellness" element={<StressDetection />} />
-            <Route path="/student/wearable" element={<WearableWellness />} />
             <Route path="/student/leaderboard" element={<Leaderboard />} />
             <Route path="/student/attendance" element={<AttendancePage />} />
             <Route path="/student/marks" element={<MarksPage />} />
@@ -126,5 +126,6 @@ export default function App() {
         </Routes>
       </BrowserRouter>
     </AuthProvider>
+    </ThemeProvider>
   );
 }
