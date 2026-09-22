@@ -32,6 +32,7 @@ import StudyPlanner from './pages/student/StudyPlanner';
 import CareerGuidance from './pages/student/CareerGuidance';
 import WearableWellness from './pages/student/WearableWellness';
 import Leaderboard from './pages/student/Leaderboard';
+import StudentRAGAssistant from './pages/student/StudentRAGAssistant';
 
 // Faculty Pages
 import FacultyDashboard from './pages/faculty/FacultyDashboard';
@@ -39,6 +40,7 @@ import MarkAttendance from './pages/faculty/MarkAttendance';
 import CreateExam from './pages/faculty/CreateExam';
 import PredictiveAnalytics from './pages/faculty/PredictiveAnalytics';
 import ExamViolationsReview from './pages/faculty/ExamViolationsReview';
+import FacultyRAGGenerator from './pages/faculty/FacultyRAGGenerator';
 
 // Parent Pages
 import ParentDashboard from './pages/parent/ParentDashboard';
@@ -100,6 +102,7 @@ export default function App() {
             <Route path="/student/marks" element={<MarksPage />} />
             <Route path="/student/fees" element={<FeesPage />} />
             <Route path="/student/exam" element={<OnlineExam />} />
+            <Route path="/student/rag-assistant" element={<StudentRAGAssistant />} />
           </Route>
 
           {/* ── FACULTY ── */}
@@ -110,6 +113,7 @@ export default function App() {
             <Route path="/faculty/student-360/:prnParam" element={<Student360 />} />
             <Route path="/faculty/exam-violations" element={<ExamViolationsReview />} />
             <Route path="/faculty/create-exam" element={<CreateExam />} />
+            <Route path="/faculty/rag-generator" element={<FacultyRAGGenerator />} />
           </Route>
 
           {/* ── PARENT ── */}

@@ -25,6 +25,7 @@ const menuItems = {
     { path: '/student/marks', label: 'Grades & Marks', icon: '📊' },
     { path: '/student/fees', label: 'Fees & Dues', icon: '💳' },
     { path: '/student/exam', label: 'Proctored Exam', icon: '📝' },
+    { path: '/student/rag-assistant', label: 'RAG AI Notes Q&A', icon: '📄' },
   ],
   FACULTY: [
     { path: '/faculty', label: 'Dashboard', icon: '🏠' },
@@ -32,6 +33,7 @@ const menuItems = {
     { path: '/faculty/predictive', label: 'At-Risk Students', icon: '⚠️' },
     { path: '/faculty/exam-violations', label: 'Exam Violations', icon: '🛡️' },
     { path: '/faculty/create-exam', label: 'Create Assessment', icon: '✍️' },
+    { path: '/faculty/rag-generator', label: 'RAG Question Generator', icon: '📑' },
   ],
   PARENT: [
     { path: '/parent', label: 'Child Performance', icon: '👨‍👩‍👧' },
