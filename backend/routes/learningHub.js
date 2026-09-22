@@ -60,6 +60,83 @@ async function callGroqExplain(conceptName, subject) {
 // Curated Verified Subject Catalog
 const LEARNING_RESOURCES = [
     {
+        id: 'physics',
+        subject: 'Engineering Physics & 3D Simulations',
+        shortName: 'Physics 3D',
+        description: 'Applied engineering physics, mechanics, optics, wave phenomena, electromagnetism, and interactive 3D visual simulations.',
+        interactiveTool: {
+            name: 'oPhysics',
+            title: 'Interactive 3D Physics Simulator',
+            description: 'Interactive real-time 3D physics visualizer covering Kinematics, Optics, Waves, Electromagnetism, Circular & Orbital Motion, and Fluid Dynamics.',
+            url: 'https://ophysics.com/',
+            badge: '3D Physics Simulator',
+            topics: [
+                'Kinematics & 2D Projectile Trajectory',
+                'Forces, Friction & Incline Dynamics',
+                'Circular Motion & Centripetal Acceleration',
+                'Gravitation & Satellite Orbital Mechanics',
+                'Simple Harmonic Motion (Pendulum & Spring)',
+                'Wave Superposition, Interference & Doppler Effect',
+                'Light Reflection, Refraction & Ray Optics (Lenses/Mirrors)',
+                'Electrostatics, Coulomb Law & Magnetic Fields',
+                'Fluid Pressure, Buoyancy & Bernoulli Principle',
+                'Thermal Expansion & Heat Transfer'
+            ]
+        },
+        books: [
+            {
+                id: 'halliday-resnick',
+                title: 'Fundamentals of Physics (Extended)',
+                authors: 'David Halliday, Robert Resnick, Jearl Walker',
+                publisher: 'Wiley',
+                edition: '11th Edition',
+                verifiedUrl: 'https://www.wiley.com/en-us/Fundamentals+of+Physics%2C+11th+Edition-p-9781119286240',
+                conceptsCovered: ['Motion in 1D and 2D', 'Force and Motion', 'Kinetic Energy and Work', 'Potential Energy and Conservation of Energy', 'Rotation and Angular Momentum', 'Oscillations and Waves', 'Electromagnetism', 'Optics']
+            },
+            {
+                id: 'serway-jewett',
+                title: 'Physics for Scientists and Engineers',
+                authors: 'Raymond A. Serway, John W. Jewett',
+                publisher: 'Cengage Learning',
+                edition: '10th Edition',
+                verifiedUrl: 'https://www.cengage.com/',
+                conceptsCovered: ['Mechanics', 'Oscillations and Mechanical Waves', 'Thermodynamics', 'Electricity and Magnetism', 'Light and Optics', 'Modern Physics']
+            }
+        ],
+        concepts: [
+            {
+                name: 'Projectile Motion',
+                definition: 'The motion of an object thrown into the air subject only to the acceleration of gravity, forming a parabolic trajectory.',
+                example: 'A launched rocket or a football kicked at a 45-degree angle reaching maximum horizontal range.',
+                usedIn: ['Ballistics engineering', 'Rocket launch trajectories', 'Sports physics analytics']
+            },
+            {
+                name: 'Simple Harmonic Motion (SHM)',
+                definition: 'Periodic oscillatory motion where the restoring force is directly proportional to displacement and acts in the opposite direction (F = -kx).',
+                example: 'A mass oscillating on a spring or a clock pendulum swinging smoothly.',
+                usedIn: ['Automobile shock absorbers', 'Seismology vibration dampeners', 'Acoustic engineering']
+            },
+            {
+                name: 'Snell\'s Law of Refraction',
+                definition: 'A formula used to describe the relationship between angles of incidence and refraction when light passes through different media (n1*sin(θ1) = n2*sin(θ2)).',
+                example: 'A straw appearing bent when placed inside a clear glass of water.',
+                usedIn: ['Optical fiber communication', 'Eyeglass lens design', 'Telescopes and camera optics']
+            },
+            {
+                name: 'Doppler Effect',
+                definition: 'The observed change in frequency of a wave in relation to an observer who is moving relative to the wave source.',
+                example: 'The rising and falling pitch of an ambulance siren as it drives past you.',
+                usedIn: ['Radar speed guns', 'Medical ultrasound blood flow imaging', 'Astrophysical redshift tracking']
+            },
+            {
+                name: 'Coulomb\'s Law & Electric Fields',
+                definition: 'The electrostatic law stating that the force between two charges is directly proportional to the product of their charges and inversely proportional to the square of the distance between them.',
+                example: 'Static electricity attracting hair to a plastic balloon.',
+                usedIn: ['Semiconductor chip manufacturing', 'Capacitor energy storage', 'Electrostatic precipitators']
+            }
+        ]
+    },
+    {
         id: 'dsa',
         subject: 'Data Structures & Algorithms',
         shortName: 'DSA',
