@@ -51,6 +51,10 @@ function NavSvgIcon({ name }) {
       return <svg {...iconProps}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><line x1="9" y1="15" x2="15" y2="15" /></svg>;
     case 'rag':
       return <svg {...iconProps}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><line x1="10" y1="9" x2="8" y2="9" /></svg>;
+    case 'feynman':
+      return <svg {...iconProps}><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>;
+    case 'cluster':
+      return <svg {...iconProps}><circle cx="6" cy="6" r="3" /><circle cx="18" cy="6" r="3" /><circle cx="12" cy="18" r="3" /><line x1="8.5" y1="7.5" x2="15.5" y2="7.5" /><line x1="7.5" y1="8.5" x2="10.5" y2="15.5" /><line x1="16.5" y1="8.5" x2="13.5" y2="15.5" /></svg>;
     case 'camera':
       return <svg {...iconProps}><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>;
     case 'alert':
@@ -66,6 +70,7 @@ const menuItems = {
   ADMIN: [
     { path: '/admin', label: 'Overview OS', icon: 'home' },
     { path: '/admin/predictive', label: 'Predictive Risk', icon: 'predictive' },
+    { path: '/admin/doubt-clusters', label: 'Doubt Clusters', icon: 'cluster' },
     { path: '/admin/cctv', label: 'Smart CCTV', icon: 'cctv' },
     { path: '/admin/departments', label: 'Departments', icon: 'department' },
     { path: '/admin/students', label: 'Manage Students', icon: 'students' },
@@ -77,6 +82,7 @@ const menuItems = {
     { path: '/student/360', label: 'Student 360°', icon: '360' },
     { path: '/student/learning-hub', label: 'Learning Hub', icon: 'learning' },
     { path: '/student/study-plan', label: 'AI Study Planner', icon: 'planner' },
+    { path: '/student/feynman-quiz', label: 'Feynman Reverse Viva', icon: 'feynman' },
     { path: '/student/career', label: 'AI Career Guide', icon: 'career' },
     { path: '/student/wellness', label: 'Mood Fusion Check', icon: 'wellness' },
     { path: '/student/leaderboard', label: 'Gamification & XP', icon: 'leaderboard' },
@@ -90,6 +96,7 @@ const menuItems = {
     { path: '/faculty', label: 'Dashboard', icon: 'home' },
     { path: '/faculty/attendance', label: 'Face Attendance', icon: 'camera' },
     { path: '/faculty/predictive', label: 'At-Risk Students', icon: 'alert' },
+    { path: '/faculty/doubt-clusters', label: 'Doubt Clusters', icon: 'cluster' },
     { path: '/faculty/exam-violations', label: 'Exam Violations', icon: 'shield' },
     { path: '/faculty/create-exam', label: 'Create Assessment', icon: 'exam' },
     { path: '/faculty/rag-generator', label: 'Question Generator', icon: 'rag' },

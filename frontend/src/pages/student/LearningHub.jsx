@@ -10,6 +10,51 @@ export default function LearningHub() {
   const [loadingAi, setLoadingAi] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // 60-Second Audio Recap & Cheat Sheet States
+  const [speakingConcept, setSpeakingConcept] = useState(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [cheatSheetSubject, setCheatSheetSubject] = useState(null);
+
+  const handleAudioRecap = (text, title) => {
+    if (!('speechSynthesis' in window)) {
+      alert('Text-to-speech is not supported in this browser.');
+      return;
+    }
+
+    if (isSpeaking && speakingConcept === title) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setSpeakingConcept(null);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1.05;
+    utterance.pitch = 1.0;
+
+    utterance.onstart = () => {
+      setIsSpeaking(true);
+      setSpeakingConcept(title);
+    };
+
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      setSpeakingConcept(null);
+    };
+
+    utterance.onerror = () => {
+      setIsSpeaking(false);
+      setSpeakingConcept(null);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handlePrintCheatSheet = () => {
+    window.print();
+  };
+
   useEffect(() => {
     const fetchCatalog = async () => {
       try {
@@ -442,7 +487,7 @@ export default function LearningHub() {
           
           {/* Subject Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
-            <div>
+            <div style={{ flex: 1, minWidth: '280px' }}>
               <h3 style={{ fontSize: '1.4rem', fontWeight: '700', margin: '0 0 4px 0', color: 'var(--text-dark)' }}>
                 {sub.subject}
               </h3>
@@ -450,9 +495,29 @@ export default function LearningHub() {
                 {sub.description}
               </p>
             </div>
-            <span className="badge" style={{ fontSize: '11px', padding: '4px 10px' }}>
-              Core Curriculum
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                onClick={() => setCheatSheetSubject(sub)}
+                style={{
+                  padding: '7px 14px',
+                  background: 'rgba(30, 64, 175, 0.08)',
+                  border: '1px solid rgba(30, 64, 175, 0.3)',
+                  borderRadius: '8px',
+                  color: 'var(--accent-color)',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                1-Page Cheat Sheet 🖨️
+              </button>
+              <span className="badge" style={{ fontSize: '11px', padding: '4px 10px' }}>
+                Core Curriculum
+              </span>
+            </div>
           </div>
 
           {/* A. INTERACTIVE TOOL BANNER */}
@@ -694,15 +759,38 @@ export default function LearningHub() {
               )}
             </div>
 
-            <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '6px', flexWrap: 'wrap' }}>
               <button
                 onClick={() => handleExplainWithAi(selectedConcept, selectedConcept.subjectName)}
                 disabled={loadingAi}
                 className="btn-primary"
-                style={{ flex: 1, padding: '10px', fontSize: '12.5px' }}
+                style={{ flex: 1, minWidth: '160px', padding: '10px', fontSize: '12.5px' }}
               >
                 {loadingAi ? 'Synthesizing...' : 'Explain with AI Tutor'}
               </button>
+
+              <button
+                onClick={() => handleAudioRecap(
+                  `${selectedConcept.name}. ${selectedConcept.definition}. ${selectedConcept.example ? 'For example: ' + selectedConcept.example : ''} ${aiExplanation || ''}`,
+                  selectedConcept.name
+                )}
+                style={{
+                  padding: '10px 16px',
+                  background: isSpeaking && speakingConcept === selectedConcept.name ? 'rgba(239, 68, 68, 0.12)' : 'rgba(30, 64, 175, 0.1)',
+                  border: isSpeaking && speakingConcept === selectedConcept.name ? '1px solid #ef4444' : '1px solid rgba(30, 64, 175, 0.3)',
+                  color: isSpeaking && speakingConcept === selectedConcept.name ? '#ef4444' : 'var(--accent-color)',
+                  borderRadius: '8px',
+                  fontSize: '12.5px',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                {isSpeaking && speakingConcept === selectedConcept.name ? 'Stop Spoken Recap ⏹' : '60-Sec Audio Recap 🔊'}
+              </button>
+
               <button
                 onClick={() => setSelectedConcept(null)}
                 className="btn-secondary"
@@ -710,6 +798,107 @@ export default function LearningHub() {
               >
                 Close
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 7. ONE-PAGE EXAM CHEAT SHEET MODAL (PRINTABLE) */}
+      {cheatSheetSubject && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.7)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '1rem'
+        }}>
+          <div style={{
+            background: 'var(--surface-card)',
+            border: '1.5px solid var(--border)',
+            borderRadius: '16px',
+            padding: '2rem',
+            maxWidth: '780px',
+            width: '100%',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.4rem'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
+              <div>
+                <span style={{ fontSize: '11px', textTransform: 'uppercase', fontWeight: '700', color: 'var(--accent-color)' }}>
+                  Rapid Exam Revision Card
+                </span>
+                <h3 style={{ fontSize: '1.45rem', fontWeight: '800', margin: '2px 0 0 0', color: 'var(--text-dark)' }}>
+                  {cheatSheetSubject.subject} — 1-Page Cheat Sheet
+                </h3>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <button
+                  onClick={handlePrintCheatSheet}
+                  className="btn-primary"
+                  style={{ padding: '8px 16px', fontSize: '12.5px', fontWeight: '700' }}
+                >
+                  Print / Save PDF 🖨️
+                </button>
+                <button
+                  onClick={() => setCheatSheetSubject(null)}
+                  style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', fontSize: '20px', cursor: 'pointer' }}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Core Definitions & Formulas */}
+            <div>
+              <h4 style={{ fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--accent-color)', marginBottom: '8px' }}>
+                Core Definitions & Principles
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '10px' }}>
+                {cheatSheetSubject.concepts?.map((c, idx) => (
+                  <div key={idx} style={{ padding: '10px 12px', background: 'var(--bg-main)', border: '1px solid var(--border)', borderRadius: '8px' }}>
+                    <strong style={{ fontSize: '13px', color: 'var(--text-dark)' }}>{c.name}</strong>
+                    <p style={{ margin: '3px 0 0 0', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.45' }}>
+                      {c.definition}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* High-Yield Textbooks & References */}
+            {cheatSheetSubject.books && cheatSheetSubject.books.length > 0 && (
+              <div>
+                <h4 style={{ fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--accent-color)', marginBottom: '8px' }}>
+                  Standard References & Authors
+                </h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {cheatSheetSubject.books.map((b, idx) => (
+                    <div key={idx} style={{ fontSize: '12.5px', color: 'var(--text-dark)', padding: '6px 10px', background: 'rgba(30, 64, 175, 0.04)', borderRadius: '6px', border: '1px solid rgba(30, 64, 175, 0.15)' }}>
+                      <strong>{b.title}</strong> — {b.authors} ({b.publisher}, {b.edition})
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Exam Pitfalls & High-Yield Tips */}
+            <div style={{ padding: '12px 14px', background: 'rgba(245, 158, 11, 0.06)', border: '1px solid rgba(245, 158, 11, 0.25)', borderRadius: '10px' }}>
+              <strong style={{ fontSize: '12px', color: '#f59e0b', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
+                High-Yield Exam Strategy:
+              </strong>
+              <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-dark)', lineHeight: '1.5' }}>
+                Always draw neat labeled diagrams and write boundary conditions first. For numericals, state SI units explicitly and double-check conservation principles.
+              </p>
             </div>
           </div>
         </div>

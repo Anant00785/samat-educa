@@ -33,6 +33,7 @@ import StudyPlanner from './pages/student/StudyPlanner';
 import CareerGuidance from './pages/student/CareerGuidance';
 import Leaderboard from './pages/student/Leaderboard';
 import StudentRAGAssistant from './pages/student/StudentRAGAssistant';
+import FeynmanQuiz from './pages/student/FeynmanQuiz';
 
 // Faculty Pages
 import FacultyDashboard from './pages/faculty/FacultyDashboard';
@@ -41,6 +42,7 @@ import CreateExam from './pages/faculty/CreateExam';
 import PredictiveAnalytics from './pages/faculty/PredictiveAnalytics';
 import ExamViolationsReview from './pages/faculty/ExamViolationsReview';
 import FacultyRAGGenerator from './pages/faculty/FacultyRAGGenerator';
+import DoubtClusters from './pages/faculty/DoubtClusters';
 
 // Parent Pages
 import ParentDashboard from './pages/parent/ParentDashboard';
@@ -80,6 +82,7 @@ export default function App() {
           <Route element={<PrivateRoute roles={['ADMIN']}><DashboardLayout /></PrivateRoute>}>
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/predictive" element={<PredictiveAnalytics />} />
+            <Route path="/admin/doubt-clusters" element={<DoubtClusters />} />
             <Route path="/admin/student-360/:prnParam" element={<Student360 />} />
             <Route path="/admin/cctv" element={<CCTVMonitor />} />
             <Route path="/admin/students" element={<ManageStudents />} />
@@ -95,6 +98,7 @@ export default function App() {
             <Route path="/student/learning-hub" element={<LearningHub />} />
             <Route path="/student/study-plan" element={<StudyPlanner />} />
             <Route path="/student/study-planner" element={<StudyPlanner />} />
+            <Route path="/student/feynman-quiz" element={<FeynmanQuiz />} />
             <Route path="/student/career" element={<CareerGuidance />} />
             <Route path="/student/wellness" element={<StressDetection />} />
             <Route path="/student/leaderboard" element={<Leaderboard />} />
@@ -110,6 +114,7 @@ export default function App() {
             <Route path="/faculty" element={<FacultyDashboard />} />
             <Route path="/faculty/attendance" element={<MarkAttendance />} />
             <Route path="/faculty/predictive" element={<PredictiveAnalytics />} />
+            <Route path="/faculty/doubt-clusters" element={<DoubtClusters />} />
             <Route path="/faculty/student-360/:prnParam" element={<Student360 />} />
             <Route path="/faculty/exam-violations" element={<ExamViolationsReview />} />
             <Route path="/faculty/create-exam" element={<CreateExam />} />

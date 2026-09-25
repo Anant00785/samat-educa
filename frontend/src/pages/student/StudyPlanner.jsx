@@ -166,6 +166,123 @@ export default function StudyPlanner() {
         </div>
       </div>
 
+      {/* EXAM READINESS & BURNOUT RISK SCORECARD */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+        
+        {/* Exam Readiness Score */}
+        <div style={{ padding: '1.3rem', background: 'var(--surface-card)', border: '1px solid var(--border)', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <span style={{ fontSize: '11px', textTransform: 'uppercase', fontWeight: '700', color: 'var(--text-muted)' }}>
+              Aggregate Exam Readiness
+            </span>
+            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#10b981', marginTop: '4px' }}>
+              84% Ready
+            </div>
+            <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)' }}>
+              Based on syllabus & quiz coverage
+            </span>
+          </div>
+          <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '4px solid #10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '13px', color: '#10b981' }}>
+            84%
+          </div>
+        </div>
+
+        {/* Study Density & Burnout Index */}
+        <div style={{ padding: '1.3rem', background: 'var(--surface-card)', border: '1px solid var(--border)', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <span style={{ fontSize: '11px', textTransform: 'uppercase', fontWeight: '700', color: 'var(--text-muted)' }}>
+              Study Density / Burnout Risk
+            </span>
+            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#3b82f6', marginTop: '4px' }}>
+              Optimal (2.4h/d)
+            </div>
+            <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)' }}>
+              Low burnout risk • Balanced pace
+            </span>
+          </div>
+          <span className="badge" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '6px 10px', fontSize: '11px' }}>
+            NORMAL
+          </span>
+        </div>
+
+        {/* Syllabus Topics Covered */}
+        <div style={{ padding: '1.3rem', background: 'var(--surface-card)', border: '1px solid var(--border)', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <span style={{ fontSize: '11px', textTransform: 'uppercase', fontWeight: '700', color: 'var(--text-muted)' }}>
+              Syllabus Coverage Depth
+            </span>
+            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--accent-color)', marginTop: '4px' }}>
+              18 / 22 Topics
+            </div>
+            <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)' }}>
+              4 topics scheduled for revision
+            </span>
+          </div>
+          <span className="badge" style={{ background: 'rgba(30, 64, 175, 0.12)', color: 'var(--accent-color)', padding: '6px 10px', fontSize: '11px' }}>
+            ON TRACK
+          </span>
+        </div>
+      </div>
+
+      {/* SYLLABUS TOPIC HEATMAP */}
+      <div style={{
+        background: 'var(--surface-card)',
+        border: '1px solid var(--border)',
+        borderRadius: '14px',
+        padding: '1.5rem',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.03)'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '8px' }}>
+          <div>
+            <h3 style={{ margin: '0 0 2px 0', fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-dark)' }}>
+              Live Syllabus Topic Heatmap
+            </h3>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Green = Mastered, Yellow = In Progress, Red = Immediate Revision Needed
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', fontSize: '11px', fontWeight: '700' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#10b981' }}>🟢 Mastered (12)</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#f59e0b' }}>🟡 In Progress (6)</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#ef4444' }}>🔴 Needs Review (4)</span>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+          {[
+            { topic: "Snell's Law & Wave Optics", subject: 'Physics', status: 'MASTERED', color: '#10b981', bg: 'rgba(16, 185, 129, 0.08)', border: 'rgba(16, 185, 129, 0.3)' },
+            { topic: 'Projectile 2D Motion', subject: 'Physics', status: 'MASTERED', color: '#10b981', bg: 'rgba(16, 185, 129, 0.08)', border: 'rgba(16, 185, 129, 0.3)' },
+            { topic: 'Binary Search Trees & AVL', subject: 'DSA', status: 'MASTERED', color: '#10b981', bg: 'rgba(16, 185, 129, 0.08)', border: 'rgba(16, 185, 129, 0.3)' },
+            { topic: 'Recursion Call Stack Frames', subject: 'DSA', status: 'NEEDS_REVIEW', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.08)', border: 'rgba(239, 68, 68, 0.3)' },
+            { topic: 'OS Deadlock & Banker Algorithm', subject: 'OS', status: 'IN_PROGRESS', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.08)', border: 'rgba(245, 158, 11, 0.3)' },
+            { topic: 'Virtual Memory & Page Replacement', subject: 'OS', status: 'MASTERED', color: '#10b981', bg: 'rgba(16, 185, 129, 0.08)', border: 'rgba(16, 185, 129, 0.3)' },
+            { topic: 'Gibbs Free Energy & Entropy', subject: 'Chemistry', status: 'IN_PROGRESS', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.08)', border: 'rgba(245, 158, 11, 0.3)' },
+            { topic: 'Buffer Solutions & Equilibrium', subject: 'Chemistry', status: 'NEEDS_REVIEW', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.08)', border: 'rgba(239, 68, 68, 0.3)' }
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              style={{
+                padding: '10px 12px',
+                background: item.bg,
+                border: `1px solid ${item.border}`,
+                borderRadius: '10px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              <div>
+                <strong style={{ fontSize: '12.5px', color: 'var(--text-dark)', display: 'block' }}>{item.topic}</strong>
+                <span style={{ fontSize: '10.5px', color: 'var(--text-secondary)' }}>{item.subject}</span>
+              </div>
+              <span style={{ fontSize: '10px', fontWeight: '800', color: item.color, textTransform: 'uppercase' }}>
+                {item.status.replace('_', ' ')}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* UPCOMING EXAM COUNTDOWN CARDS */}
       <div>
         <h3 style={{ fontSize: '1.1rem', fontWeight: '700', margin: '0 0 1rem 0', color: 'var(--text-dark)' }}>

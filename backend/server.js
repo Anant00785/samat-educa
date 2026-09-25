@@ -42,6 +42,8 @@ const student360Routes = require('./routes/student360');
 const learningHubRoutes = require('./routes/learningHub');
 const paymentRoutes = require('./routes/payments');
 const ragRoutes = require('./routes/rag');
+const feynmanRoutes = require('./routes/feynman');
+const doubtClustersRoutes = require('./routes/doubtClusters');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
@@ -69,6 +71,8 @@ app.use('/api/student-360', student360Routes);
 app.use('/api/learning-hub', learningHubRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/rag', ragRoutes);
+app.use('/api/feynman', feynmanRoutes);
+app.use('/api/doubt-clusters', doubtClustersRoutes);
 
 // 404 fallback
 app.use((req, res) => {
